@@ -23,10 +23,23 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
+    // resolve是webpack的内置选项，顾名思义，决定要做的事情，也就是说当使用 import "jquery"，
+    // 该如何去执行这件事情就是resolve配置项要做的，
+    // import jQuery from "./additional/dist/js/jquery"
+    // 这样会很麻烦，可以起个别名简化操作
     extensions: ['.js', '.vue', '.json'],
     alias: {
+      //后面的$符号指精确匹配，
+      // 也就是说只能使用 import vuejs from "vue"
+      // 这样的方式导入vue.esm.js文件，不能在后面跟上 vue/vue.js
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'src':path.resolve(__dirname,'../src'),
+      'pages':path.resolve(__dirname,'../src/pages'),
+      'common':path.resolve(__dirname,'../src/common'),
+      'vendor':path.resolve(__dirname,'../src/vendor'),
+      'components':path.resolve(__dirname,'../src/components'),
+      'views':path.resolve(__dirname,'../src/views')
     }
   },
   module: {
