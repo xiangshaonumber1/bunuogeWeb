@@ -3,21 +3,32 @@
   <div id="app"  >
     <!-- 路由出口 -->
     <!-- 路由匹配到的组件将渲染在这里 -->
-    <router-view></router-view>
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
 <script>
-  //局部注册部件
-  // import Header from './views/header/header'
-  // import Footer from './views/footer/footer'
-export default ({
+export default {
   name:'App',
-  // components:{
-  //   "blog-header":Header,
-  //   "blog-footer":Footer
+  // provide (){
+  //   return{
+  //     reload:this.reload
+  //   }
+  // },
+  // data(){
+  //   return{
+  //     isRouterAlive:true,
+  //   }
+  // },
+  // methods:{
+  //   reload(){
+  //     this.isRouterAlive = false;
+  //     this.$nextTick(function () {
+  //       this.isRouterAlive = true
+  //     })
+  //   }
   // }
-})
+}
 </script>
 
 <style>
