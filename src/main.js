@@ -5,14 +5,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import Element from 'element-ui'
 import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import 'axios/dist/axios.min'
 import store from './vuex/store'
+import 'element-ui/lib/index'
+import 'element-ui/lib/theme-chalk/index.css'
 //全局安装路由功能
 Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(Element,{size:'small',zIndex:3000})
 
 
 //  1.定义（路由）组件
@@ -21,11 +25,13 @@ import Login from './views/login/login'
 import Home from './views/home/home'
 import Header from './views/header/header'
 import Footer from './views/footer/footer'
+import Controller from './views/Service/Controller/ServiceController'
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
   {path:'/',component:Home,name:"home"},
   {path: '/login', component:Login,name:"login"},//前面to 指定的地方 path /login
+  {path:"/ServiceController",component:Controller,name:"ServiceController"}
 ]
 //  3.创建 router 实例，然后传‘routes’配置
 //  还可以传别的配置参数, 不过先这么简单着吧。
@@ -49,15 +55,13 @@ const app = new Vue({
   },
   //Vue对象创建完成时
   created(){
-    if (localStorage.getItem("isLogin") === true ){
+    // this.$store.commit("clearLoginInfo")
+    if (localStorage.getItem("isLogin") === 'true' ){
       console.log("欢迎博主回来")
     }else {
-      localStorage.setItem("isLogin",false)
+      localStorage.setItem("isLogin","false")
       console.log("博主尚未登录")
     }
-    console.log("result:"+  localStorage.getItem("isLogin") === null)
-
-    console.log("main.js-> isLogin:"+localStorage.getItem("isLogin"))
     this.$store.state.isLogin = localStorage.getItem("isLogin");
   }
 })//现在，可以试试启动喽

@@ -12,8 +12,10 @@
             </button>
             <!-- 通过传入 `to` 属性指定在main.js文件设置的别名链接，如/1 -->
             <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
-            <button class="navbar-brand" :click="cancel()" v-if="isLogin()===true">XiangShao的个人博客</button>
-            <router-link class="navbar-brand" to="/login" v-else="isLogin()===false">XiangShao的个人博客</router-link>
+
+            <a href="#" class="navbar-brand" v-on:click = "cancel()" v-if="this.isLogin === 'true' "><span style="color:red;">XiangShao的个人博客</span></a>
+            <router-link class="navbar-brand" to="/login" v-if="this.isLogin === 'false' ">XiangShao的个人博客</router-link>
+
           </div>
 
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -51,18 +53,17 @@
               {bar:'服务器相关'},
               {bar:'Vue相关'},
             ],
+            isLogin: localStorage.getItem("isLogin")
           }
       },
       methods:{
-          //判断用户是否登录
-          isLogin:function () {
-            console.log("isLogin："+localStorage.getItem("isLogin"))
-            return localStorage.getItem("isLogin")
-          },
         cancel:function () {
-            this.$store.commit("clearLoinInfo")
-        }
-      }
+          this.$store.commit("clearLoginInfo")
+          //调用注销的方法后，isLogin输出的值为null,默认修改回fasle
+          localStorage.setItem("isLogin",'false')
+          return this.isLogin = localStorage.getItem("isLogin")
+        },
+      },
     }
 </script>
 

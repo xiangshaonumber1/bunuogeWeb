@@ -6,12 +6,12 @@ export const saveLoginInfo = (state,user) =>{
     state.nickname = user.nickname
     state.usericon = user.usericon
     state.token = user.token
-    state.isLogin = true
+    state.isLogin = "true"
     localStorage.setItem("id",user.id)
     localStorage.setItem("nickname",user.nickname)
     localStorage.setItem("usericon",user.usericon)
     localStorage.setItem("token",user.token)
-    localStorage.setItem("isLogin",true)
+    localStorage.setItem("isLogin","true")
   }
   // else if (user == null){
   //   //登出的时候，清空sessionStorage里的东西
@@ -24,7 +24,7 @@ export const saveLoginInfo = (state,user) =>{
 }
 
 //清除用户登录信息
-export const clearLoinInfo = (state)=>{
+export const clearLoginInfo = (state)=>{
     console.log("用户退出登录，执行清除用户登录信息")
     //登出的时候，清空sessionStorage里的东西
     localStorage.clear()
@@ -33,5 +33,5 @@ export const clearLoinInfo = (state)=>{
     state.nickname = null
     state.usericon = null
     state.token = null
-    state.isLogin = false
+    state.isLogin = "false"
 }

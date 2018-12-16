@@ -99,7 +99,7 @@
             //实现将数据post到登陆接口：http://localhost/user/login
             // 1. 获取用户填写的文本值只需要this.xxxx
             // 2. 调用ajax的post方法将数据post给服务器
-            this.$http.post('http://localhost/user/login',
+            this.$http.post('http://localhost/myuser/login',
               {account:this.account,password:this.password},
               {emulateJSON:true})
               .then(function (response) {
