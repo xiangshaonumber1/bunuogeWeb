@@ -25,7 +25,7 @@ import Login from './views/login/login'
 import Home from './views/home/home'
 import Header from './views/header/header'
 import Footer from './views/footer/footer'
-import Controller from './views/Service/Controller/ServiceController'
+import Controller from './views/Service/controller/ServiceController'
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
