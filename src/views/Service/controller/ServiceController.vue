@@ -1,54 +1,29 @@
 <template>
-  <div id="ServiceController">
+  <div class="layout">
+    <Row type="flex">
+      <!-- 左侧，导航栏 -->
+      <i-col span="4" class="layout-menu-left">
+        <Menu theme="dark" width="auto">
+          <div class="layout-logo-left" v-on:click="goHome">OK博客</div>
+          <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_title" style="font-size: 18px">
+            <template slot="title"><Icon type="ios-paper"></Icon>{{submenu.parent_title}}</template>
+            <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_title" @click.native="addTab(submenu.parent_index,child.child_index,child.child_title)" >{{child.child_title}}</MenuItem>
+          </Submenu>
+        </Menu>
+      </i-col>
 
-    <!--container 布局-->
-      <el-container style="height: 100vh">
-        <!--侧边栏容器-->
-        <el-aside style="width: 210px;">
-          <!--导航栏-->
-          <el-menu
-            default-active="1"
-            @open="handleOpen"
-            @close="handleClose"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b"
-            style="height: 100%;width: 210px">
+      <i-col  span="20">
+        <Tabs class="style-tab" type="card" v-model=" editableTabsValue" closable @on-tab-remove="removeTab">
+          <TabPane class="style-tabpane"
+            v-for="item in editableTabs"
+            v-if="item.name!=null"
+            :key="item.name"
+            :label="item.title"
+            :name="item.name">{{item.content}}</TabPane>
+        </Tabs>
+      </i-col>
 
-            <p class="menuTitle" v-on:click="goHome">XiangShao</p>
-
-            <!--第一个导航条-->
-            <el-submenu v-for="submenu in submenuList" :index="submenu.parent_index">
-              <template slot="title">
-                <i :class="submenu.parent_icon"></i>
-                <span>{{submenu.parent_title}}</span>
-              </template>
-              <el-menu-item-group v-if="submenu.is_child">
-                <el-menu-item v-for="child_menu in submenu.childList" :index="child_menu.child_index" @click="addTab(submenu.parent_index,child_menu.child_index,child_menu.child_title)">{{child_menu.child_title}}</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
-
-          </el-menu>
-        </el-aside>
-
-        <el-container>
-          <!--主要区域容器-->
-          <el-main style="">
-            <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab"  >
-              <el-tab-pane
-                v-for="item in editableTabs"
-                v-if="item.name!=null"
-                :key="item.name"
-                :label="item.title"
-                :name="item.name"
-              >
-                {{item.content}}
-              </el-tab-pane>
-            </el-tabs>
-          </el-main>
-        </el-container>
-      </el-container>
-
+    </Row>
   </div>
 </template>
 
@@ -59,11 +34,26 @@
           return{
             submenuList:[
               //每一个父菜单和其子菜单的所有设置
-              {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'网站统计',is_child:false},
-              {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',is_child:false},
-              {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',is_child:false},
-              {parent_index:'4',parent_icon:'el-icon-share',parent_title:'友链管理',is_child:false},
-              {parent_index:'5',parent_icon:'el-icon-location',parent_title:'标签管理',is_child:false},
+              {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'网站统计',is_child:true,
+                childList:[
+                  {child_title:'网站统计子菜单一号',child_index:'1-1'},
+                ]},
+              {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',is_child:true,
+                childList:[
+                  {child_title:'发布文章子菜单一号',child_index:'2-1'},
+              ]},
+              {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',is_child:true,
+                childList:[
+                  {child_title:'文章管理子菜单一号',child_index:'3-1'},
+                ]},
+              {parent_index:'4',parent_icon:'el-icon-share',parent_title:'友链管理',is_child:true,
+                childList:[
+                  {child_title:'友链管理子菜单一号',child_index:'4-1'},
+                ]},
+              {parent_index:'5',parent_icon:'el-icon-location',parent_title:'标签管理',is_child:true,
+                childList:[
+                  {child_title:'标签管理子菜单一号',child_index:'5-1'},
+                ]},
               {parent_index:'6',parent_icon:'el-icon-setting',parent_title:'系统管理',is_child:true,
                 childList:[
                   {child_title:'系统管理子菜单一号',child_index:'6-1'},
@@ -78,7 +68,8 @@
               name:null,
               content:null
             }],
-            tabsIndex:[]
+            tabsIndex:[],
+            theme2: 'light'
           }
       },
       methods: {
@@ -86,15 +77,6 @@
           console.log("跳转到首页")
           this.$router.push({name:'home'})
           },
-        handleOpen(key, keyPath) {
-          console.log(key, keyPath);
-        },
-        handleClose(key, keyPath) {
-          console.log(key, keyPath);
-        },
-        handleClick(tab, event) {
-          console.log(tab, event)
-        },
 
         //添加Tab标签内容
         addTab(parentIndex,childIndex,childtitle) {
@@ -135,8 +117,6 @@
           this.editableTabs = tabs.filter(tab => tab.name !== childIndex);
           console.log("点击 removeTab 后的 tabsIndex:"+this.tabsIndex)
         },
-
-
       }
     }
 
@@ -150,18 +130,42 @@
 </script>
 
 <style scoped>
-  .menuTitle{
-    color: #0aac8e;
-    text-align: center;
-    font-size: xx-large;
-    padding-top: 20px;
+
+  .layout{
+    background: #f5f7f9;
+    position: relative;
   }
 
-  .el-header {
-    background-color: #545c64;
-    /*background-color: #B3C0D1;*/
-    color: white;
-    line-height: 60px;
+  .layout-menu-left{
+    background: #464c5b;
+    /*background-color: rgb(81, 90, 110);*/
+    height: 100vh;
   }
+
+  .layout-logo-left{
+    width: 100%;
+    border-radius: 3px;
+    padding:15px;
+    text-align: center;
+    color: white;
+    height: auto;
+    font-size: 3em;
+    background: #464c5b;
+  }
+
+  .style-tabpane{
+    font-size: 25px;
+    color: cadetblue;
+    /*background-color: lightskyblue;*/
+    padding: 5px;
+    border: 1px solid red;
+  }
+  .style-tab{
+    tab-size: 50px;
+    font-size: 10em;
+    height: 100vh;
+    background-color: white;
+  }
+
 
 </style>

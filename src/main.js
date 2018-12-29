@@ -5,7 +5,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
-import Element from 'element-ui'
+// import Element from 'element-ui'
+import iView from 'iview';
+import 'iview/dist/styles/iview.css'
 import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
@@ -13,25 +15,34 @@ import 'axios/dist/axios.min'
 import store from './vuex/store'
 import 'element-ui/lib/index'
 import 'element-ui/lib/theme-chalk/index.css'
+
+
+
 //全局安装路由功能
 Vue.use(VueRouter)
 Vue.use(VueResource)
-Vue.use(Element,{size:'small',zIndex:3000})
+// Vue.use(Element,{size:'small',zIndex:3000})
+Vue.use(iView)
 
 
 //  1.定义（路由）组件
 //加载组组件
-import Login from './views/login/login'
-import Home from './views/home/home'
-import Header from './views/header/header'
-import Footer from './views/footer/footer'
+import Login from './views/Web/login/login'
+import Home from './views/Web/home/home'
+import Header from './views/Web/header/header'
+import Footer from './views/Web/footer/footer'
 import Controller from './views/Service/controller/ServiceController'
+import WriteArticle from './views/Service/components/write_article'
+
+
+
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
-  {path:'/',component:Home,name:"home"},
-  {path: '/login', component:Login,name:"login"},//前面to 指定的地方 path /login
-  {path:"/ServiceController",component:Controller,name:"ServiceController"}
+  {path:'/', component:Home, name:"home"},
+  {path: '/login', component:Login, name:"login"},//前面to 指定的地方 path /login
+  {path:"/ServiceController", component:Controller, name:"ServiceController"},
+  {path:"/writeArticle", component:WriteArticle, name:"WriteArticle"}
 ]
 //  3.创建 router 实例，然后传‘routes’配置
 //  还可以传别的配置参数, 不过先这么简单着吧。

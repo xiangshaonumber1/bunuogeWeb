@@ -1,6 +1,6 @@
 <template>
 
-  <div id="login" class="login" style="background-image: url(../../../static/picture/lunbo1.jpg);filter:grayscale(0%);">
+  <div id="login" class="login" style="background-image: url(../../../../static/picture/lunbo1.jpg);filter:grayscale(0%);">
 
     <div id="body">
       <div class="top">
@@ -60,8 +60,8 @@
 
 <script>
   //局部注册部件
-  import Header from 'src/views/header/header'
-  import Footer from 'src/views/footer/footer'
+  import Header from 'src/views/Web/header/header'
+  import Footer from 'src/views/Web/footer/footer'
   //axios 请求
 
     export default {
