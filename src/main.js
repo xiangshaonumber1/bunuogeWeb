@@ -13,8 +13,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import 'axios/dist/axios.min'
 import store from './vuex/store'
-import 'element-ui/lib/index'
-import 'element-ui/lib/theme-chalk/index.css'
 
 
 
