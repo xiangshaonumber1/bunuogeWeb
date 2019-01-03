@@ -8,19 +8,19 @@
           <div class="layout-logo-left" v-on:click="goHome">OK博客<span>管理中心</span></div>
           <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_title" style="font-size: 18px">
             <template slot="title"><Icon :type="submenu.icon" size="25"></Icon>{{submenu.parent_title}}</template>
-            <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_title" @click.native="addTab(child.child_index,child.child_title)" >{{child.child_title}}</MenuItem>
+            <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_title" @click.native="addTab(child.child_index,child.child_title)" ><router-link :to="child.to_path">{{child.child_title}}</router-link></MenuItem>
           </Submenu>
         </Menu>
       </Col>
 
       <Col  span="20">
-        <Tabs class="style-tab" type="card" v-model="activeName" closable @on-tab-remove="removeTab">
+        <Tabs class="style-tab" type="card" v-model="activeIndex" closable @on-tab-remove="removeTab">
           <TabPane class="style-tabpane"
             v-for="item in editableTabs"
-            v-if="item.name!=null"
-            :key="item.name"
+            v-if="item.index!=null"
+            :key="item.index"
             :label="item.title"
-            :name="item.name">{{item.content}}</TabPane>
+            :name="item.index"><router-view></router-view></TabPane>
         </Tabs>
       </Col>
     </Row>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+  //导入Vue组件
+
     export default {
         name: "ServiceController",
       data(){
@@ -38,49 +40,49 @@
               //每一个父菜单和其子菜单的所有设置
               {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
                 childList:[
-                  {child_title:'统计详情',child_index:'1-1'},
-                  {child_title:'个人详情',child_index:'1-2'},
+                  {child_title:'统计详情',child_index:'1-1',to_path:'/ServiceController/white'},
+                  {child_title:'个人详情',child_index:'1-2',to_path:'/ServiceController/white'},
                 ]},
               {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
                 childList:[
-                  {child_title:'写文章',child_index:'2-1'},
-                  {child_title:'写日记',child_index:'2-2'},
-                  {child_title:'提问题',child_index:'2-3'},
+                  {child_title:'写文章',child_index:'2-1',to_path:'/ServiceController/write'},
+                  {child_title:'写日记',child_index:'2-2',to_path:'/ServiceController/white'},
+                  {child_title:'提问题',child_index:'2-3',to_path:'/ServiceController/white'},
               ]},
               {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',icon:'ios-copy',is_child:true,
                 childList:[
-                  {child_title:'博文统计',child_index:'3-1'},
-                  {child_title:'博文编辑',child_index:'3-2'},
+                  {child_title:'博文统计',child_index:'3-1',to_path:'/ServiceController/white'},
+                  {child_title:'博文编辑',child_index:'3-2',to_path:'/ServiceController/white'},
                 ]},
               {parent_index:'4',parent_icon:'el-icon-share',parent_title:'友链管理',icon:'ios-link',is_child:true,
                 childList:[
-                  {child_title:'连接编辑',child_index:'4-1'},
+                  {child_title:'连接编辑',child_index:'4-1',to_path:'/ServiceController/white'},
                 ]},
               {parent_index:'5',parent_icon:'el-icon-location',parent_title:'标签管理',icon:'ios-bookmark',is_child:true,
                 childList:[
-                  {child_title:'标签编辑',child_index:'5-1'},
+                  {child_title:'标签编辑',child_index:'5-1',to_path:'/ServiceController/white'},
                 ]},
               {parent_index:'6',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
-                  {child_title:'角色管理',child_index:'6-1'},
-                  {child_title:'权限管理',child_index:'6-2'}
+                  {child_title:'角色管理',child_index:'6-1',to_path:'/ServiceController/white'},
+                  {child_title:'权限管理',child_index:'6-2',to_path:'/ServiceController/white'}
                 ]
               },
 
             ],
             //以后给下面这些值给个默认值，用作展示首页帮助面板
-            activeName:null,//当前显示的table
+            activeIndex:null,//当前显示的table
             editableTabs:[{
               title:null,
-              name:null, //和activeName对应
-              content:null
+              index:null, //和activeIndex对应
             }],
             openNames:[],
             theme: 'light'
           }
       },
+
+      //**********************  methods star ****************************
       methods: {
-        //**********************  methods star ****************************
         goHome:function(){
           console.log("跳转到首页");
           this.$router.push({name:'home'})
@@ -93,12 +95,11 @@
             //刷新全局的值
             this.editableTabs.push({
               title: childTitle,//选项卡标题
-              name: childIndex, //选项卡的编号
-              content: "New Tab Content" + "_" + childIndex + "_" //选项卡的正文内容
+              index: childIndex, //选项卡的编号
             });
             this.openNames.push(childIndex);//将刚创建的选项卡的编号存入openNames
           }
-          this.activeName = childIndex
+          this.activeIndex = childIndex
         },
 
         //删除指定tab标签的内容
@@ -106,7 +107,7 @@
           this.openNames.remove(childIndex);
           /** 勿删 **/
           let tabs = this.editableTabs;
-          this.editableTabs = tabs.filter(tab => tab.name !== childIndex);
+          this.editableTabs = tabs.filter(tab => tab.index !== childIndex);
         },
 
       },
@@ -129,7 +130,7 @@
                   console.log("成功找到："+this.submenuList[j].childList[k]);
                   this.editableTabs.push({
                     title: this.submenuList[j].childList[k].child_title,//选项卡标题
-                    name: this.submenuList[j].childList[k].child_index, //选项卡的编号
+                    index: this.submenuList[j].childList[k].child_index, //选项卡的编号
                     content: "New Tab Content" + "_" + this.submenuList[j].childList[k].child_index + "_" //选项卡的正文内容
                   });
                 }
@@ -137,12 +138,12 @@
             }
           }
           if (null != active){
-            console.log("初始化的 activeName value:"+this.activeName);
-            this.activeName = active;
-            console.log("赋值后的 activeName value:"+this.activeName)
+            console.log("初始化的 activeIndex value:"+this.activeIndex);
+            this.activeIndex = active;
+            console.log("赋值后的 activeIndex value:"+this.activeIndex)
           }
         }
-        console.log('最后'+'\n'+'openNames:'+this.openNames+'\n'+'activeName:'+this.activeName+'\n')
+        console.log('最后'+'\n'+'openNames:'+this.openNames+'\n'+'activeIndex:'+this.activeIndex+'\n')
       },
       //实例销毁完成执行的钩子，跳转到其他页面时，清空保存的open-names和active-name
       destroyed:function () {
@@ -151,7 +152,7 @@
       },
       //实时监控数据变化并随之更新DOM，updated是更新之后的钩子，beforeUpdate是更新之前的钩子
       updated:function () {
-        localStorage.setItem("active-name",this.activeName);
+        localStorage.setItem("active-name",this.activeIndex);
         localStorage.setItem("open-names",this.openNames);//然后再保存新的 open-names
       }
 
@@ -199,8 +200,8 @@
   }
 
   .style-tabpane{
-    font-size: 20px;
-    color: cadetblue;
+    font-size: 18px;
+    /*color: cadetblue;*/
     /*background-color: lightskyblue;*/
     padding: 5px;
     /*border: 1px solid red;*/

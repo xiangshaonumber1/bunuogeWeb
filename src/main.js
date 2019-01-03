@@ -31,28 +31,32 @@ import Header from './views/Web/header/header'
 import Footer from './views/Web/footer/footer'
 import Controller from './views/Service/controller/ServiceController'
 import WriteArticle from './views/Service/components/write_article'
+import White from './views/Service/components/white'
 
 
 
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
-  {path:'/', component:Home, name:"home"},
-  {path: '/login', component:Login, name:"login"},//前面to 指定的地方 path /login
-  {path:"/ServiceController", component:Controller, name:"ServiceController"},
-  {path:"/writeArticle", component:WriteArticle, name:"WriteArticle"}
-]
+  {path:'/', component: Home, name:"home"},
+  {path: '/login', component: Login, name:"login"},//前面to 指定的地方 path /login
+  {path:"/ServiceController", component: Controller, name:"ServiceController",
+    children:[
+      {path: 'write', component: WriteArticle},
+      {path: 'white',component: White}
+    ]},
+];
 //  3.创建 router 实例，然后传‘routes’配置
 //  还可以传别的配置参数, 不过先这么简单着吧。
 const router = new VueRouter({
   routes //缩写，相当于 routes: routes
-})
+});
 
 //  4. 创建和挂载根实例。
 //  记得要通过 router 配置参数注入路由，
 //  从而让整个应用都有路由功能
 const app = new Vue({
-  el: '#app',
+  el: '#app', // el和$mount并没有本质上的不同
   /* 想要实现单独渲染vue，就不能添加下面的两句，否则，渲染的结果会直接出现在主页最后面 */
   // template: '<App/>',
   // components: { App },
@@ -68,9 +72,9 @@ const app = new Vue({
     if (localStorage.getItem("isLogin") === 'true' ){
       console.log("欢迎博主回来")
     }else {
-      localStorage.setItem("isLogin","false")
+      localStorage.setItem("isLogin","false");
       console.log("博主尚未登录")
     }
     this.$store.state.isLogin = localStorage.getItem("isLogin");
   }
-})//现在，可以试试启动喽
+});//现在，可以试试启动喽
