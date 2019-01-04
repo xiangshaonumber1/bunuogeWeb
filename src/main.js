@@ -5,7 +5,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
-// import Element from 'element-ui'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css'
 import 'jquery'
@@ -17,10 +16,9 @@ import store from './vuex/store'
 
 
 //全局安装路由功能
-Vue.use(VueRouter)
-Vue.use(VueResource)
-// Vue.use(Element,{size:'small',zIndex:3000})
-Vue.use(iView)
+Vue.use(VueRouter);
+Vue.use(VueResource);
+Vue.use(iView);
 
 
 //  1.定义（路由）组件
@@ -42,9 +40,10 @@ const routes = [
   {path: '/login', component: Login, name:"login"},//前面to 指定的地方 path /login
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
-      {path: 'write', component: WriteArticle},
-      {path: 'white',component: White}
+      {path: 'write', component: WriteArticle, name:"ServiceController/write"},
+      {path: 'white',component: White, name:"ServiceController/white"}
     ]},
+  {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},
 ];
 //  3.创建 router 实例，然后传‘routes’配置
 //  还可以传别的配置参数, 不过先这么简单着吧。

@@ -19,7 +19,7 @@
       </i-col>
 
       <i-col span="2" style="text-align: center;padding: 5px 0;margin: auto">
-       <Button type="info" size="lager">确认发布</Button>
+       <Button type="info" size="large">确认发布</Button>
       </i-col>
     </Row>
 
@@ -33,14 +33,14 @@
     <!--第三行 编辑器工具栏-->
     <Row>
       <i-col style="padding: 0 5px">
-        <div id="editor1" class="toolbar"></div>
+        <div ref="editorMenu" class="toolbar"></div>
       </i-col>
     </Row>
 
     <!--第四行，编辑内容 -->
     <Row>
       <i-col style="padding: 0 5px">
-        <div id="editor2" class="text">
+        <div ref="editorContent" class="text">
           <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
         </div>
       </i-col>
@@ -67,13 +67,16 @@
           }
       },
       mounted(){
+      console.log("write_article : mounted 正在执行");
           //这句不能加，加了反而不会显示
         // var E = window.wangEditor
-        const editor = new E('#editor1','#editor2');
+        let editor = new E(this.$refs.editorMenu,this.$refs.editorContent);
         //加上这个句，才能在编辑器中粘贴图片
         editor.customConfig.uploadImgShowBase64 = true;
         editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
         editor.customConfig.uploadFileName = 'file';
+        // 通过 url 参数配置 debug 模式。url 中带有 write 才会开启 debug 模式
+        editor.customConfig.debug = location.href.indexOf('write') > 0
         //监听编辑器内容变化，并赋给editorContent
         editor.customConfig.onchange = (html) => {
           this.editorContent = html
