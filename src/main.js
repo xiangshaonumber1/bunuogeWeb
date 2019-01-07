@@ -29,7 +29,10 @@ import Header from './views/Web/header/header'
 import Footer from './views/Web/footer/footer'
 import Controller from './views/Service/controller/ServiceController'
 import WriteArticle from './views/Service/components/write_article'
+import WriteDiary from './views/Service/components/write_diary'
 import White from './views/Service/components/white'
+import MyArticles from  './views/Service/components/management_articles'
+import MyDiaries from  './views/Service/components/management_diaries'
 
 
 
@@ -40,7 +43,10 @@ const routes = [
   {path: '/login', component: Login, name:"login"},//前面to 指定的地方 path /login
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
-      {path: 'write', component: WriteArticle, name:"ServiceController/write"},
+      {path: 'article', component: WriteArticle, name:"ServiceController/article"},
+      {path: 'diary', component: WriteDiary, name:"ServiceController/diary"},
+      {path: 'myarticles', component: MyArticles, name:"ServiceController/myarticles"},
+      {path: 'mydiaries', component: MyDiaries, name:"ServiceController/mydiaries"},
       {path: 'white',component: White, name:"ServiceController/white"}
     ]},
   {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},

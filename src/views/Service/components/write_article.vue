@@ -5,7 +5,7 @@
   <div id="write_article" class="write_article">
 
     <!-- 第一行内容 -->
-    <Row style="z-index: 10002;">
+    <Row style="z-index: 10002; margin-bottom: 10px">
       <i-col span="3">
         <Select v-model="select_type" class="article_type_select" size="large" :value="select_type">
           <Option value="原创文章" label="原创文章"></Option>
@@ -18,7 +18,7 @@
         <Input v-model="input_title" placeholder="标题：请用简洁的标题来概括文章内容......" clearable size="large" class="article_title_input" />
       </i-col>
 
-      <i-col span="2" style="text-align: center;padding: 5px 0;margin: auto">
+      <i-col span="2" class="article_confirm">
        <Button type="info" size="large">确认发布</Button>
       </i-col>
     </Row>
@@ -26,20 +26,20 @@
     <!--第二行（默认隐藏）  如何选择的是“转载文章”或者“翻译文章” 都必须要备注原文链接 -->
     <Row v-if="select_type!=='原创文章'">
       <i-col>
-        <Input id="origin-link"  v-model="input_origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
+        <Input class="origin-link"  v-model="input_origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
       </i-col>
     </Row>
 
     <!--第三行 编辑器工具栏-->
     <Row>
-      <i-col style="padding: 0 5px">
+      <i-col>
         <div ref="editorMenu" class="toolbar"></div>
       </i-col>
     </Row>
 
     <!--第四行，编辑内容 -->
     <Row>
-      <i-col style="padding: 0 5px">
+      <i-col>
         <div ref="editorContent" class="text">
           <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
         </div>
@@ -90,30 +90,35 @@
 </script>
 
 <style scoped>
+
   .write_article{
-    padding: 15px 25px;
-    height: 100vh;
+    padding: 0 35px;
+    height: auto;
   }
 
-  #origin-link{
+  .article_type_select{
+    padding-right: 10px;
+  }
+
+  .article_confirm{
+    padding-left: 10px;
+  }
+
+  .origin-link{
     height: auto;
     padding: 5px;
   }
+
   .toolbar {
     border: 1px solid #ccc;
     border-radius: 5px 5px 0 0;
     width: 100vm;
   }
+
   .text {
     border: 1px solid #ccc;
     width: 100%;
-    height: 80vh;
+    height: 75vh;
   }
 
-  .article_type_select{
-    padding: 5px;
-  }
-  .article_title_input{
-    padding: 5px;
-  }
 </style>

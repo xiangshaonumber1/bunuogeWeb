@@ -15,8 +15,8 @@
         </Menu>
       </Col>
 
-      <Col  span="20">
-        <Tabs class="style-tab" type="card" v-model="activeIndex" closable @on-tab-remove="removeTab" @on-click="TabClick">
+      <Col  span="20" class="layout_main_right">
+        <Tabs class="style-tab" type="card" v-model="activeIndex" :animated="false" closable @on-tab-remove="removeTab" @on-click="TabClick">
           <TabPane class="style-tabpane"
             v-for="item in editableTabs"
             v-if="item.index!=null"
@@ -48,14 +48,16 @@
                 ]},
               {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
                 childList:[
-                  {child_title:'写文章',child_index:'2-1',to_path:'ServiceController/write'},
-                  {child_title:'写日记',child_index:'2-2',to_path:'ServiceController/white'},
+                  {child_title:'写文章',child_index:'2-1',to_path:'ServiceController/article'},
+                  {child_title:'写日记',child_index:'2-2',to_path:'ServiceController/diary'},
                   {child_title:'提问题',child_index:'2-3',to_path:'ServiceController/white'},
               ]},
               {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',icon:'ios-copy',is_child:true,
                 childList:[
-                  {child_title:'博文统计',child_index:'3-1',to_path:'ServiceController/white'},
-                  {child_title:'博文编辑',child_index:'3-2',to_path:'ServiceController/white'},
+                  {child_title:'我的文章',child_index:'3-1',to_path:'ServiceController/myarticles'},
+                  {child_title:'我的日记',child_index:'3-2',to_path:'ServiceController/mydiaries'},
+                  {child_title:'收藏文章',child_index:'3-3',to_path:'ServiceController/white'},
+                  {child_title:'我的评论',child_index:'3-3',to_path:'ServiceController/white'},
                 ]},
               {parent_index:'4',parent_icon:'el-icon-share',parent_title:'友链管理',icon:'ios-link',is_child:true,
                 childList:[
@@ -219,7 +221,6 @@
     height: 100vh;
   }
 
-
   .layout-logo-left{
     width: auto;
     border-radius: 3px;
@@ -230,29 +231,31 @@
     padding: 5px;
     font-weight: bold;
   }
+
   .layout-logo-left span{
     font-size: 25px;
     padding: 5px;
   }
 
-
   .layout-menu-left{
     background: #464c5b;
     /*background-color: rgb(81, 90, 110);*/
+    height: auto;
+  }
+
+  .layout_main_right{
+
   }
 
   .style-tabpane{
     font-size: 18px;
     /*color: cadetblue;*/
-    /*background-color: lightskyblue;*/
-    padding: 5px;
-    /*border: 1px solid red;*/
-    height: auto;
+    height: 100%;
   }
+
   .style-tab{
     background-color: white;
     height: 100vh;
   }
-
 
 </style>
