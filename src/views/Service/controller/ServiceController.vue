@@ -6,7 +6,7 @@
       <Col span="4" class="layout-menu-left">
         <Menu :theme="theme" width="auto" style="height: 100vh;">
           <div class="layout-logo-left" v-on:click="goHome">OK博客<span>管理中心</span></div>
-          <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_title" style="font-size: 18px">
+          <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_title">
             <template slot="title"><Icon :type="submenu.icon" size="25"></Icon>{{submenu.parent_title}}</template>
             <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_title" @click.native="addTab(child.child_index,child.child_title,child.to_path)">
               {{child.child_title}}
@@ -44,7 +44,7 @@
               {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
                 childList:[
                   {child_title:'统计详情',child_index:'1-1',to_path:'ServiceController/white'},
-                  {child_title:'个人详情',child_index:'1-2',to_path:'ServiceController/white'},
+                  {child_title:'个人详情',child_index:'1-2',to_path:'ServiceController/psersoninfo'},
                 ]},
               {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
                 childList:[
@@ -57,7 +57,7 @@
                   {child_title:'我的文章',child_index:'3-1',to_path:'ServiceController/myarticles'},
                   {child_title:'我的日记',child_index:'3-2',to_path:'ServiceController/mydiaries'},
                   {child_title:'收藏文章',child_index:'3-3',to_path:'ServiceController/white'},
-                  {child_title:'我的评论',child_index:'3-3',to_path:'ServiceController/white'},
+                  {child_title:'我的评论',child_index:'3-4',to_path:'ServiceController/white'},
                 ]},
               {parent_index:'4',parent_icon:'el-icon-share',parent_title:'友链管理',icon:'ios-link',is_child:true,
                 childList:[
@@ -225,15 +225,15 @@
     width: auto;
     border-radius: 3px;
     color: white;
-    font-size: 35px;
+    font-size: 25px;
     background: #464c5b;
     font-family: "简楷体", fantasy;
-    padding: 5px;
+    padding: 15px;
     font-weight: bold;
   }
 
   .layout-logo-left span{
-    font-size: 25px;
+    font-size: 20px;
     padding: 5px;
   }
 
@@ -243,14 +243,9 @@
     height: auto;
   }
 
-  .layout_main_right{
-
-  }
-
   .style-tabpane{
-    font-size: 18px;
-    /*color: cadetblue;*/
     height: 100%;
+    border: 1px solid blue;
   }
 
   .style-tab{

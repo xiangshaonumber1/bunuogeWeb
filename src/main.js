@@ -5,6 +5,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+import VueCropper from 'vue-cropper'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css'
 import 'jquery'
@@ -19,6 +20,7 @@ import store from './vuex/store'
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(iView);
+Vue.use(VueCropper);
 
 
 //  1.定义（路由）组件
@@ -33,7 +35,7 @@ import WriteDiary from './views/Service/components/write_diary'
 import White from './views/Service/components/white'
 import MyArticles from  './views/Service/components/management_articles'
 import MyDiaries from  './views/Service/components/management_diaries'
-
+import PersonalInfo from  './views/Service/components/personal_info'
 
 
 //  2.定义路由
@@ -47,6 +49,7 @@ const routes = [
       {path: 'diary', component: WriteDiary, name:"ServiceController/diary"},
       {path: 'myarticles', component: MyArticles, name:"ServiceController/myarticles"},
       {path: 'mydiaries', component: MyDiaries, name:"ServiceController/mydiaries"},
+      {path: 'psersoninfo', component: PersonalInfo, name:"ServiceController/psersoninfo"},
       {path: 'white',component: White, name:"ServiceController/white"}
     ]},
   {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},
