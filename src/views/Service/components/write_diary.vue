@@ -2,8 +2,7 @@
     <div id="write_diary" class="write_diary">
 
       <!--日记标题-->
-      <Row>
-
+      <Row style="margin: 5px 0;">
         <i-col span="4" style="z-index: 10002; padding-right: 10px;margin-bottom: 10px">
           <Select v-model="select_type" size="large" :value="select_type">
             <Option value="公开 (所有人可见)" label="公开 (所有人可见)"></Option>
@@ -75,15 +74,15 @@
 
 <style scoped>
 
+  .write_diary{
+    padding: 0 35px;
+  }
 
   .diary_confirm{
     padding-left: 10px;
   }
 
-  .write_diary{
-    padding: 0 35px;
-    height: 100vh;
-  }
+
 
   .toolbar {
     border: 1px solid #ccc;

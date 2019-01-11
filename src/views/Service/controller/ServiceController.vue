@@ -4,7 +4,7 @@
     <Row type="flex">
       <!-- 左侧，导航栏 -->
       <Col span="4" class="layout-menu-left">
-        <Menu :theme="theme" width="auto" style="height: 100vh;">
+        <Menu :theme="theme" width="auto" style="height: 100%">
           <div class="layout-logo-left" v-on:click="goHome">OK博客<span>管理中心</span></div>
           <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_title">
             <template slot="title"><Icon :type="submenu.icon" size="25"></Icon>{{submenu.parent_title}}</template>
@@ -16,6 +16,7 @@
       </Col>
 
       <Col  span="20" class="layout_main_right">
+
         <Tabs class="style-tab" type="card" v-model="activeIndex" :animated="false" closable @on-tab-remove="removeTab" @on-click="TabClick">
           <TabPane class="style-tabpane"
             v-for="item in editableTabs"
@@ -23,7 +24,11 @@
             :key="item.index"
             :label="item.title"
             :name="item.index"
-          ><router-view></router-view></TabPane>
+          >
+            <div class="tabpane-content">
+              <router-view></router-view>
+            </div>
+          </TabPane>
         </Tabs>
       </Col>
     </Row>
@@ -43,7 +48,7 @@
               //每一个父菜单和其子菜单的所有设置
               {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
                 childList:[
-                  {child_title:'统计详情',child_index:'1-1',to_path:'ServiceController/white'},
+                  {child_title:'统计详情',child_index:'1-1',to_path:'ServiceController/blogtotal'},
                   {child_title:'个人详情',child_index:'1-2',to_path:'ServiceController/psersoninfo'},
                 ]},
               {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
@@ -216,7 +221,7 @@
   }
 
   .layout{
-    background: #f5f7f9;
+    background: white;
     position: relative;
     height: 100vh;
   }
@@ -238,19 +243,25 @@
   }
 
   .layout-menu-left{
-    background: #464c5b;
+    background: white;
     /*background-color: rgb(81, 90, 110);*/
     height: auto;
-  }
-
-  .style-tabpane{
-    height: 100%;
-    border: 1px solid blue;
+    border: none;
   }
 
   .style-tab{
-    background-color: white;
-    height: 100vh;
+    /*background-color: red;*/
   }
+
+
+  .style-tabpane{
+    background-color: white;
+  }
+
+  .tabpane-content{
+    height: 95vh;
+    overflow: auto;
+  }
+
 
 </style>

@@ -504,9 +504,8 @@
   }
 
   .myarticles{
-    padding: 15px 35px 90px 35px;
-    height: 100vh;
-    overflow: auto;
+    padding: 15px 35px;
+    border: 3px solid black;
   }
 
   .content_article{

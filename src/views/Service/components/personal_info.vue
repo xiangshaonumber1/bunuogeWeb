@@ -1,10 +1,10 @@
 <template>
     <div class="personal">
 
-      <Row type="flex" justify="center" align="middle" class="code-row-bg">
-        <i-col span="4" style="border: 1px solid red;" class="text-center">
+      <Row type="flex" justify="center" align="middle" class="code-row-bg" style="border: 1px solid crimson ;margin-bottom: 5px">
+        <i-col span="5" style="border: 1px solid red;">
           <div class="text-center">
-            <img src="/static/picture/avatar_default.jpg" alt="..." class="img-circle img-thumbnail" style="width: 150px;height: 150px;">
+            <img src="/static/picture/avatar_default.jpg" alt="..." class="img-circle img-thumbnail" style="width: 175px;height: 175px;">
             <Upload action="upload_url"
                     :before-upload="handleUpload">
               <Button style="margin-top: 10px">上传头像</Button>
@@ -12,7 +12,7 @@
           </div>
         </i-col>
 
-        <i-col span="10" style="border: 1px solid black;padding: 15px">
+        <i-col span="9" style="border: 1px solid black;padding: 5px">
           <div class="userInfo">
 
             <div>
@@ -30,7 +30,7 @@
             </div>
 
             <div>
-              <span><Icon type="ios-pricetags" /> <Tag color="blue"  v-if="userInfo.tags !== null" v-for="user in userInfo.tags">{{user.tag}}</Tag></span>
+              <span><Icon type="ios-pricetags" /> <Tag color="blue"  v-if="userInfo.tags !== null" v-for="user in userInfo.tags" :key="user.tag">{{user.tag}}</Tag></span>
             </div>
 
             <div>
@@ -44,21 +44,46 @@
           </div>
         </i-col>
 
-        <i-col span="10" style="border: 1px solid orange;" align="top">
-          <Card shadow style="min-height: 250px;max-height: 250px">
-            <p slot="title" style="font-size: 16px;font-weight: normal">
-              <Icon type="ios-film-outline"></Icon>
+        <i-col span="10" style="border: 1px solid orange;padding: 0 15px">
+          <Card style="height: 220px;">
+            <span slot="title" style="font-size: 16px;font-weight: normal;">
+              <Icon type="md-clipboard" />
               心愿墙
-            </p>
+            </span>
             <a href="#" slot="extra" @click.prevent="changeLimit">
-              <Icon type="ios-loop-strong"></Icon>
               编辑
             </a>
-
+            <textarea class="wish_textarea"  wrap="hard" maxlength="100">猪年大吉</textarea>
           </Card>
         </i-col>
       </Row>
 
+
+      <Row type="flex" justify="center" align="middle" class="code-row-bg" style="margin: 20px 0">
+        <i-col span="5"  class="text-center" style="border: 1px solid gold">
+            <span><Tag color="rgb(2, 181, 218)" type="dot">关注数 9999</Tag></span>
+            <span><Tag color="#FFA2D3" type="dot">粉丝数 20.5W</Tag></span>
+        </i-col>
+
+        <i-col span="19">
+          <div class="article_count">
+            <div style="background-color: rgb(251, 114, 153)">原创文章数：<span class="badge">1</span></div>
+            <div style="background-color: rgb(0, 192, 145);">转载文章数：<span class="badge">42</span></div>
+            <div style="background-color: rgb(2, 181, 218)">翻译文章数：<span class="badge">4645</span></div>
+            <div style="background-color: rgb(255, 93, 71);">日记文章数：<span class="badge">445</span></div>
+            <div style="background-color: rgb(243, 160, 52);">收藏文章数：<span class="badge">445</span></div>
+          </div>
+        </i-col>
+      </Row>
+
+      <Divider/>
+
+      <Row style="margin: 0 20px;">
+        <i-col span="24">
+          <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人简介</span>
+          <textarea class="form-control personal_textarea" maxlength="300"></textarea>
+        </i-col>
+      </Row>
 
       <!-- **************************************** 图片裁剪 start ***************************************************** -->
       <Modal title="请选择喜欢的区域作为你的个人头像" v-model="isShowModal" :mask-closable="false" width="75"
@@ -91,9 +116,9 @@
 
 <script>
 
+
   export default {
       name: "personal_info",
-
       data(){
           return {
             file:null,
@@ -122,8 +147,9 @@
                 {tag:'Android'}
               ],
               email:'821940979@qq.com',
-              gender:'男'
-            }
+              gender:'男',
+            },
+            userInfoStatus:"以下信息公开",
           }
       },
       methods:{
@@ -171,12 +197,55 @@
 
 <style scoped>
 
+  .wish_textarea{
+    min-height: 150px;
+    width: 100%;
+    resize: none;
+    padding: 5px;
+    border: none;
+  }
+
+  .personal_textarea{
+    resize: none;
+    padding: 5px;
+    min-height: 200px;
+    font-size: 18px;
+  }
+
+  .personal{
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .personal::-webkit-scrollbar {
+    display: none;
+  }
+
   p{
     font-size: 25px;
     font-weight: bold;
   }
   span{
     font-size: 18px;
+  }
+
+
+  .article_count div{
+    font-size: 16px;
+    display: block;
+    float: left;
+    border-radius: 5px;
+    color: white;
+    margin: 3px 5px 3px 5px;
+    padding: 5px;
+  }
+
+  .article_count div span{
+    font-size: 12px;
+    font-weight: normal;
+    background-color: white;
+    color: #000;
   }
 
   .cropper-content{
@@ -193,11 +262,12 @@
     /*border: 1px solid red;*/
     background-color: white;
     margin: 1px 15px;
+    width: auto;
   }
 
   .userInfo div{
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
     margin-left: 5px;
   }
 

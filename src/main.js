@@ -15,7 +15,6 @@ import 'axios/dist/axios.min'
 import store from './vuex/store'
 
 
-
 //全局安装路由功能
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -36,6 +35,7 @@ import White from './views/Service/components/white'
 import MyArticles from  './views/Service/components/management_articles'
 import MyDiaries from  './views/Service/components/management_diaries'
 import PersonalInfo from  './views/Service/components/personal_info'
+import BlogTotal from './views/Service/components/blog_total'
 
 
 //  2.定义路由
@@ -50,6 +50,7 @@ const routes = [
       {path: 'myarticles', component: MyArticles, name:"ServiceController/myarticles"},
       {path: 'mydiaries', component: MyDiaries, name:"ServiceController/mydiaries"},
       {path: 'psersoninfo', component: PersonalInfo, name:"ServiceController/psersoninfo"},
+      {path: 'blogtotal',component: BlogTotal,name:"ServiceController/blogtotal"},
       {path: 'white',component: White, name:"ServiceController/white"}
     ]},
   {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},

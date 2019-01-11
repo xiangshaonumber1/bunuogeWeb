@@ -5,7 +5,7 @@
   <div id="write_article" class="write_article">
 
     <!-- 第一行内容 -->
-    <Row style="z-index: 10002; margin-bottom: 10px">
+    <Row style="z-index: 10002;margin: 5px 0;">
       <i-col span="3">
         <Select v-model="select_type" class="article_type_select" size="large" :value="select_type">
           <Option value="原创文章" label="原创文章"></Option>
@@ -24,9 +24,9 @@
     </Row>
 
     <!--第二行（默认隐藏）  如何选择的是“转载文章”或者“翻译文章” 都必须要备注原文链接 -->
-    <Row v-if="select_type!=='原创文章'">
+    <Row v-if="select_type!=='原创文章'" style="margin: 5px 0;">
       <i-col>
-        <Input class="origin-link"  v-model="input_origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
+        <Input  v-model="input_origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
       </i-col>
     </Row>
 
@@ -104,10 +104,6 @@
     padding-left: 10px;
   }
 
-  .origin-link{
-    height: auto;
-    padding: 5px;
-  }
 
   .toolbar {
     border: 1px solid #ccc;
