@@ -1,11 +1,11 @@
 <template>
-    <div class="myarticles">
+    <div class="my-articles">
 
       <!-- Title 部分 -->
       <div>
         <Row>
           <i-col span="24">
-            <span style="font-size: 16px">文章数据详情</span>
+            <span style="font-size: 20px;font-weight: bold">文章数据详情</span>
             <div style="float: right">
               <span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>
             </div>
@@ -16,468 +16,516 @@
 
       <!-- Content 部分 -->
       <div class="content_article">
-        <Row>
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
           <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
               <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
               <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
             </div>
           </i-col>
+
           <i-col span="16">
-            <div class="title_article">
+            <div class="article_title">
               <Divider type="vertical" />
               <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
             </div>
           </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
 
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
       <!--手动复制部分，无用，之后再删  start-->
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
 
-      <div>
-        <Row>
           <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
               <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
               <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
             </div>
           </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
 
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
           <i-col span="16">
-            <div class="title_article">
+            <div class="article_title">
               <Divider type="vertical" />
               <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
             </div>
           </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
 
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
           <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
           </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
 
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
         </Row>
-        <hr style="margin-top: 5px;">
+        <hr>
       </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>1.4W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>9.9W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>9.9W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
-      <div>
-        <Row>
-          <i-col span="5">
-            <div class="count_like_and_dislike">
-              <Icon type="md-heart" color="#FF3030" /><span>9.9W</span>
-              <Divider type="vertical" />
-              <Icon type="md-heart" color="#000000" /><span>1.0W</span>
-              <Divider type="vertical" />
-              <Icon type="md-eye" /><span>2.5W</span>
-            </div>
-          </i-col>
-          <i-col span="16">
-            <div class="title_article">
-              <Divider type="vertical" />
-              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
-            </div>
-          </i-col>
-          <i-col span="3">
-            <Divider type="vertical" />
-            <Time :time="push_time" type="date" />
-          </i-col>
-        </Row>
-        <hr style="margin-top: 5px;">
-      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
 
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
+      <div class="content_article">
+        <Row type="flex" justify="start" align="middle" class="code-row-bg">
+
+          <i-col span="5">
+            <div class="article_data">
+              <Icon type="md-heart" color="#FF3030" size="18" />&nbsp;<label>1.42W</label>
+              <Divider type="vertical" />
+              <Icon type="md-heart" color="#000000" size="18" />&nbsp;<label>1.02W</label>
+              <Divider type="vertical" />
+              <Icon type="md-eye" size="18" />&nbsp;<label>2.52W</label>
+            </div>
+          </i-col>
+
+          <i-col span="16">
+            <div class="article_title">
+              <Divider type="vertical" />
+              <span>具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题具体的文章的标题</span>
+            </div>
+          </i-col>
+
+          <i-col span="3">
+            <div class="article_time">
+              <Divider type="vertical" />
+              <Time :time="push_time" type="date" />
+            </div>
+          </i-col>
+
+        </Row>
+        <hr>
+      </div>
       <!--手动复制部分，无用，之后再删  end-->
 
     </div>
@@ -499,46 +547,26 @@
   span{
     font-size: 14px;
   }
+
   hr{
-    margin-bottom: 10px;
+    margin: 10px 0;
   }
 
-  .myarticles{
+  label{
+    margin: 0;
+    padding: 0;
+  }
+
+  .my-articles{
     padding: 15px 35px;
-    border: 3px solid black;
   }
 
-  .content_article{
-    white-space: nowrap;/* 超出不换行 */
+  .article_data, .article_title, .article_time{
+    /* 超出不换行 */
+    white-space: nowrap;
     /* 超出长度时，出现省略号  */
     overflow:hidden;
     text-overflow:ellipsis
   }
-
-
-  .count_like_and_dislike{
-    width: auto;
-    /*border: 1px solid seagreen;*/
-    padding: 2px 2px;
-
-  }
-  .count_like_and_dislike > span{
-    color:  black;
-    text-align: center;
-    padding: 5px;
-  }
-
-  .title_article{
-    padding: 1px 2px;
-    font-size: 16px;
-    /*border: 1px solid red;*/
-
-    white-space: nowrap;/* 不换行 */
-    /* 超出长度时，出现省略号  */
-    overflow:hidden;
-    text-overflow:ellipsis
-  }
-
-
 
 </style>

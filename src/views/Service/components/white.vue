@@ -1,7 +1,10 @@
 <template>
-    <div>
-      emmmmmm..............666666666666666
-      <Input v-model="value" placeholder="Enter something..." style="width: 300px" />
+    <div class="center-block text-center">
+      <Row type="flex" justify="space_around" align="middle" class="code-row-bg">
+        <i-col span="24">
+          <label>待开发中，敬请期待......</label>
+        </i-col>
+      </Row>
     </div>
 </template>
 

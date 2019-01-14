@@ -36,12 +36,14 @@ import MyArticles from  './views/Service/components/management_articles'
 import MyDiaries from  './views/Service/components/management_diaries'
 import PersonalInfo from  './views/Service/components/personal_info'
 import BlogTotal from './views/Service/components/blog_total'
+import Index from './views/Web/mainContent/index'
 
 
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
-  {path:'/', component: Home, name:"home"},
+  {path:'/', component: Index, name:"index"},
+  {path:'/home', component: Home, name:"home"},
   {path: '/login', component: Login, name:"login"},//前面to 指定的地方 path /login
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[

@@ -259,8 +259,9 @@
   }
 
   .tabpane-content{
-    height: 95vh;
+    height: 93vh;
     overflow: auto;
+    /*border: 1px solid red;*/
   }
 
 

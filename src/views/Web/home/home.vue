@@ -9,7 +9,7 @@
         <!--导航栏的设置 end-->
 
         <!--轮播的设置 star-->
-        <div class="carousel slide row" id="carousel-355329" data-ride="carousel" data-interval="1000">
+        <div class="carousel slide row" id="carousel-355329" data-ride="carousel" data-interval="5000">
           <ol class="carousel-indicators">
             <li data-slide-to="0" data-target="#carousel-355329" class="active"></li>
             <li data-slide-to="1" data-target="#carousel-355329"></li>
@@ -55,15 +55,9 @@
             <div class="thumbnail">
               <img class="img-responsive" alt="300x200" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/600/200/people/default.jpg" />
               <div class="caption">
-                <h3>
-                  {{article.title}}
-                </h3>
-                <p>
-                  {{article.content}}
-                </p>
-                <p>
-                  <a class="btn btn-primary" href="#">详情</a> <a class="btn" href="#">Action ......</a>
-                </p>
+                <h3>{{article.title}}</h3>
+                <p>{{article.content}}</p>
+                <p><a class="btn btn-primary" href="#">详情</a> <a class="btn" href="#">Action ......</a></p>
               </div>
             </div>
           </div>

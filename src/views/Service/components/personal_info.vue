@@ -1,8 +1,7 @@
 <template>
     <div class="personal">
-
-      <Row type="flex" justify="center" align="middle" class="code-row-bg" style="border: 1px solid crimson ;margin-bottom: 5px">
-        <i-col span="5" style="border: 1px solid red;">
+      <Row type="flex" justify="center" align="middle" class="code-row-bg" style="margin-bottom: 5px">
+        <i-col span="5">
           <div class="text-center">
             <img src="/static/picture/avatar_default.jpg" alt="..." class="img-circle img-thumbnail" style="width: 175px;height: 175px;">
             <Upload action="upload_url"
@@ -12,7 +11,7 @@
           </div>
         </i-col>
 
-        <i-col span="9" style="border: 1px solid black;padding: 5px">
+        <i-col span="9" style="padding: 5px">
           <div class="userInfo">
 
             <div>
@@ -44,7 +43,7 @@
           </div>
         </i-col>
 
-        <i-col span="10" style="border: 1px solid orange;padding: 0 15px">
+        <i-col span="10" style="padding: 0 15px">
           <Card style="height: 220px;">
             <span slot="title" style="font-size: 16px;font-weight: normal;">
               <Icon type="md-clipboard" />
@@ -60,7 +59,7 @@
 
 
       <Row type="flex" justify="center" align="middle" class="code-row-bg" style="margin: 20px 0">
-        <i-col span="5"  class="text-center" style="border: 1px solid gold">
+        <i-col span="5"  class="text-center" >
             <span><Tag color="rgb(2, 181, 218)" type="dot">关注数 9999</Tag></span>
             <span><Tag color="#FFA2D3" type="dot">粉丝数 20.5W</Tag></span>
         </i-col>
@@ -78,7 +77,7 @@
 
       <Divider/>
 
-      <Row style="margin: 0 20px;">
+      <Row>
         <i-col span="24">
           <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人简介</span>
           <textarea class="form-control personal_textarea" maxlength="300"></textarea>
@@ -197,6 +196,10 @@
 
 <style scoped>
 
+  .personal{
+    padding: 35px 35px 10px 35px;
+  }
+
   .wish_textarea{
     min-height: 150px;
     width: 100%;
@@ -258,7 +261,7 @@
   }
 
   .userInfo input{
-    border: 0;
+    border: none;
     /*border: 1px solid red;*/
     background-color: white;
     margin: 1px 15px;
