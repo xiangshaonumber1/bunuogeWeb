@@ -1,123 +1,83 @@
 <template>
     <div class="index">
-      <div class="container">
-        <div class="row clearfix">
-          <div class="col-md-12 column">
-            <nav class="navbar navbar-default" role="navigation">
-              <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
-              </div>
+      <!-- 固定在顶部的导航栏  -->
+      <Affix>
+        <Row style="height: 60px;">
 
-              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                  <li class="active">
-                    <a href="#">Link</a>
-                  </li>
-                  <li>
-                    <a href="#">Link</a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a href="#">Action</a>
-                      </li>
-                      <li>
-                        <a href="#">Another action</a>
-                      </li>
-                      <li>
-                        <a href="#">Something else here</a>
-                      </li>
-                      <li class="divider">
-                      </li>
-                      <li>
-                        <a href="#">Separated link</a>
-                      </li>
-                      <li class="divider">
-                      </li>
-                      <li>
-                        <a href="#">One more separated link</a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-                <form class="navbar-form navbar-left" role="search">
-                  <div class="form-group">
-                    <input type="text" class="form-control" />
-                  </div> <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-                <ul class="nav navbar-nav navbar-right">
-                  <li>
-                    <a href="#">Link</a>
-                  </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <a href="#">Action</a>
-                      </li>
-                      <li>
-                        <a href="#">Another action</a>
-                      </li>
-                      <li>
-                        <a href="#">Something else here</a>
-                      </li>
-                      <li class="divider">
-                      </li>
-                      <li>
-                        <a href="#">Separated link</a>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
+          <i-col span="3">
+            <img src="/static/picture/avatar_default.jpg" style="max-width: 100%;height: 60px" alt="...">
+          </i-col>
 
-            </nav>
-          </div>
-        </div>
+          <i-col span="14">
+            <Menu mode="horizontal" theme="light" active-name="1">
+              <MenuItem name="1">首页</MenuItem>
+              <MenuItem name="2">收藏</MenuItem>
+            </Menu>
+          </i-col>
+
+          <i-col span="3">
+            
+          </i-col>
+
+        </Row>
+      </Affix>
+
+
+      <div class="index-content">
+        <p class="demo-affix" style="margin-top: 50px">emmmmmmmm...........1</p><br>
+        <p class="demo-affix">emmmmmmmm...........2</p><br>
+        <p class="demo-affix">emmmmmmmm...........3</p><br>
+        <p class="demo-affix">emmmmmmmm...........4</p><br>
+        <p class="demo-affix">emmmmmmmm...........5</p><br>
+        <p class="demo-affix">emmmmmmmm...........6</p><br>
+        <p class="demo-affix">emmmmmmmm...........7</p><br>
+        <p class="demo-affix">emmmmmmmm...........8</p><br>
+        <p class="demo-affix">emmmmmmmm...........9</p><br>
+        <p class="demo-affix">emmmmmmmm...........0</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+        <p class="demo-affix">emmmmmmmm...........</p><br>
+
       </div>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-      <p class="demo-affix">emmmmmmmm...........</p><br>
-
     </div>
 </template>
 
 <script>
     export default {
-        name: "index",
+      name: "index",
       data(){
-          return {
-            top_menu_theme:'light',
-            top_menuItem_name:'articles',
-          }
+        return {
+          top_menu_theme:'light',
+          top_menuItem_name:'articles',
+        }
+      },
+      methods:{
+        navbarClick(obj){
+          console.log('输出：',obj)
+        }
       }
     }
 </script>
 
 <style scoped>
   .index{
-    border: 1px solid red;
+    /*border: 1px solid red;*/
     width: 100vm;
     height: auto;
+  }
+
+  .index-content{
+    padding: 0;
+    border: 1px solid gold;
+    background-color: rgb(248, 248, 248);
   }
 
 </style>
