@@ -5,7 +5,7 @@
         <Row style="height: 60px;">
 
           <i-col span="3">
-            <img src="/static/picture/avatar_default.jpg" style="max-width: 100%;height: 60px" alt="...">
+            <img src="/static/picture/logo.png" style="max-width: 100%;height: 60px" alt="...">
           </i-col>
 
           <i-col span="14">
@@ -16,7 +16,7 @@
           </i-col>
 
           <i-col span="3">
-            
+
           </i-col>
 
         </Row>
