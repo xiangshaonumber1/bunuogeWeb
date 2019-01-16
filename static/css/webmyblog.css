@@ -39,10 +39,9 @@
 }
 
 .webinfo{
-  margin-left: -15px;
-  margin-right: -15px;
+  width: 100vm;
   background: #F5F5F5;
-  padding-top: 50px;
+  padding-top: 30px;
   padding-bottom: 10px;
 }
 
