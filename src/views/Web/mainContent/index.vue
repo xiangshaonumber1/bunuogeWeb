@@ -134,7 +134,7 @@
             <div class="articles" v-for="article in articleList">
               <Card :bordered="false">
                 <div class="articles-title">
-                  <p>66666</p>
+                  <p><a>现代浏览器探秘（part4）：事件处理</a></p>
                 </div>
                 <div class="articles-content">
                   <span>Content of no border type. Content of no border type.
@@ -276,10 +276,16 @@
   .articles{
     margin: 10px 0;
   }
+
   .articles-title{
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
   }
+
+  .articles-title a{
+    color: black;
+  }
+
   .articles-content{
     overflow: hidden;
     text-overflow: ellipsis;
@@ -289,17 +295,21 @@
      /*autoprefixer: on;*/
     display:-webkit-box;
   }
+
   .articles-info{
     line-height: 30px;
     width: 100%;
     margin-top: 10px;
   }
+
   .articles-info img {
     width: 25px;
     float: left;
   }
+
   .articles-info span{
     margin-left: 5px;
     font-size: 14px;
   }
+
 </style>

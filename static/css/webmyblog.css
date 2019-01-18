@@ -40,6 +40,7 @@
 
 .webinfo{
   width: 100vm;
+  height: 100%;
   background: #F5F5F5;
   padding-top: 30px;
   padding-bottom: 10px;
@@ -75,7 +76,6 @@
 .login-label{
   font-size: 20px;
   font-family: "简楷体", cursive;
-  text-align: center;
   line-height: 34px;
 }
 
@@ -86,10 +86,12 @@
 
 
 .login{
-  height: 100vh;
   width: 100%;
   background-color: white;
   margin: 0 auto;
+  background-image: url(../picture/lunbo1.jpg);
+  background-size: cover;
+  filter:grayscale(0%);
 }
 
 .top{
@@ -104,33 +106,33 @@
 .bottom{
   /*background-color: chartreuse;*/
   height: 20vh;
-  padding-left: 15px;
-  padding-right: 15px;
+  width: 100vm;
 }
 
-.login-form{
-  width: 450px;
-  float: right;
-  margin-right: 250px;
-  margin-top: 50px;
-  border: 1px solid gray;
-  height: auto;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  padding-left: 50px;
-  padding-right: 50px;
-  font-family: "简楷体", cursive;
-  background:rgba(102,139,139,0.5);
-  color: white;
-}
+/*.login-form{*/
+  /*width: 450px;*/
+  /*float: right;*/
+  /*margin-right: 250px;*/
+  /*margin-top: 50px;*/
+  /*border: 1px solid gray;*/
+  /*height: auto;*/
+  /*padding-top: 50px;*/
+  /*padding-bottom: 50px;*/
+  /*padding-left: 50px;*/
+  /*padding-right: 50px;*/
+  /*font-family: "简楷体", cursive;*/
+  /*background:rgba(102,139,139,0.5);*/
+  /*color: white;*/
+/*}*/
 
-.label-style-1{
-  font-size: 50px;
-  font-family: "简楷体", fantasy;
-  text-align: center;
-  color: #0aac8e;
-  width: 100%;
-}
+/*.label-style-1{*/
+  /*font-size: 50px;*/
+  /*font-family: "简楷体", fantasy;*/
+  /*text-align: center;*/
+  /*color: #0aac8e;*/
+  /*width: 100%;*/
+/*}*/
+
 .label-style-1 :hover{
   color: red;
 }

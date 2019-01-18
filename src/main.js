@@ -24,7 +24,7 @@ Vue.use(VueCropper);
 
 //  1.定义（路由）组件
 //加载组组件
-import Login from './views/Web/login/login'
+import Welcoment from './views/Web/login/welcome'
 import Home from './views/Web/home/home'
 import Header from './views/Web/header/header'
 import Footer from './views/Web/footer/footer'
@@ -44,7 +44,7 @@ import Index from './views/Web/mainContent/index'
 const routes = [
   {path:'/', component: Index, name:"index"},
   {path:'/home', component: Home, name:"home"},
-  {path: '/login', component: Login, name:"login"},//前面to 指定的地方 path /login
+  {path: '/welcome', component: Welcoment, name:"welcome"},//前面to 指定的地方 path /login
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
       {path: 'article', component: WriteArticle, name:"ServiceController/article"},
