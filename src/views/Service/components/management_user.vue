@@ -46,10 +46,8 @@
 
         <!-- 点击管理(用户身份),点击详情(用户权限) 时，出现的对话框 -->
         <Modal :title="ModalTitle" v-model="showModal" :closable="false" :mask-closable="false">
-          <Transfer :data="role_or_permission" :target-keys="role_or_permission_key" :render-format="render"  @on-change="update_role_or_permission">
-          </Transfer>
+          <Transfer :data="role_or_permission" :target-keys="role_or_permission_key" :render-format="render_role_permission"  @on-change="update_role_or_permission"/>
         </Modal>
-
 
       </Row>
     </div>
@@ -63,7 +61,7 @@
           searchKey:null,//搜索关键字
           showModal:false,
           ModalTitle:null,
-          role_or_permission:this.getMockData(), //既可以用于存放role信息，也可以用于存放 permission 信息
+          role_or_permission:[], //既可以用于存放role信息，也可以用于存放 permission 信息
           role_or_permission_key:[], //对应的key值
           tabHead:[
             {title:'ID', slot:'id',ellipsis:true,align:'center',minWidth:80},
@@ -84,24 +82,30 @@
             this.$Message.error("对方不想说话，并向你抛出了一个异常")
           },
 
-        getMockData(){
-          var mockData = [];
-          var labels = ["admin","root","user"];
-          for (let i =1 ;i<=3;i++){
-            mockData.push({
-              key:i.toString(),
-              label: labels[i-1],
-              disabled: false
-            })
-          }
-          console.log("mockData:",mockData);
-
-          return mockData;
-
-        },
         //点击管理用户身份
         ready_update_role(row,index){
-            this.showModal = true
+          this.showModal = true;
+          const temp_role_template = ["admin","root","user"];
+          let temp_role=[];
+          for (let i = 0;i<=2;i++){
+            temp_role.push({
+              key:i.toString(),
+              label:temp_role_template[i],
+              disable:false,
+            });
+          }
+          this.role_or_permission = temp_role;
+          //根据 身份名，转为为对应的 key
+          let role_number = -1;
+          switch (row.role){
+            case "admin":
+              role_number=0;break;
+            case "root":
+              role_number=1;break;
+            case "user":
+              role_number=2;break;
+          }
+          this.role_or_permission_key = [role_number.toString()];
         },
 
         //点击管理用户权限
@@ -112,8 +116,8 @@
         update_role_or_permission(){
 
         },
-        render (item) {
-          return item.label;
+        render_role_permission (item) {
+          return item.key + '&emsp;:&emsp;' + item.label;
         },
       },
       mounted() {
