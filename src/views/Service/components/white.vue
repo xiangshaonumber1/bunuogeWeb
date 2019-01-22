@@ -1,6 +1,6 @@
 <template>
     <div class="center-block text-center">
-      <Row type="flex" justify="space_around" align="middle" class="code-row-bg">
+      <Row type="flex"  justify="space-around"  align="middle" class="code-row-bg">
         <i-col span="24">
           <label>待开发中，敬请期待......</label>
         </i-col>

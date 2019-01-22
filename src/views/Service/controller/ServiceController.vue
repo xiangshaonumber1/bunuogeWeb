@@ -48,8 +48,8 @@
               //每一个父菜单和其子菜单的所有设置
               {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
                 childList:[
-                  {child_title:'统计详情',child_index:'1-1',to_path:'ServiceController/blogtotal'},
-                  {child_title:'个人详情',child_index:'1-2',to_path:'ServiceController/psersoninfo'},
+                  {child_title:'统计详情',child_index:'1-1',to_path:'ServiceController/blogState'},
+                  {child_title:'个人详情',child_index:'1-2',to_path:'ServiceController/personalInfo'},
                 ]},
               {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
                 childList:[
@@ -59,8 +59,8 @@
               ]},
               {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',icon:'ios-copy',is_child:true,
                 childList:[
-                  {child_title:'我的文章',child_index:'3-1',to_path:'ServiceController/myarticles'},
-                  {child_title:'我的日记',child_index:'3-2',to_path:'ServiceController/mydiaries'},
+                  {child_title:'我的文章',child_index:'3-1',to_path:'ServiceController/articles'},
+                  {child_title:'我的日记',child_index:'3-2',to_path:'ServiceController/diaries'},
                   {child_title:'收藏文章',child_index:'3-3',to_path:'ServiceController/white'},
                   {child_title:'我的评论',child_index:'3-4',to_path:'ServiceController/white'},
                 ]},
@@ -74,8 +74,8 @@
                 ]},
               {parent_index:'6',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
-                  {child_title:'角色管理',child_index:'6-1',to_path:'ServiceController/white'},
-                  {child_title:'权限管理',child_index:'6-2',to_path:'ServiceController/white'}
+                  {child_title:'用户管理',child_index:'6-1',to_path:'ServiceController/identity'},
+                  {child_title:'发送邮件',child_index:'6-2',to_path:'ServiceController/email'}
                 ]
               },
             ],
@@ -215,6 +215,7 @@
 </script>
 
 <style scoped>
+
   a{
     /* 去除所有a标签的默认下划线 */
     text-decoration: none;
@@ -232,7 +233,7 @@
     color: white;
     font-size: 25px;
     background: #464c5b;
-    font-family: "简楷体", fantasy;
+    font-family:"简楷体",cursive;
     padding: 15px;
     font-weight: bold;
   }

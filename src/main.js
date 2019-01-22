@@ -24,19 +24,23 @@ Vue.use(VueCropper);
 
 //  1.定义（路由）组件
 //加载组组件
-import Welcoment from './views/Web/login/welcome'
+import Welcome from './views/Web/login_register/welcome'
 import Home from './views/Web/home/home'
 import Header from './views/Web/header/header'
 import Footer from './views/Web/footer/footer'
 import Controller from './views/Service/controller/ServiceController'
 import WriteArticle from './views/Service/components/write_article'
 import WriteDiary from './views/Service/components/write_diary'
+import WriteEmail from './views/Service/components/write_email'
 import White from './views/Service/components/white'
 import MyArticles from  './views/Service/components/management_articles'
 import MyDiaries from  './views/Service/components/management_diaries'
 import PersonalInfo from  './views/Service/components/personal_info'
 import BlogTotal from './views/Service/components/blog_total'
 import Index from './views/Web/mainContent/index'
+import Register from './views/Web/login_register/register'
+import Login from './views/Web/login_register/login'
+import Identity from './views/Service/components/management_user'
 
 
 //  2.定义路由
@@ -44,16 +48,21 @@ import Index from './views/Web/mainContent/index'
 const routes = [
   {path:'/', component: Index, name:"index"},
   {path:'/home', component: Home, name:"home"},
-  {path: '/welcome', component: Welcoment, name:"welcome"},//前面to 指定的地方 path /login
+  {path: '/welcome', component: Welcome, name:"welcome",children:[
+      {path:'login',component:Login, name:"login"},
+      {path:'register' , component: Register , name:"register"}
+    ]},
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
       {path: 'article', component: WriteArticle, name:"ServiceController/article"},
       {path: 'diary', component: WriteDiary, name:"ServiceController/diary"},
-      {path: 'myarticles', component: MyArticles, name:"ServiceController/myarticles"},
-      {path: 'mydiaries', component: MyDiaries, name:"ServiceController/mydiaries"},
-      {path: 'psersoninfo', component: PersonalInfo, name:"ServiceController/psersoninfo"},
-      {path: 'blogtotal',component: BlogTotal,name:"ServiceController/blogtotal"},
-      {path: 'white',component: White, name:"ServiceController/white"}
+      {path: 'articles', component: MyArticles, name:"ServiceController/articles"},
+      {path: 'diaries', component: MyDiaries, name:"ServiceController/diaries"},
+      {path: 'personalInfo', component: PersonalInfo, name:"ServiceController/personalInfo"},
+      {path: 'blogState',component: BlogTotal,name:"ServiceController/blogState"},
+      {path: 'email',component: WriteEmail,name:"ServiceController/email"},
+      {path: 'identity',component: Identity, name:"ServiceController/identity"},
+      {path: 'white',component: White, name:"ServiceController/white"},
     ]},
   {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},
 ];
