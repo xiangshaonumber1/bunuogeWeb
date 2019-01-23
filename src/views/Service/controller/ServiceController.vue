@@ -190,7 +190,8 @@
       },
 
       //实例销毁完成执行的钩子，跳转到其他页面时，清空保存的open-names和active-name
-      destroyed:function () {
+      beforeDestroy() {//不过没起作用，也不知道是为什么，先留个问题在这
+          console.log("ServiceController destoryed");
           localStorage.removeItem("open-names");
           localStorage.removeItem("active-name");
       },
