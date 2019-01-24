@@ -63,12 +63,13 @@
             editorContent:"",
             input_title:'',
             select_type:"原创文章",
-            input_origin_link:""
+            input_origin_link:"",
+            Editor:"",
           }
       },
       mounted(){
-      console.log("write_article : mounted 正在执行");
-          //这句不能加，加了反而不会显示
+        console.log("write_article : mounted 正在执行");
+        //这句不能加，加了反而不会显示
         // var E = window.wangEditor
         let editor = new E(this.$refs.editorMenu,this.$refs.editorContent);
         //加上这个句，才能在编辑器中粘贴图片

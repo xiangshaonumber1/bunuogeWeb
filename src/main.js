@@ -28,6 +28,7 @@ import Welcome from './views/Web/login_register/welcome'
 import Home from './views/Web/home/home'
 import Header from './views/Web/header/header'
 import Footer from './views/Web/footer/footer'
+import OkHeader from './views/Web/header/ok_header'
 import Controller from './views/Service/controller/ServiceController'
 import WriteArticle from './views/Service/components/write_article'
 import WriteDiary from './views/Service/components/write_diary'
@@ -41,12 +42,15 @@ import Index from './views/Web/mainContent/index'
 import Register from './views/Web/login_register/register'
 import Login from './views/Web/login_register/login'
 import Identity from './views/Service/components/management_user'
+import LinkEdit from './views/Service/components/link_edit'
+import ArticleInfo from './views/Web/mainContent/articleInfo'
 
 
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
   {path:'/', component: Index, name:"index"},
+  {path:"/ai/:article_id",component:ArticleInfo, name:'articleInfo'}, //ai —— article info
   {path:'/home', component: Home, name:"home"},
   {path: '/welcome', component: Welcome, name:"welcome",children:[
       {path:'login',component:Login, name:"login"},
@@ -62,6 +66,7 @@ const routes = [
       {path: 'blogState',component: BlogTotal,name:"ServiceController/blogState"},
       {path: 'email',component: WriteEmail,name:"ServiceController/email"},
       {path: 'identity',component: Identity, name:"ServiceController/identity"},
+      {path: 'link',component: LinkEdit, name:"ServiceController/link"},
       {path: 'white',component: White, name:"ServiceController/white"},
     ]},
   {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},
@@ -84,8 +89,9 @@ const app = new Vue({
   router,
   store,
   components:{
-    "blog-header":Header,
-    "blog-footer":Footer
+    "OkHeader":OkHeader,
+    "Header":Header,
+    "Footer":Footer
   },
   //Vue对象创建完成时
   created(){

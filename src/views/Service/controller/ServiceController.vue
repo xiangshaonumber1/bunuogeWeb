@@ -64,18 +64,11 @@
                   {child_title:'收藏文章',child_index:'3-3',to_path:'ServiceController/white'},
                   {child_title:'我的评论',child_index:'3-4',to_path:'ServiceController/white'},
                 ]},
-              {parent_index:'4',parent_icon:'el-icon-share',parent_title:'友链管理',icon:'ios-link',is_child:true,
+              {parent_index:'4',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
-                  {child_title:'连接编辑',child_index:'4-1',to_path:'ServiceController/white'},
-                ]},
-              {parent_index:'5',parent_icon:'el-icon-location',parent_title:'标签管理',icon:'ios-bookmark',is_child:true,
-                childList:[
-                  {child_title:'标签编辑',child_index:'5-1',to_path:'ServiceController/white'},
-                ]},
-              {parent_index:'6',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
-                childList:[
-                  {child_title:'用户管理',child_index:'6-1',to_path:'ServiceController/identity'},
-                  {child_title:'发送邮件',child_index:'6-2',to_path:'ServiceController/email'}
+                  {child_title:'用户管理',child_index:'4-1',to_path:'ServiceController/identity'},
+                  {child_title:'发送邮件',child_index:'4-2',to_path:'ServiceController/email'},
+                  {child_title:'链接编辑',child_index:'4-3',to_path:'ServiceController/link'},
                 ]
               },
             ],
