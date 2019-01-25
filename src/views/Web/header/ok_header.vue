@@ -6,21 +6,21 @@
           <i-col span="24" class="top-info">
             <!-- logo -->
             <div>
-              <img src="/static/picture/ok_blog_logo.png" style="height: 60px;" alt="...">
+              <img src="/static/picture/ok_blog_logo.png" style="height: 60px;" alt="img_none">
             </div>
 
             <!-- 导航栏 -->
             <div>
               <Menu mode="horizontal" theme="light" :active-name="menuActive" style="border: none">
-                <MenuItem name="index" style="margin: 0 5px;"><span>首页</span></MenuItem>
-                <MenuItem name="collection" style="margin: 0 5px;"><span>收藏</span></MenuItem>
-                <MenuItem name="recommend" style="margin: 0 5px;"><span>推荐</span></MenuItem>
+                <MenuItem name="index"><span>首页</span></MenuItem>
+                <MenuItem name="collection"><span>收藏</span></MenuItem>
+                <MenuItem name="recommend"><span>推荐</span></MenuItem>
               </Menu>
             </div>
 
             <!-- 搜索框 -->
-            <div >
-              <form class="navbar-form navbar-left" style=";height: 60px;margin: 0;padding: 15px 0;">
+            <div>
+              <form class="navbar-form navbar-left" style=";line-height: 60px;margin: 0;padding:0 15px;">
                 <div class="form-group">
                   <input type="text" class="form-control" placeholder="Search">
                 </div>
@@ -29,8 +29,7 @@
             </div>
 
             <!-- 个人信息 -->
-
-            <div style="height: 60px;float: right;padding: 0 10px;" v-if="isLogin">
+            <div style="line-height: 60px;float: right;padding: 0 10px;" v-if="isLogin">
 
               <Dropdown placement="bottom">
                 <a style="text-decoration: none;line-height: 60px;">
@@ -46,17 +45,16 @@
                 </DropdownMenu>
               </Dropdown>
 
-              <div style="line-height: 60px">
+              <div style="line-height: 60px;padding-left: 15px">
                 <Button type="info" icon="md-create" ghost size="large"> <Icon type="" size="25" color="blue" />创作文章</Button>
               </div>
 
             </div>
 
-            <div style="height: 60px;float: right;padding: 0 10px;" v-else>
-              <div style="line-height: 60px">
-                <Button type="text" ghost><span style="color: rgb(35, 201, 237);font-weight: bold" @click="to_sign_in()">立即登录</span></Button>&emsp;
-                <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bold;margin: 0 20px" @click="to_sign_up"><span>免费注册</span></Button>
-              </div>
+            <!-- 登录注册提示 -->
+            <div style="line-height: 60px;float: right;padding: 0 10px;" v-else>
+              <Button type="text" ghost><span style="color: rgb(35, 201, 237);font-weight: bold" @click="to_sign_in()">立即登录</span></Button>&emsp;
+              <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bold;" @click="to_sign_up"><span>免费注册</span></Button>
             </div>
 
           </i-col>
@@ -71,7 +69,7 @@
         name: "ok-header",
       data(){
         return {
-          isLogin:false,
+          isLogin:true,
           menuActive:"",
         }
       },
@@ -101,6 +99,7 @@
 
   .top-info div{
     float: left;
+    /*border: 1px solid red;*/
   }
 
   .index-top-affix{

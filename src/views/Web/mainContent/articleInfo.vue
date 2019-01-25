@@ -3,7 +3,7 @@
       <ok-header></ok-header>
 
       <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
-        <i-col span="10">
+        <i-col span="12" >
           <span class="article_title">
             SpringBoot自动配置原理
             {{$route.params.article_id}}
@@ -12,7 +12,7 @@
       </Row>
 
       <Row type="flex" align="middle" justify="center" class="code-row-bg row-userInfo">
-        <i-col span="10" style="line-height: 60px" >
+        <i-col span="12" style="line-height: 60px" >
           <div style="float: left">
             <a style="text-decoration: none;margin: 0 10px">
               <img src="https://i.loli.net/2017/08/21/599a521472424.jpg"  alt="none" class="img-circle" width="45px"/>
@@ -29,9 +29,8 @@
         </i-col>
       </Row>
 
-
       <Row type="flex" align="middle" justify="center" class="code-row-bg row-content">
-        <i-col span="10">
+        <i-col span="12" style="border: 1px solid red">
           <div class="article_content">
             <!-- 复制粘贴过来的，死样式，后面再删 start -->
             <div class="article fmt article__content" data-id="1190000018011535" data-license="nd">
@@ -183,6 +182,10 @@ public void registerBeanDefinitions(AnnotationMetadata metadata,
           </div>
         </i-col>
       </Row>
+
+      <Divider />
+
+      <BackTop></BackTop>
 
     </div>
 </template>

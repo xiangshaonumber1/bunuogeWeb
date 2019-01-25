@@ -14,7 +14,6 @@
           </div>
         </i-col>
 
-
         <!--表单数据展示-->
         <i-col span="24">
           <Table ref="userDataTable" :columns="tabHead" :data="userData" border>
@@ -41,7 +40,6 @@
 
           </Table>
         </i-col>
-
 
         <!-- 点击管理(用户身份),出现的对话框 -->
         <Modal title="用户身份管理" v-model="showModal_role" :mask-closable="false" @on-ok="save_role" @on-cancel="cancel_role">
@@ -177,7 +175,7 @@
         // role 对话框，点击确认后执行
         save_role(){
             // this.showModal_role = false;
-          const data_role = localStorage.getItem("data_role").split(",")
+          const data_role = localStorage.getItem("data_role").split(",");
           if (data_role.toString() === this.data_role_key.toString()){
             console.log(" role 改变前 和 改变后 数据一致，不用保存")
           }else {
@@ -187,14 +185,20 @@
         },
         // role 对话框，取消时 执行
         cancel_role(){
-            console.log("role 对话框关闭")
-          localStorage.removeItem("data_role")
+            console.log("role 对话框关闭");
+          localStorage.removeItem("data_role");
           this.data_role =[]
           this.data_role_key=[]
         },
 
         //permission 对话框，点击确认后执行
         save_permission(){
+            const  data_permission = localStorage.getItem("data_permission").split(",");
+            if (data_permission.toString() === this.data_permission_key.toString()){
+              console.log(" permission 改变前 和 改变后 数据一致，不用保存")
+            }else {
+              console.log(" permission 改变前 和 改变后 数据不一致，需要保存")
+            }
             this.showModal_permission = false;
           console.log("save_permission 完成")
         },
@@ -217,6 +221,12 @@
           top: 50,
           duration: 3
         });
+      },
+      beforeDestroy(){
+          console.log("identity_user 页面关闭，开始清楚localStorage 数据");
+          localStorage.removeItem("data_role");
+          localStorage.removeItem("data_permission");
+          console.log("data_role,data_permission 已清除完毕");
       }
     }
 </script>

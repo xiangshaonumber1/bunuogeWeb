@@ -34,16 +34,17 @@ import WriteArticle from './views/Service/components/write_article'
 import WriteDiary from './views/Service/components/write_diary'
 import WriteEmail from './views/Service/components/write_email'
 import White from './views/Service/components/white'
-import MyArticles from  './views/Service/components/management_articles'
-import MyDiaries from  './views/Service/components/management_diaries'
+import DataArticles from './views/Service/components/data_articles'
+import DataDiaries from './views/Service/components/data_diaries'
 import PersonalInfo from  './views/Service/components/personal_info'
 import BlogTotal from './views/Service/components/blog_total'
 import Index from './views/Web/mainContent/index'
 import Register from './views/Web/login_register/register'
 import Login from './views/Web/login_register/login'
-import Identity from './views/Service/components/management_user'
+import Identity from './views/Service/components/identity_user'
 import LinkEdit from './views/Service/components/link_edit'
 import ArticleInfo from './views/Web/mainContent/articleInfo'
+import FeedBack from './views/Web/mainContent/feedback'
 
 
 //  2.定义路由
@@ -52,21 +53,22 @@ const routes = [
   {path:'/', component: Index, name:"index"},
   {path:"/ai/:article_id",component:ArticleInfo, name:'articleInfo'}, //ai —— article info
   {path:'/home', component: Home, name:"home"},
+  {path:'/feedback',component:FeedBack, name:'feedback'},
   {path: '/welcome', component: Welcome, name:"welcome",children:[
       {path:'login',component:Login, name:"login"},
       {path:'register' , component: Register , name:"register"}
     ]},
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
-      {path: 'article', component: WriteArticle, name:"ServiceController/article"},
-      {path: 'diary', component: WriteDiary, name:"ServiceController/diary"},
-      {path: 'articles', component: MyArticles, name:"ServiceController/articles"},
-      {path: 'diaries', component: MyDiaries, name:"ServiceController/diaries"},
-      {path: 'personalInfo', component: PersonalInfo, name:"ServiceController/personalInfo"},
-      {path: 'blogState',component: BlogTotal,name:"ServiceController/blogState"},
-      {path: 'email',component: WriteEmail,name:"ServiceController/email"},
-      {path: 'identity',component: Identity, name:"ServiceController/identity"},
-      {path: 'link',component: LinkEdit, name:"ServiceController/link"},
+      {path: 'article', component: WriteArticle, name:"write_article"},
+      {path: 'diary', component: WriteDiary, name:"write_diary"},
+      {path: 'articles', component: DataArticles, name:"data_articles"},
+      {path: 'diaries', component: DataDiaries, name:"data_diaries"},
+      {path: 'personalInfo', component: PersonalInfo, name:"personal_info"},
+      {path: 'blogState',component: BlogTotal,name:"blog_state"},
+      {path: 'email',component: WriteEmail,name:"write_email"},
+      {path: 'identity',component: Identity, name:"identity_user"},
+      {path: 'link',component: LinkEdit, name:"identity_link"},
       {path: 'white',component: White, name:"ServiceController/white"},
     ]},
   {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},
