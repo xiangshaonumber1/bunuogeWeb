@@ -13,16 +13,26 @@
               <label style="color: white;">用户登录</label>
               <a class="go-register" @click="goRegister">立即注册</a>
             </p>
-            <p class="text-center" v-if="login_status === false"><span>账号或密码错误！</span><br/></p>
-            <Input type="text" placeholder="在这里输入邮箱号" size="large" style="margin: 10px 0;"></Input>
-            <Input type="password" placeholder="在这里输入您的密码" size="large" style="margin: 10px 0;"></Input>
-            <span><a style="color: white;font-size: 16px;float: right">忘记密码？</a></span>
-            <Button type="info" size="large" long style="margin:10px 0;">
-              <span  style="color: white;font-size: 20px">登&emsp;录</span>
-            </Button>
-            <div class="text-center" style="margin-top: 20px;margin-bottom: 20px">
-              <span><a style="color:white;font-size: 16px" @click="goIndex">前往首页>></a></span>
-            </div>
+            <i-form :rules="ruleLogin" :model="loginInfo">
+              <form-item prop="ruleAccount">
+                <Input type="text" v-model="loginInfo.account" placeholder="在这里输入邮箱号" size="large"></Input>
+              </form-item>
+
+              <form-item prop="rulePassword">
+                <Input type="password" v-model="loginInfo.password" placeholder="在这里输入您的密码" size="large"></Input>
+              </form-item>
+
+              <form-item>
+                <span><a style="color: white;font-size: 16px;float: right">忘记密码？</a></span>
+                <Button type="info" size="large" long style="margin:10px 0;">
+                  <span  style="color: white;font-size: 20px">登&emsp;录</span>
+                </Button>
+                <div class="text-center" style="margin-top: 20px;margin-bottom: 20px">
+                  <span><a style="color:white;font-size: 16px" @click="goIndex">前往首页>></a></span>
+                </div>
+              </form-item>
+
+            </i-form>
           </div>
         </div>
 
@@ -34,14 +44,42 @@
 <script>
     export default {
         name: "login",
-      data() {
-        return {
+      data: function () {
 
+        const validateAccount = (rule, value, callback) => {
+          if (!value) {
+            callback(new Error("账号不能为空!"))
+          }else {
+            callback();
+          }
+        };
+
+        const validatePassword = (rule, value, callback) => {
+          if (!value) {
+            callback(new Error("密码不能为空!"))
+          }else {
+            callback();
+          }
+        };
+
+        return {
+          loginInfo:{
+            account:'',
+            password:''
+          },
+          ruleLogin: {
+            rulePassword: [
+              {validator: validatePassword, trigger: 'blur'}
+            ],
+            ruleAccount: [
+              {validator: validateAccount, trigger: 'blur'}
+            ]
+          }
         };
       },
       methods:{
         //返回首页
-        goIndex(){
+        goIndex:function(){
           this.$router.push({name:'index'})
         },
         //前往注册
@@ -64,12 +102,13 @@
   }
 
   .login-form{
-    float: right;
-    width: 25vw;
+    /*float: right;*/
+    /*width: 25vw;*/
     background:rgba(102,139,139,0.5);
-    margin-right: 10vw;
-    max-height: 80vh;
-    margin-top: 15vh;
+    /*margin-right: 10vw;*/
+    /*max-height: 80vh;*/
+    /*margin-top: 15vh;*/
+    border: 1px solid red;
   }
 
   .form-logo{
@@ -85,7 +124,7 @@
     padding-right: 40px;
   }
 
-  .login-info-form label, .register-form-content label{
+  .login-info-form label{
     font-size: 20px;
     font-family: "简楷体", cursive;
     color: #0aac8e;

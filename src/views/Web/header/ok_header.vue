@@ -53,7 +53,7 @@
 
             <!-- 登录注册提示 -->
             <div style="line-height: 60px;float: right;padding: 0 10px;" v-else>
-              <Button type="text" ghost><span style="color: rgb(35, 201, 237);font-weight: bold" @click="to_sign_in()">立即登录</span></Button>&emsp;
+              <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bold">立即登录</span></Button>&emsp;
               <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bold;" @click="to_sign_up"><span>免费注册</span></Button>
             </div>
 
@@ -69,7 +69,7 @@
         name: "ok-header",
       data(){
         return {
-          isLogin:true,
+          isLogin:false,
           menuActive:"",
         }
       },

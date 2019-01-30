@@ -1,13 +1,13 @@
 <template>
 
   <div id="login" class="login">
-    <Row style="height: 80vh">
-      <i-col span="24">
+    <Row type="flex" class="code-row-bg" align="middle"  style="height: 85vh;border: 1px solid red">
+      <i-col span="8" offset="14" style="border: 1px solid salmon">
         <router-view></router-view>
       </i-col>
     </Row>
 
-    <Row style="height: 20vh;" type="flex" class="code-row-bg" align="bottom">
+    <Row type="flex" class="code-row-bg" align="middle" justify="center" style="height: 15vh;border: 1px solid gold">
       <i-col span="24">
         <div class="login-footer">
           <blog-footer style="filter:opacity(70%);color: white;background-color: black"></blog-footer>
@@ -91,7 +91,6 @@
 
 <style scoped>
   .login-footer{
-    height: 100%;
     width: 100%;
   }
 </style>
