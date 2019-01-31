@@ -27,7 +27,7 @@
                 <Button type="info" size="large" long style="margin:10px 0;">
                   <span  style="color: white;font-size: 20px">登&emsp;录</span>
                 </Button>
-                <div class="text-center" style="margin-top: 20px;margin-bottom: 20px">
+                <div class="text-center" style="margin-top: 20px;">
                   <span><a style="color:white;font-size: 16px" @click="goIndex">前往首页>></a></span>
                 </div>
               </form-item>
@@ -102,17 +102,14 @@
   }
 
   .login-form{
-    /*float: right;*/
-    /*width: 25vw;*/
-    background:rgba(102,139,139,0.5);
-    /*margin-right: 10vw;*/
-    /*max-height: 80vh;*/
-    /*margin-top: 15vh;*/
-    border: 1px solid red;
+    background:rgba(102,139,139,0.3);
+    /*border: 1px solid red;*/
+    border-radius: 10px;
+    padding: 20px 0;
   }
 
   .form-logo{
-    margin: 20px 0;
+    margin: 15px 0;
   }
 
   .form-logo img{

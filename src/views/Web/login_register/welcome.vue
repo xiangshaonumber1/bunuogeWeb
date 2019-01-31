@@ -1,16 +1,16 @@
 <template>
 
   <div id="login" class="login">
-    <Row type="flex" class="code-row-bg" align="middle"  style="height: 85vh;border: 1px solid red">
-      <i-col span="8" offset="14" style="border: 1px solid salmon">
-        <router-view></router-view>
+    <Row type="flex" class="code-row-bg" align="middle" justify="end"  style="height: 85vh;">
+      <i-col>
+        <router-view style="width: 30vw;margin-right: 10vw"></router-view>
       </i-col>
     </Row>
 
-    <Row type="flex" class="code-row-bg" align="middle" justify="center" style="height: 15vh;border: 1px solid gold">
+    <Row type="flex" class="code-row-bg" align="bottom" justify="center" style="height: 15vh;">
       <i-col span="24">
         <div class="login-footer">
-          <blog-footer style="filter:opacity(70%);color: white;background-color: black"></blog-footer>
+          <blog-footer style="color: black;background-color: transparent"></blog-footer>
         </div>
       </i-col>
     </Row>
@@ -90,7 +90,19 @@
 </script>
 
 <style scoped>
+
+  .login{
+    width: 100%;
+    background-image:url("/static/picture/test1.jpg");
+    background-size: 100% 100%;
+    background-repeat:no-repeat;
+    filter:grayscale(0%);
+  }
+
   .login-footer{
     width: 100%;
   }
+
+
+
 </style>

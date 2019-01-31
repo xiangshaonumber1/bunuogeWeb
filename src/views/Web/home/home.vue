@@ -204,4 +204,68 @@
     -moz-osx-font-smoothing: grayscale;
     background-color: #222222;
   }
+
+  .footerDIV{
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 50px;
+    background: #F5F5F5;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .custom table{
+    width: 75%;
+    background: #F5F5F5;
+    margin: 0 auto;
+  }
+  .custom table tr{
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .custom table tr td{
+    width: 25%;
+    height: auto;
+    font-size: 13px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-indent: 10px;
+    text-align: left;
+    font-family: "华文新魏", serif;
+  }
+  .custom table tr td p{
+    margin: 0 auto;
+    font-size: 15px;
+    font-family: 微软雅黑, fantasy;
+  }
+
+  .custom table tr td hr{
+    margin: 0 auto;
+    font-size: 15px;
+  }
+
+  .picutre-word{
+    position: absolute;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+    bottom: 45vh;
+    left: 33vh;
+    right: 33vh;
+    text-align: center;
+  }
+  .picutre-word p{
+    color: whitesmoke;
+    font-size: 90px;
+  }
+
+  .picutre-word span{
+    text-align: center;
+    color:  #0aac8e;
+    font-size: 22px;
+    font-family: "华文新魏", serif;
+    font-weight: bold;
+  }
+
+
 </style>

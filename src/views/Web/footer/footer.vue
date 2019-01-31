@@ -15,5 +15,16 @@
 </script>
 
 <style scoped>
+  .webinfo{
+    width: 100vm;
+    height: 100%;
+    background: #F5F5F5;
+    padding-top: 30px;
+    padding-bottom: 10px;
+  }
 
+  .webinfo p{
+    text-align: center;
+    font-size: 12px;
+  }
 </style>
