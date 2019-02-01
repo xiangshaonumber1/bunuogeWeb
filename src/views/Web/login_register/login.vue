@@ -14,8 +14,8 @@
               <a class="go-register" @click="goRegister">立即注册</a>
             </p>
             <i-form :rules="ruleLogin" :model="loginInfo">
-              <form-item prop="ruleAccount">
-                <Input type="text" v-model="loginInfo.account" placeholder="在这里输入邮箱号" size="large"></Input>
+              <form-item prop="ruleUsername">
+                <Input type="text" v-model="loginInfo.username" placeholder="在这里输入邮箱号" size="large"></Input>
               </form-item>
 
               <form-item prop="rulePassword">
@@ -25,7 +25,7 @@
               <form-item>
                 <span><a style="color: white;font-size: 16px;float: right">忘记密码？</a></span>
                 <Button type="info" size="large" long style="margin:10px 0;">
-                  <span  style="color: white;font-size: 20px">登&emsp;录</span>
+                  <span  style="color: white;font-size: 20px" @click="request_login">登&emsp;录</span>
                 </Button>
                 <div class="text-center" style="margin-top: 20px;">
                   <span><a style="color:white;font-size: 16px" @click="goIndex">前往首页>></a></span>
@@ -46,8 +46,8 @@
         name: "login",
       data: function () {
 
-        const validateAccount = (rule, value, callback) => {
-          if (!value) {
+        const validateUsername = (rule, value, callback) => {
+          if (value ===null || value==='') {
             callback(new Error("账号不能为空!"))
           }else {
             callback();
@@ -55,7 +55,7 @@
         };
 
         const validatePassword = (rule, value, callback) => {
-          if (!value) {
+          if (value===null || value==='') {
             callback(new Error("密码不能为空!"))
           }else {
             callback();
@@ -64,15 +64,15 @@
 
         return {
           loginInfo:{
-            account:'',
+            username:'',
             password:''
           },
           ruleLogin: {
             rulePassword: [
               {validator: validatePassword, trigger: 'blur'}
             ],
-            ruleAccount: [
-              {validator: validateAccount, trigger: 'blur'}
+            ruleUsername: [
+              {validator: validateUsername, trigger: 'blur'}
             ]
           }
         };
@@ -86,6 +86,22 @@
         goRegister(){
           this.$router.push({name:'register'})
         },
+        //登录请求
+        request_login(){
+          console.log("username：",this.loginInfo.username,"password：",this.loginInfo.password)
+          this.$axios({
+            methods: 'post',
+            url:'Authentication/login',
+            data:{
+              username:this.loginInfo.username,
+              password:this.loginInfo.password,
+            }
+          }).then((response)=>{ //这里使用了 ES6 的语法
+            console.log("返回的数据:",response)
+          }).catch((error)=>{
+            console.log("error 中的是：",error)
+          })
+        }
       }
     }
 </script>

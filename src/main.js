@@ -4,22 +4,28 @@
 //引入并安装vue-router插件
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
 import VueCropper from 'vue-cropper'
-import iView from 'iview';
+import axios from 'axios'
+import Iview from 'iview';
 import 'iview/dist/styles/iview.css'
 import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
-import 'axios/dist/axios.min'
 import store from './vuex/store'
 
 
 //全局安装路由功能
 Vue.use(VueRouter);
-Vue.use(VueResource);
-Vue.use(iView);
+//Iview UI 框架
+Vue.use(Iview);
+//Vue 截图工具
 Vue.use(VueCropper);
+
+//Vue 网络请求工具
+Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
+//axios 全局默认配置
+axios.defaults.baseURL = 'localhost:8888/';
+
 
 
 //  1.定义（路由）组件
