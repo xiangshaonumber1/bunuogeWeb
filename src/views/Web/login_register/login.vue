@@ -13,19 +13,19 @@
               <label style="color: white;">用户登录</label>
               <a class="go-register" @click="goRegister">立即注册</a>
             </p>
-            <i-form :rules="ruleLogin" :model="loginInfo">
-              <form-item prop="ruleUsername">
+            <i-form :model="loginInfo">
+              <form-item prop="username">
                 <Input type="text" v-model="loginInfo.username" placeholder="在这里输入邮箱号" size="large"></Input>
               </form-item>
 
-              <form-item prop="rulePassword">
-                <Input type="password" v-model="loginInfo.password" placeholder="在这里输入您的密码" size="large"></Input>
+              <form-item prop="password">
+                <Input type="password" v-model="loginInfo.password" placeholder="在这里输入您的密码" size="large" @on-enter="request_login"></Input>
               </form-item>
 
               <form-item>
                 <span><a style="color: white;font-size: 16px;float: right">忘记密码？</a></span>
-                <Button type="info" size="large" long style="margin:10px 0;">
-                  <span  style="color: white;font-size: 20px" @click="request_login">登&emsp;录</span>
+                <Button type="info" size="large" @click="request_login" long style="margin:10px 0;">
+                  <span  style="color: white;font-size: 20px">登&emsp;录</span>
                 </Button>
                 <div class="text-center" style="margin-top: 20px;">
                   <span><a style="color:white;font-size: 16px" @click="goIndex">前往首页>></a></span>
@@ -45,36 +45,11 @@
     export default {
         name: "login",
       data: function () {
-
-        const validateUsername = (rule, value, callback) => {
-          if (value ===null || value==='') {
-            callback(new Error("账号不能为空!"))
-          }else {
-            callback();
-          }
-        };
-
-        const validatePassword = (rule, value, callback) => {
-          if (value===null || value==='') {
-            callback(new Error("密码不能为空!"))
-          }else {
-            callback();
-          }
-        };
-
         return {
           loginInfo:{
             username:'',
             password:''
           },
-          ruleLogin: {
-            rulePassword: [
-              {validator: validatePassword, trigger: 'blur'}
-            ],
-            ruleUsername: [
-              {validator: validateUsername, trigger: 'blur'}
-            ]
-          }
         };
       },
       methods:{
@@ -88,16 +63,37 @@
         },
         //登录请求
         request_login(){
-          console.log("username：",this.loginInfo.username,"password：",this.loginInfo.password)
+          if (this.loginInfo.username === null || this.loginInfo.username ===''
+            || this.loginInfo.password === null || this.loginInfo.password ===''){
+            return this.$Notice.error({
+              title:'注意：',
+              desc:'账号或密码不能用为空！'
+            })
+          }
           this.$axios({
-            methods: 'post',
-            url:'Authentication/login',
-            data:{
-              username:this.loginInfo.username,
-              password:this.loginInfo.password,
+              url:'/Authentication/login',
+              method:'post',
+              data:this.$qs.stringify({
+                username:this.loginInfo.username,
+                password:this.loginInfo.password,
+              })
             }
-          }).then((response)=>{ //这里使用了 ES6 的语法
-            console.log("返回的数据:",response)
+          ).then((response)=>{ //这里使用了 ES6 的语法
+            if (response.data.code === '200'){ //登录成功
+              const userInfo = {
+                openID: response.data.data.openID,
+                nickname: response.data.data.nickname,
+                avatar: response.data.data.avatar,
+                token: response.data.data.token,
+              };
+              this.$store.dispatch("saveLoginInfo",userInfo);
+              this.$router.push({name:'index'});
+            }else {
+              return this.$Notice.error({ //登录失败
+                title:'登录失败：',
+                desc:response.data.msg
+              })
+            }
           }).catch((error)=>{
             console.log("error 中的是：",error)
           })

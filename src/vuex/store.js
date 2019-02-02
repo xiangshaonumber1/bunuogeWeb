@@ -3,22 +3,23 @@ import Vuex from 'vuex'
 import * as getters from './getters'
 import * as mutations from './mutations'
 import * as actions from './actions'
-Vue.use(Vuex)
+Vue.use(Vuex);
 
+// 如果在模块化构建系统中，请确保在开头调用了 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   //定义状态
   state:{
-    id:null,//用户ID
+    openID:null,//用户ID
     nickname:null,//用户昵称
-    usericon:null,//用户头像地址
+    avatar:null,//用户头像地址
     token:null,//用户登录后持有的token
-    isLogin:'',//判断当前用户是否已经登录
+    isLogin:'false',//判断当前用户是否已经登录
   },
-  getters,
-  mutations,
-  actions
-})
+  getters,  //注册getters
+  mutations,  //注册mutations
+  actions,  //注册actions
+});
 /*
 * 实际上token也可以不保存在vuex中，因为vuex是一个状态管理器而非一个存储工具，
 * 我在axios的headers里直接用sessionStorage里的token

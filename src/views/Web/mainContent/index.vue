@@ -127,13 +127,14 @@
         }
       },
       methods:{
-        navbarClick(obj){
-          console.log('输出：',obj)
-        },
         goArticleInfo(id){
           this.$router.push({path:"/ai/"+id+""})
         }
+      },
+      mounted(){
+
       }
+
     }
 </script>
 

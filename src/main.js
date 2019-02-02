@@ -5,12 +5,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueCropper from 'vue-cropper'
+import qs from 'qs'
 import axios from 'axios'
 import Iview from 'iview';
 import 'iview/dist/styles/iview.css'
 import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
+//引入状态管理 store
 import store from './vuex/store'
 
 
@@ -21,10 +23,12 @@ Vue.use(Iview);
 //Vue 截图工具
 Vue.use(VueCropper);
 
+//axios 参数格式
+Vue.prototype.$qs = qs;
 //Vue 网络请求工具
 Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
 //axios 全局默认配置
-axios.defaults.baseURL = 'localhost:8888/';
+axios.defaults.baseURL = 'http://localhost:8888';
 
 
 
