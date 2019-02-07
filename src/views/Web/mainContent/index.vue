@@ -37,17 +37,17 @@
 
               <div>
                 <Button type="text" style="background-color: rgba(255,255,0,0.7);"><span>Top 1</span></Button>
-                <strong>&nbsp;{{topList[0]}}</strong>
+                <strong>&nbsp;<a>{{topList[0]}}</a></strong>
               </div>
 
               <div>
                 <Button type="text" style="background-color: rgba(220,220,220,0.7);"><span>Top 2</span></Button>
-                <strong>&nbsp;{{topList[1]}}</strong>
+                <strong>&nbsp;<a>{{topList[1]}}</a></strong>
               </div>
 
               <div>
                 <Button type="text" style="background-color: rgba(205, 154, 98,0.7);"><span>Top 3</span></Button>
-                <strong>&nbsp;{{topList[2]}}</strong>
+                <strong>&nbsp;<a>{{topList[2]}}</a></strong>
               </div>
 
             </div>
@@ -139,6 +139,10 @@
 </script>
 
 <style scoped>
+
+  a{
+    color: black;
+  }
 
   span{
     font-size: 16px;
