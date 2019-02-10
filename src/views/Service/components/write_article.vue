@@ -19,7 +19,7 @@
       </i-col>
 
       <i-col span="2" class="article_confirm">
-       <Button type="info" size="large">确认发布</Button>
+       <Button type="info" size="large" long>确认发布</Button>
       </i-col>
     </Row>
 

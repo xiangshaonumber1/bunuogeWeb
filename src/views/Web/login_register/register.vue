@@ -105,7 +105,6 @@
                 desc:'非常抱歉，目前网络连接失败，请检查后再继续'
               })
             })
-
           };
           //密码格式验证
           const validatePassword = (rule,value,callback)=>{

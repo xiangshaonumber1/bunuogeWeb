@@ -31,7 +31,6 @@ Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
 axios.defaults.baseURL = 'http://localhost:8888';
 
 
-
 //  1.定义（路由）组件
 //加载组组件
 import Welcome from './views/Web/login_register/welcome'
@@ -53,21 +52,24 @@ import Register from './views/Web/login_register/register'
 import Login from './views/Web/login_register/login'
 import Identity from './views/Service/components/identity_user'
 import LinkEdit from './views/Service/components/link_edit'
-import ArticleInfo from './views/Web/mainContent/articleInfo'
-import FeedBack from './views/Web/mainContent/feedback'
+import Web_articleInfo from './views/Web/mainContent/web_articleInfo'
+import Web_feedBack from './views/Web/mainContent/web_feedback'
+import Web_writeArticle from './views/Web/mainContent/web_article_write'
 
 
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
   {path:'/', component: Index, name:"index"},
-  {path:"/ai/:article_id",component:ArticleInfo, name:'articleInfo'}, //ai —— article info
+  {path:"/ai/:article_id",component:Web_articleInfo, name:'articleInfo'}, //ai —— article info
   {path:'/home', component: Home, name:"home"},
-  {path:'/feedback',component:FeedBack, name:'feedback'},
+  {path:'/feedback',component:Web_feedBack, name:'feedback'},
   {path: '/welcome', component: Welcome, name:"welcome",children:[
       {path:'login',component:Login, name:"login"},
       {path:'register' , component: Register , name:"register"}
     ]},
+  {path:'/write/article',component:Web_writeArticle,name:'web_write_article'},
+  {path:'/write/'},
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
       {path: 'article', component: WriteArticle, name:"write_article"},
