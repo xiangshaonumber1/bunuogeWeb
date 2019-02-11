@@ -46,7 +46,7 @@
               </Dropdown>
 
               <div style="line-height: 60px;padding-left: 15px">
-                <Button type="info" icon="md-create" ghost size="large"> <Icon type="" size="25" color="blue" />创作文章</Button>
+                <Button type="info" icon="md-create" ghost size="large" @click="go_writeArticle"> <Icon type="" size="25" color="blue" />创作文章</Button>
               </div>
 
             </div>
@@ -86,6 +86,7 @@
         to_sign_up(){//进行注册
           this.$router.push({name:'register'});
         },
+        //用户功能
         to_user_function(item_name){
           switch (item_name) {
             case 'userInfo'://前往个人信息
@@ -106,11 +107,17 @@
               this.$router.push({name:"index"});
               break;
           }
+        },
+        //前往文章创作版块
+        go_writeArticle(){
+          this.$router.push({path:'/write/article'})
         }
       },
       mounted() {
         this.userInfo = this.$store.getters.userInfo;
+        console.log("userInfo : ", this.$store.getters.userInfo);
         this.isLogin = this.$store.getters.isLogin;
+        console.log("isLogin : ",this.$store.getters.isLogin);
         if (this.isLogin === 'true'){
           this.$Message.success({
             content:"欢迎来到ok博客，把所有烦恼都忘掉，静下来感受知识的力量吧！",

@@ -13,7 +13,7 @@ import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 //引入状态管理 store
-import store from './vuex/store'
+import store from './blog_vuex/store'
 
 
 //全局安装路由功能
@@ -29,7 +29,6 @@ Vue.prototype.$qs = qs;
 Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
 //axios 全局默认配置
 axios.defaults.baseURL = 'http://localhost:8888';
-
 
 //  1.定义（路由）组件
 //加载组组件
@@ -108,7 +107,7 @@ const app = new Vue({
     "Footer":Footer
   },
   //Vue对象创建完成时
-  created(){
+  mounted(){
     // this.$store.commit("clearLoginInfo")
     if (localStorage.getItem("isLogin") === 'true' ){
       console.log("欢迎博主回来")

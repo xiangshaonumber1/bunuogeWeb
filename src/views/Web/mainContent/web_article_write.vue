@@ -1,15 +1,15 @@
 <template>
   <div id="web_article_write">
 
-    <Row type="flex" class="row-code-bg" justify="center" align="center">
+    <Row type="flex" class="row-code-bg" justify="center" align="middle">
       <i-col span="24">
         <Divider orientation="left"><span style="font-size: 30px;">文&emsp;章&emsp;写&emsp;作</span></Divider>
       </i-col>
     </Row>
 
-    <Row type="flex" class="row-code-bg" justify="center" align="center">
+    <Row type="flex" class="row-code-bg" justify="center" align="middle">
       <i-col span="18">
-        <div style="background-color: white">
+        <div>
           <write_article></write_article>
         </div>
       </i-col>
@@ -28,7 +28,6 @@
 <style scoped>
 #web_article_write{
   height: 100vh;
-
 }
 
 </style>

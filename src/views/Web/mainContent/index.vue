@@ -131,10 +131,6 @@
           this.$router.push({path:"/ai/"+id+""})
         }
       },
-      mounted(){
-
-      }
-
     }
 </script>
 
