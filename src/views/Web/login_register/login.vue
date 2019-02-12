@@ -94,8 +94,6 @@
                 desc:response.data.msg
               })
             }
-          }).catch((error)=>{
-            console.log("error 中的是：",error)
           })
         }
       }

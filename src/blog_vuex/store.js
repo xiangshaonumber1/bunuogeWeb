@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import * as getters from './getters'
 import * as mutations from './mutations'
 import * as actions from './actions'
@@ -16,6 +17,7 @@ const state = {
 }
 
 const store = new Vuex.Store({
+  plugins:[createPersistedState()],
   //定义状态
   state,
   getters,  //注册getters

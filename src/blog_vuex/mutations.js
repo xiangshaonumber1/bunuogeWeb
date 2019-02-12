@@ -1,13 +1,12 @@
 //保存用户登陆信息
 export const saveLoginInfo = (state,user) =>{
   if (user){
-    console.log("mutations: user 不为空，执行保存用户登录信息");
+    console.log("mutations: user 有值，执行保存用户登录信息");
     state.openID = user.openID;
     state.nickname = user.nickname;
     state.avatar = user.avatar;
     state.token = user.token;
     state.isLogin = 'true';
-    localStorage.setItem("userInfo",JSON.stringify(user));
   }
 };
 

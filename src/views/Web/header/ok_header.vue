@@ -72,20 +72,24 @@
           menuActive:"",
           isLogin:"false",//判断当前用户是否已经登录
           userInfo:{
-            openID:null,//用户ID
-            nickname:null,//用户昵称
-            avatar:null,//用户头像地址
-            token:null,//用户登录后持有的token
+            openID:'',//用户ID
+            nickname:'',//用户昵称
+            avatar:'',//用户头像地址
+            token:'',//用户登录后持有的token
           }
         }
       },
       methods:{
-        to_sign_in(){//进行登录
+        //进行登录
+        to_sign_in(){
           this.$router.push({name:'login'});
         },
-        to_sign_up(){//进行注册
+
+        //进行注册
+        to_sign_up(){
           this.$router.push({name:'register'});
         },
+
         //用户功能
         to_user_function(item_name){
           switch (item_name) {
@@ -108,11 +112,13 @@
               break;
           }
         },
+
         //前往文章创作版块
         go_writeArticle(){
           this.$router.push({path:'/write/article'})
         }
       },
+
       mounted() {
         this.userInfo = this.$store.getters.userInfo;
         console.log("userInfo : ", this.$store.getters.userInfo);

@@ -23,12 +23,8 @@ Vue.use(Iview);
 //Vue 截图工具
 Vue.use(VueCropper);
 
-//axios 参数格式
-Vue.prototype.$qs = qs;
-//Vue 网络请求工具
-Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
-//axios 全局默认配置
-axios.defaults.baseURL = 'http://localhost:8888';
+
+
 
 //  1.定义（路由）组件
 //加载组组件
@@ -54,6 +50,39 @@ import LinkEdit from './views/Service/components/link_edit'
 import Web_articleInfo from './views/Web/mainContent/web_articleInfo'
 import Web_feedBack from './views/Web/mainContent/web_feedback'
 import Web_writeArticle from './views/Web/mainContent/web_article_write'
+
+
+
+//axios 参数格式
+Vue.prototype.$qs = qs;
+//Vue 网络请求工具
+Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
+//axios 全局默认配置
+// axios.defaults.baseURL = 'http://localhost:8888';
+const service = axios.create({
+  baseURL:'http://localhost:8888'
+});
+
+//添加请求拦截器
+service.interceptors.request.use(config=>{
+  //在发送请求之前做某事，比如设置token
+  console.log("在发送请求之前做某事，比如设置token");
+  config.headers["X-Auth-Token"] = this.$store.getters.userToken;
+  return config;
+},error => {
+  //请求错误时做些事情
+  console.log("请求失败");
+  return Promise.reject(error); //方法返回一个带有拒绝原因reason参数的Promise对象。
+});
+
+//添加响应拦截器
+service.interceptors.response.use(response=>{
+  //对响应数据做些事
+  console.log("http 链接成功");
+},error => {
+  console.log("返回接口返回的错误信息");
+  return Promise.reject(error.response.data); // 返回接口返回的错误信息
+});
 
 
 //  2.定义路由
@@ -91,6 +120,7 @@ const router = new VueRouter({
   routes //缩写，相当于 routes: routes
 });
 
+
 //  4. 创建和挂载根实例。
 //  记得要通过 router 配置参数注入路由，
 //  从而让整个应用都有路由功能
@@ -109,12 +139,13 @@ const app = new Vue({
   //Vue对象创建完成时
   mounted(){
     // this.$store.commit("clearLoginInfo")
-    if (localStorage.getItem("isLogin") === 'true' ){
+    if (this.$store.getters.isLogin === 'true' ){
       console.log("欢迎博主回来")
     }else {
-      localStorage.setItem("isLogin","false");
       console.log("博主尚未登录")
     }
-    this.$store.state.isLogin = localStorage.getItem("isLogin");
   }
 });//现在，可以试试启动喽
+
+
+

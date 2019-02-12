@@ -94,6 +94,7 @@
           const token = this.$store.getters.userToken;
           console.log("获取到的token:",token);
 
+          this.$axios.post()
           this.$axios({
             url:'/article/write_article',
             method:'post',
@@ -110,17 +111,13 @@
             console.log("提交成功:",response)
           }).catch((error)=>{
             console.log("出现了一个错误",error.response);
-            if (error.response.data.code === '401'){
-              this.$Notice.error({
-                title:'尚未登录',
-                desc:'抱歉，检测到您尚未进行有效登录，无法继续，即将前往登录页面，请登录后再继续操作',
-                duration:8
-              });
-              this.$router.push({name:'login'})
-            }
+            this.$Notice.error({
+              title:error.response.data.code,
+              desc:error.response.data.msg,
+              duration:8
+            });
+            this.$router.push({name:'login'})
           })
-
-
         }
       },
 
