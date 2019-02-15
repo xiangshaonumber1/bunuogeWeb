@@ -10,44 +10,44 @@
           <i-col span="15">
             <Carousel autoplay v-model="CarouselOrder" loop :autoplay-speed="autoplaySpeed">
               <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/lunbo1.jpg" alt="none"> </div>
+                <div class="my-carousel"><img src="/static/picture/home1.jpg" alt="none"> </div>
               </CarouselItem>
               <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/lunbo2.jpg"  alt="none"></div>
+                <div class="my-carousel"><img src="/static/picture/home2.jpg" alt="none"></div>
               </CarouselItem>
               <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/lunbo3.jpg"  alt="none"></div>
+                <div class="my-carousel"><img src="/static/picture/home3.jpg" alt="none"></div>
               </CarouselItem>
               <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/lunbo4.jpg" alt="none"></div>
+                <div class="my-carousel"><img src="/static/picture/home4.jpg" alt="none"></div>
               </CarouselItem>
             </Carousel>
           </i-col>
 
           <i-col span="8" class="official-activities">
             <div>
-              <p class="bg-info">官方活动版块一</p>
-              <p class="bg-success">官方活动版块二</p>
-              <p class="bg-danger">官方活动版块三</p>
+              <p class="bg-info">推荐版块location1</p>
+              <p class="bg-success">推荐版块location1</p>
+              <p class="bg-danger">推荐版块location1</p>
             </div>
 
             <div class="excellent-articles">
 
-              <p style="font-size: 20px;margin-bottom: 0"><Icon type="md-star-outline" size="25" color="rgb(251, 114, 153)" />&nbsp;今日星推荐</p>
+              <p style="font-size: 22px;margin-bottom: 0"><Icon type="md-star-outline" size="30" color="rgb(251, 114, 153)" />&nbsp;&nbsp;今日星推荐</p>
 
               <div>
-                <Button type="text" style="background-color: rgba(255,255,0,0.7);"><span>Top 1</span></Button>
-                <strong>&nbsp;<a>{{topList[0]}}</a></strong>
+                <Button type="text" style="background-color: rgba(255,255,0,0.7);"><span>Top&emsp;1</span></Button>
+                <span>&emsp;<a>{{topList[0]}}</a></span>
               </div>
 
               <div>
-                <Button type="text" style="background-color: rgba(220,220,220,0.7);"><span>Top 2</span></Button>
-                <strong>&nbsp;<a>{{topList[1]}}</a></strong>
+                <Button type="text" style="background-color: rgba(220,220,220,0.7);"><span>Top&emsp;2</span></Button>
+                <span>&emsp;<a>{{topList[1]}}</a></span>
               </div>
 
               <div>
-                <Button type="text" style="background-color: rgba(205, 154, 98,0.7);"><span>Top 3</span></Button>
-                <strong>&nbsp;<a>{{topList[2]}}</a></strong>
+                <Button type="text" style="background-color: rgba(205, 154, 98,0.7);"><span>Top&emsp;3</span></Button>
+                <span>&emsp;<a>{{topList[2]}}</a></span>
               </div>
 
             </div>
@@ -60,9 +60,9 @@
         <Row>
           <i-col span="24">
             <p style="font-size: 20px;font-weight: bold;float: left">为你推送</p>
-            <!--<div style="float: right">-->
-              <!--<span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>-->
-            <!--</div>-->
+            <div style="float: right">
+              <span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>
+            </div>
           </i-col>
         </Row>
 

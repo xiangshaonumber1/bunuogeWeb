@@ -5,7 +5,7 @@
       <!-- 左侧，导航栏 -->
       <Col span="4" class="layout-menu-left">
         <Menu :theme="theme" width="auto" style="height: 100%">
-          <div class="layout-logo-left" v-on:click="goHome">OK博客<span>管理中心</span></div>
+          <div class="layout-logo-left" v-on:click="goHome">GetOk<span>管理中心</span></div>
           <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_title">
             <template slot="title"><Icon :type="submenu.icon" size="25"></Icon>{{submenu.parent_title}}</template>
             <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_title" @click.native="addTab(child.child_index,child.child_title,child.to_path)">
@@ -225,15 +225,15 @@
     width: auto;
     border-radius: 3px;
     color: white;
-    font-size: 25px;
+    font-size: 30px;
     background: #464c5b;
-    font-family:"简楷体",cursive;
+    font-family:"华文新魏",cursive;
     padding: 15px;
     font-weight: bold;
   }
 
   .layout-logo-left span{
-    font-size: 20px;
+    font-size: 25px;
     padding: 5px;
   }
 

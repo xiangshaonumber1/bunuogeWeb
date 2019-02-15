@@ -5,8 +5,8 @@ export const saveLoginInfo = (state,user) =>{
     state.openID = user.openID;
     state.nickname = user.nickname;
     state.avatar = user.avatar;
-    state.token = user.token;
     state.isLogin = 'true';
+    localStorage.setItem("token",user.token)
   }
 };
 
@@ -18,6 +18,5 @@ export const clearLoginInfo = (state)=>{
     state.openID = null;
     state.nickname = null;
     state.avatar = null;
-    state.token = null;
     state.isLogin = 'false';
 };

@@ -12,9 +12,8 @@ const state = {
   openID:null,//用户ID
   nickname:null,//用户昵称
   avatar:null,//用户头像地址
-  token:null,//用户登录后持有的token
   isLogin:'false',//判断当前用户是否已经登录
-}
+};
 
 const store = new Vuex.Store({
   plugins:[createPersistedState()],

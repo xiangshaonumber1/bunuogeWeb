@@ -1,9 +1,9 @@
 <template>
 
   <div id="login" class="login">
-    <Row type="flex" class="code-row-bg" align="middle" justify="end"  style="height: 85vh;">
-      <i-col>
-        <router-view style="width: 30vw;margin-right: 10vw"></router-view>
+    <Row type="flex" class="code-row-bg" align="middle"  style="height: 85vh;">
+      <i-col :span="module_span" :offset="module_offset">
+        <router-view></router-view>
       </i-col>
     </Row>
 
@@ -29,21 +29,15 @@
       components:{
         "blog-footer":Footer
       },
+      data(){
+        return{
+          module_span:8,
+          module_offset:14,
+        }
+      },
       methods:{
         //用户登录
           goto_login: function () {
-            if (this.account ===""){
-              this.error_account = "账号不能为空"
-              return
-            }else {
-              this.error_account = ""
-            }
-            if (this.password === ""){
-              this.error_password = "密码不能为空"
-              return
-            }else {
-              this.error_password = ""
-            }
             //实现将数据post到登陆接口：http://localhost/user/login
             // 1. 获取用户填写的文本值只需要this.xxxx
             // 2. 调用ajax的post方法将数据post给服务器
@@ -52,14 +46,14 @@
               {emulateJSON:true})
               .then(function (response) {
                 //承诺成功完成时要运行的履行处理程序函数。
-                var user = response.body.data
-                console.log(response.body)
+                var user = response.body.data;
+                console.log(response.body);
                 if (response.body.data===false){
                   console.log("未找到相关信息_404")
                 }else{
                   //将相关信息放入vuex中
                   // this.$store.dispatch("saveLoginInfo",user)
-                  this.$store.commit("saveLoginInfo",user)
+                  this.$store.commit("saveLoginInfo",user);
                   //打印login状态
                   // this.reload()
                   this.$router.push({name:'home'})
@@ -73,7 +67,14 @@
         //重新拉取数据
         fetchDate(){
           //使用 axios获取数据
-          console.log('当前路由地址：'+this.$route.path)
+          console.log('当前路由地址：'+this.$route.path);
+          if (this.$route.path.endsWith("login")){
+            this.module_span = 6;
+            this.module_offset = 16;
+          } else{
+            this.module_span = 8;
+            this.module_offset = 14;
+          }
         }
       },
       created(){
@@ -93,7 +94,7 @@
 
   .login{
     width: 100%;
-    background-image:url("/static/picture/test1.jpg");
+    background-image:url("/static/picture/welcome.jpg");
     background-size: 100% 100%;
     background-repeat:no-repeat;
     filter:grayscale(0%);

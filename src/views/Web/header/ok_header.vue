@@ -6,7 +6,7 @@
           <i-col span="24" class="top-info">
             <!-- logo -->
             <div>
-              <img src="/static/picture/ok_blog_logo.png" style="height: 60px;" alt="img_none">
+              <img src="/static/picture/getok-2.png" style="height: 59px;" alt="img_none">
             </div>
 
             <!-- 导航栏 -->
@@ -121,9 +121,7 @@
 
       mounted() {
         this.userInfo = this.$store.getters.userInfo;
-        console.log("userInfo : ", this.$store.getters.userInfo);
         this.isLogin = this.$store.getters.isLogin;
-        console.log("isLogin : ",this.$store.getters.isLogin);
         if (this.isLogin === 'true'){
           this.$Message.success({
             content:"欢迎来到ok博客，把所有烦恼都忘掉，静下来感受知识的力量吧！",

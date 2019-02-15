@@ -172,9 +172,9 @@
             {title:'这里应该展示文章标题',content:'这里应该填写的是文章的部分内容，字数应该有一定的限制，超出部分应该用省略号显示'},
           ],
           lunbos:[
-            {biaoti:'Hello World',fubiaoti:'每一个程序猿的开始，都是从 hello word 启程!',img:'static/picture/lunbo1.jpg',class: 'item active'},
-            {biaoti:'Hello Tomorrow',fubiaoti:'不管今天如何，微笑面对明天，把它掌握在自己手中!',img:'static/picture/lunbo2.jpg',class: 'item'},
-            {biaoti:'Hello Everyone',fubiaoti:'不管别人待你如何，做好自己，别活成自己讨厌的人的样子!',img:'static/picture/lunbo4.jpg',class: 'item'},
+            {biaoti:'Hello World',fubiaoti:'每一个程序猿的开始，都是从 hello word 启程!',img:'static/picture/home1.jpg',class: 'item active'},
+            {biaoti:'Hello Tomorrow',fubiaoti:'不管今天如何，微笑面对明天，把它掌握在自己手中!',img:'static/picture/home2.jpg',class: 'item'},
+            {biaoti:'Hello Everyone',fubiaoti:'不管别人待你如何，做好自己，别活成自己讨厌的人的样子!',img:'static/picture/home4.jpg',class: 'item'},
           ],
         }
       },

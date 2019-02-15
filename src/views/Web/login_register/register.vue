@@ -5,7 +5,7 @@
     <div class="register-form">
 
       <div class="form-logo text-center">
-        <a @click="goIndex"><img src="/static/picture/ok_blog_logo.png"></a>
+        <a @click="goIndex"><img src="/static/picture/getok-2.png"></a>
       </div>
 
       <div class="register-form-content">
@@ -40,7 +40,7 @@
           </form-item>
 
           <Button type="info" @click="request_register" style="background-color: rgb(0, 192, 145);border: none;margin:20px 0;" long>
-            <span style="font-size: 20px">注&emsp;册</span>
+            <span style="font-size: 22px;font-family: cursive;">注&emsp;册</span>
           </Button>
 
           <p style="color: white;text-align: center">
@@ -243,6 +243,8 @@
 
   .formRegister >>> .ivu-form-item-label{
     color: white;
+    font-size: 20px;
+    font-family: cursive;
   }
 
   label{
@@ -253,7 +255,7 @@
     float: right;
     font-size: 20px;
     color:#0aac8e;
-    font-family:'简楷体',serif;
+    font-family: cursive;
     font-weight: bold;
     text-decoration: none;
   }
@@ -270,7 +272,7 @@
   }
 
   .form-logo img{
-    width: 40%;
+    width: 60%;
   }
 
   .register-form-content{
@@ -280,7 +282,7 @@
 
   .register-form-content label{
     font-size: 20px;
-    font-family: "简楷体", cursive;
+    font-family: cursive;
     color: #0aac8e;
   }
 

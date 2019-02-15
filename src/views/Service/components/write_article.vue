@@ -89,18 +89,9 @@
             })
           }
 
-          const userInfo = this.$store.getters.userInfo;
-          console.log("获取到的userInfo:",userInfo);
-          const token = this.$store.getters.userToken;
-          console.log("获取到的token:",token);
-
-          this.$axios.post()
           this.$axios({
             url:'/article/write_article',
             method:'post',
-            headers:{
-              'X-Auth-Token':this.$store.getters.userToken
-            },
             data:this.$qs.stringify({
               title:this.articleTitle,
               content:this.editorContent,
@@ -108,15 +99,14 @@
               origin_link:this.origin_link,
             })
           }).then((response)=>{
-            console.log("提交成功:",response)
-          }).catch((error)=>{
-            console.log("出现了一个错误",error.response);
-            this.$Notice.error({
-              title:error.response.data.code,
-              desc:error.response.data.msg,
-              duration:8
-            });
-            this.$router.push({name:'login'})
+            //发布成功后，立即跳转到刚编辑的文章
+            if (response.data.code === '200'){
+              console.log("发布成功的文章的ID:",response.data.msg);
+              const id = response.data.msg;
+              this.$router.push({path:'/ai/'+id+''})
+            }else {
+              console.log("write_article:",response)
+            }
           })
         }
       },

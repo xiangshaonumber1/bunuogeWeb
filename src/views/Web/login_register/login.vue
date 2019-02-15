@@ -4,7 +4,7 @@
       <div class="login-form">
 
         <div class="form-logo text-center">
-          <a @click="goIndex"><img src="/static/picture/ok_blog_logo.png"></a>
+          <a @click="goIndex"><img src="/static/picture/getok-2.png"></a>
         </div>
 
         <div class="login-form-content">
@@ -25,7 +25,7 @@
               <form-item>
                 <span><a style="color: white;font-size: 16px;float: right">忘记密码？</a></span>
                 <Button type="info" size="large" @click="request_login" long style="margin:10px 0;">
-                  <span  style="color: white;font-size: 20px">登&emsp;录</span>
+                  <span  style="color: white;font-size: 22px">登&emsp;录</span>
                 </Button>
                 <div class="text-center" style="margin-top: 20px;">
                   <span><a style="color:white;font-size: 16px" @click="goIndex">前往首页>></a></span>
@@ -44,7 +44,7 @@
 <script>
     export default {
         name: "login",
-      data: function () {
+      data(){
         return {
           loginInfo:{
             username:'',
@@ -79,7 +79,6 @@
               })
             }
           ).then((response)=>{ //这里使用了 ES6 的语法
-            console.log("http 链接成功22222",response);
             if (response.data.code === '200'){ //登录成功
               const userInfo = {
                 openID: response.data.data.openID,
@@ -107,7 +106,7 @@
     float: right;
     font-size: 20px;
     color:#0aac8e;
-    font-family:'简楷体',serif;
+    font-family:cursive;
     font-weight: bold;
     text-decoration: none;
   }
@@ -124,7 +123,7 @@
   }
 
   .form-logo img{
-    width: 40%;
+    width: 60%;
   }
 
   .login-form-content{
@@ -134,7 +133,7 @@
 
   .login-info-form label{
     font-size: 20px;
-    font-family: "简楷体", cursive;
+    font-family: cursive;
     color: #0aac8e;
   }
 
@@ -142,7 +141,7 @@
     color: red;
     font-size: 20px;
     font-weight: bold;
-    font-family: "简楷体", cursive;
+    font-family: cursive;
   }
 
 </style>

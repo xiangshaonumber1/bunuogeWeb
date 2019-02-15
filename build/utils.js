@@ -47,7 +47,8 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
+        fallback: 'vue-style-loader',
+        publicPath:'../../' //解决打包后Nginx无法正确读取Iview 图标资源
       })
     } else {
       return ['vue-style-loader'].concat(loaders)
