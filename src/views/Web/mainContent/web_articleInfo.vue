@@ -1,50 +1,61 @@
 <template>
     <div id="articleInfo">
+      <!-- ok导航栏（用户登录信息） -->
       <ok-header></ok-header>
 
-      <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
-        <i-col span="12" >
+      <div>
+        <!--Article 文章标题部分-->
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
+          <i-col span="12" >
           <span class="article_title">
             SpringBoot自动配置原理
+            {{this.ArticleInfo.title}}
             {{$route.params.article_id}}
           </span>
-        </i-col>
-      </Row>
+          </i-col>
+        </Row>
 
-      <Row type="flex" align="middle" justify="center" class="code-row-bg row-userInfo">
-        <i-col span="12" style="line-height: 60px" >
-          <div style="float: left">
-            <a style="text-decoration: none;margin: 0 10px">
-              <img src="https://i.loli.net/2017/08/21/599a521472424.jpg"  alt="none" class="img-circle" width="45px"/>
-            </a>
-          </div>
+        <!--Article 文章用户信息和状态信息-->
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-userInfo">
+          <i-col span="12" style="line-height: 60px" >
+            <!--该div用于显示用户头像-->
+            <div style="float: left">
+              <a style="text-decoration: none;margin: 0 10px">
+                <img :src="this.ArticleInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
+              </a>
+            </div>
 
-          <div style="line-height: 30px;">
-            <a><span>丿丶祥灬少</span></a>
-            <br>
-            <span style="color: gray"> <Time :time="ArticleInfo.time" type="datetime" /></span>&emsp;
-            <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="18"/>&nbsp;<label style="margin: 0;padding: 0">this.ArticleInfo.like</label></span>&emsp;
-            <span><Icon type="md-eye" size="18" />&nbsp;<label style="margin: 0;padding: 0">this.ArticleInfo.watch</label></span>
-          </div>
+            <!--该div 用于显示文章作者你猜，喜欢数，不喜欢数，浏览量-->
+            <div style="line-height: 30px;">
+              <a><span>{{this.ArticleInfo.nickname}}</span></a>
+              <br>
+              <span style="color: gray"> <Time :time="ArticleInfo.time" type="datetime" /></span>&emsp;
+              <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="22"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
+              <span><Icon type="md-eye" size="22" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.watch}}</label></span>
+            </div>
 
-        </i-col>
-      </Row>
+          </i-col>
+        </Row>
 
-      <Row type="flex" align="middle" justify="center" class="code-row-bg row-content">
-        <i-col span="12" style="border: 1px solid red">
+        <!--Article 文章主要内容-->
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-content">
+          <i-col span="12" style="border: 1px solid red">
 
-          <div class="article_content">
-            <!-- 复制粘贴过来的，死样式，后面再删 start -->
-            this.ArticleInfo.title
-            this.ArticleInfo.content
-            <!-- 复制粘贴过来的，死样式，后面再删 end -->
-          </div>
+            <div class="article_content">
+              <!-- 复制粘贴过来的，死样式，后面再删 start -->
+              <span v-html="this.ArticleInfo.content"></span>
+              <!-- 复制粘贴过来的，死样式，后面再删 end -->
+            </div>
 
-        </i-col>
-      </Row>
+          </i-col>
+        </Row>
+      </div>
+
+
 
       <Divider />
 
+      <!--返回顶部-->
       <BackTop></BackTop>
 
     </div>
@@ -73,15 +84,18 @@
           },
         };
       },
-      created(){
+      mounted(){
+          let me = this;
+          let qs = this.$qs;
+          console.log("this.$qs 内容：",this.$qs,' qs 的内容:',qs);
           this.ArticleInfo.articleID = this.$route.params.article_id;
-          console.log("created 文章ID:",this.ArticleInfo.articleID);
+          console.log("mounted 文章ID:",this.ArticleInfo.articleID);
 
         if (this.ArticleInfo.articleID !== ''){
-          this.$axios({
+          me.$axios({
             url:'/article/get_articleInfo',
             method:'post',
-            data:this.$qs.stringify({
+            data:me.$qs.stringify({
               articleID : this.ArticleInfo.articleID,
             })
           }).then((response)=>{
@@ -98,7 +112,7 @@
           })
         }
       },
-      mounted(){
+      created(){
           //根据传递过来的ID，去请求相应文章的所有内容
 
       },

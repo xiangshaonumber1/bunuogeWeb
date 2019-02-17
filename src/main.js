@@ -25,6 +25,83 @@ Vue.use(Iview);
 Vue.use(VueCropper);
 
 
+//axios 参数格式
+Vue.prototype.$qs = qs;
+//Vue 网络请求工具
+Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
+//axios 全局默认配置
+axios.defaults.baseURL = 'http://localhost:8888';
+
+/******************************************** 添加请求拦截器  start *****************************************************/
+axios.interceptors.request.use(config=>{
+  //在发送请求之前做某事，比如设置token
+  config.headers["X-Auth-Token"] = localStorage.getItem("token");
+  return config;
+},error => {
+  //请求错误时做些事情
+  console.log("请求失败");
+  return Promise.reject(error); //方法返回一个带有拒绝原因reason参数的Promise对象。
+});
+/*******************************************  添加请求拦截器  end *******************************************************************/
+
+
+/******************************************** 添加响应拦截器  start *****************************************************/
+axios.interceptors.response.use((response)=>{
+  //对接入成功的请求返回的信息做默认处理
+  //注 403 是拒绝处理，情况比较复杂，就根据不同请求单独处理，不在这里做统一处理
+  //注 404 页面由于是组件化的，不是直接跳转到404页面，所以需要单独处理
+  switch (response.data.code) {
+
+    case '401': //如果返回401，则表示要继续实现该功能则需要进一步的登录，否则无法继续，直接跳转到登录页面，不需要返回response
+      Notice.info({
+        title: "登录提示：",
+        desc: "该功能需要登录后才能操作，请先进行登录后再继续",
+      });
+      router.push({name:'login'});
+      break;
+
+    case '402': //如果返回的是402，则表示token获取，需要重新获取token,这个工作由程序完成，不用提示用户需要重新登录（符合刷新token原则的情况下）,需要返回response 继续下一步操作
+      axios({
+        url:'/Authentication/getToken',
+        method:'post',
+      }).then((response)=>{
+        if (response.data.code === '200') {
+          console.log("刷新Token成功");
+          localStorage.setItem("token",response.data.data)
+        }else {// 如果 Token 不允许刷新（登录过期等等复杂情况），跳转到登录页面
+          console.log("Return Info："+response.data.code+"："+response.data.msg);
+          router.push({name:'login'})
+        }
+      });
+      return response;
+
+    case '407': //表示没有足够的身份或者权限去获取对应的信息,不需要返回response
+      Notcie.warning({
+        title:'拒绝访问提示：',
+        desc:response.data.msg,
+      });
+      break;
+
+    case '500'://表示服务器处理该请求的时候，出现了错误,不需要返回response
+      Notice.error({
+        title:'服务处理异常：',
+        desc:response.data.msg,
+      });
+      break;
+  }
+
+},error => { //连接发送错误时的处理
+  Notice.warning({
+    title : '网络链接阻塞',
+    desc : '服务器被外星人拐跑了  @oo(▼皿▼メ;)o'
+  });
+  console.log("网络链接阻塞\n服务器被外星人拐跑了  @oo(▼皿▼メ;)o");
+  return Promise.reject(error); // 返回接口返回的错误信息
+
+});
+
+/******************************************** 添加响应拦截器  end *****************************************************/
+
 
 
 //  1.定义（路由）组件
@@ -92,12 +169,13 @@ const router = new VueRouter({
 });
 
 
+
+
+// **********************************************************  必须放到最后系列  ****************************************************************************
 //  4. 创建和挂载根实例。
 //  记得要通过 router 配置参数注入路由，
 //  从而让整个应用都有路由功能
-
 const app = new Vue({
-
   el: '#app', // el和$mount并没有本质上的不同
   /* 想要实现单独渲染vue，就不能添加下面的两句，否则，渲染的结果会直接出现在主页最后面 */
   // template: '<App/>',
@@ -120,84 +198,7 @@ const app = new Vue({
   },
 
 });//现在，可以试试启动喽
+// ***********************************************************   必须放到最后系列   ************************************************************************************
 
 
-
-//axios 参数格式
-Vue.prototype.$qs = qs;
-//Vue 网络请求工具
-Vue.prototype.$axios = axios;  //全局注册，使用方法为：this.$axios
-//axios 全局默认配置
-axios.defaults.baseURL = 'http://localhost:8888';
-//添加请求拦截器
-axios.interceptors.request.use(config=>{
-  //在发送请求之前做某事，比如设置token
-  config.headers["X-Auth-Token"] = localStorage.getItem("token");
-  return config;
-},error => {
-  //请求错误时做些事情
-  console.log("请求失败");
-  return Promise.reject(error); //方法返回一个带有拒绝原因reason参数的Promise对象。
-});
-
-//添加响应拦截器
-axios.interceptors.response.use((response)=>{
-  //对接入成功的请求返回的信息做默认处理
-  //注 403 是拒绝处理，情况比较复杂，就根据不同请求单独处理，不在这里做统一处理
-  switch (response.data.code) {
-
-    case '401': //如果返回401，则表示要继续实现该功能则需要进一步的登录，否则无法继续
-      Notice.info({
-        title: "登录提示：",
-        desc: "该功能需要登录后才能操作，请先进行登录后再继续",
-      });
-      router.push({name:'login'});
-      break;
-
-    case '402': //如果返回的是402，则表示token获取，需要重新获取token,这个工作由程序完成，不用提示用户需要重新登录（符合刷新token原则的情况下）
-      axios({
-        url:'/Authentication/getToken',
-        method:'post',
-      }).then((response)=>{
-        if (response.data.code === '200') {
-          console.log("刷新Token成功");
-          localStorage.setItem("token",response.data.data)
-        }else {// 如果 Token 不允许刷新（登录过期等等复杂情况），跳转到登录页面
-          console.log("Return Info："+response.data.code+"："+response.data.msg);
-          router.push({name:'login'})
-        }
-      });
-      break;
-
-    case '404':
-      router.push({name:'404'});
-      break;
-
-    case '407': //表示没有足够的身份或者权限去获取对应的信息
-      Notcie.warning({
-        title:'拒绝访问提示：',
-        desc:response.data.msg,
-      });
-      break;
-
-    case '500'://表示服务器处理该请求的时候，出现了错误
-      Notice.error({
-        title:'服务处理异常：',
-        desc:response.data.msg,
-      });
-      break;
-  }
-  return response;
-
-},error => {
-
-  Notice.warning({
-    title : '网络链接阻塞',
-    desc : '服务器被外星人拐跑了  @oo(▼皿▼メ;)o'
-  });
-
-  console.log("网络链接阻塞\n服务器被外星人拐跑了  @oo(▼皿▼メ;)o");
-  return Promise.reject(error); // 返回接口返回的错误信息
-
-});
 
