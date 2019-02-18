@@ -3,12 +3,17 @@
       <!-- ok导航栏（用户登录信息） -->
       <ok-header></ok-header>
 
-      <div>
+      <!-- 是否显示404页面 -->
+      <div  v-if="isNotFound">
+        <not-found></not-found>
+      </div>
+
+      <!-- 否则显示主要内容页面 -->
+      <div v-else>
         <!--Article 文章标题部分-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
           <i-col span="12" >
           <span class="article_title">
-            SpringBoot自动配置原理
             {{this.ArticleInfo.title}}
             {{$route.params.article_id}}
           </span>
@@ -29,7 +34,7 @@
             <div style="line-height: 30px;">
               <a><span>{{this.ArticleInfo.nickname}}</span></a>
               <br>
-              <span style="color: gray"> <Time :time="ArticleInfo.time" type="datetime" /></span>&emsp;
+              <span style="color: gray">{{ArticleInfo.time}}</span>&emsp;
               <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="22"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
               <span><Icon type="md-eye" size="22" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.watch}}</label></span>
             </div>
@@ -52,7 +57,6 @@
       </div>
 
 
-
       <Divider />
 
       <!--返回顶部-->
@@ -63,9 +67,10 @@
 
 <script>
     import OkHeader from "../header/ok_header";
+    import NotFound from "./404";
     export default {
         name: "articleInfo",
-      components: {OkHeader},
+      components: {NotFound, OkHeader},
       data() {
         return {
           ArticleInfo:{
@@ -82,35 +87,46 @@
             like:0,             //文章的喜欢量
             dislike:0,          //文章的不喜欢量
           },
+          isNotFound:false,
         };
       },
+      methods:{
+          //获取文章详情的方法
+          getArticleInfo(){
+            if (this.ArticleInfo.articleID !== ''){
+              this.$axios({
+                url:'/article/get_articleInfo',
+                method:'get',
+                params:{
+                  articleID : this.ArticleInfo.articleID,
+                }
+              }).then((response)=>{
+                console.log("web_articleInfo 第一次执行返回的信息:",response);
+                if (response.data.code === '404'){
+                  this.isNotFound = true;
+                  console.log("404, NotFound")
+                }else if (response.data.code === 'reTry'){
+                  console.log("web_articleInfo reTry 时 执行");
+                  this.getArticleInfo();
+                } else {
+                  this.ArticleInfo.nickname = response.data.data.nickname;
+                  this.ArticleInfo.userIcon = response.data.data.userIcon;
+                  this.ArticleInfo.content = response.data.data.content;
+                  this.ArticleInfo.title = response.data.data.title;
+                  this.ArticleInfo.label = response.data.data.label;
+                  this.ArticleInfo.time = response.data.data.time;
+                  this.ArticleInfo.watch = response.data.data.watch;
+                  this.ArticleInfo.like = response.data.data.like;
+                  this.ArticleInfo.dislike = response.data.data.dislike;
+                }
+              })
+            }
+          }
+      },
       mounted(){
-          let me = this;
-          let qs = this.$qs;
-          console.log("this.$qs 内容：",this.$qs,' qs 的内容:',qs);
           this.ArticleInfo.articleID = this.$route.params.article_id;
-          console.log("mounted 文章ID:",this.ArticleInfo.articleID);
 
-        if (this.ArticleInfo.articleID !== ''){
-          me.$axios({
-            url:'/article/get_articleInfo',
-            method:'post',
-            data:me.$qs.stringify({
-              articleID : this.ArticleInfo.articleID,
-            })
-          }).then((response)=>{
-            console.log("链接成功，返回的信息:",response);
-            this.ArticleInfo.nickname = response.data.data.nickname;
-            this.ArticleInfo.userIcon = response.data.data.userIcon;
-            this.ArticleInfo.content = response.data.data.content;
-            this.ArticleInfo.title = response.data.data.title;
-            this.ArticleInfo.label = response.data.data.label;
-            this.ArticleInfo.time = response.data.data.time;
-            this.ArticleInfo.watch = response.data.data.watch;
-            this.ArticleInfo.like = response.data.data.like;
-            this.ArticleInfo.dislike = response.data.data.dislike;
-          })
-        }
+          this.getArticleInfo();
       },
       created(){
           //根据传递过来的ID，去请求相应文章的所有内容

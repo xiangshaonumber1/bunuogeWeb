@@ -79,6 +79,7 @@
               })
             }
           ).then((response)=>{ //这里使用了 ES6 的语法
+            console.log(response);
             if (response.data.code === '200'){ //登录成功
               const userInfo = {
                 openID: response.data.data.openID,

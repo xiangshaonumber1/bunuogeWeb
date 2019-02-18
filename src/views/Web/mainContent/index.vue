@@ -82,7 +82,6 @@
                   </span>
                 </div>
                 <div class="articles-info">
-                  <img src="https://i.loli.net/2017/08/21/599a521472424.jpg" class="img-circle"/>
                   <span>UserNickName</span>
                   <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>1.88W</label></span>&emsp;
                   <span><Icon type="md-eye" size="20" />&nbsp;<label>1.88W</label></span>
@@ -131,6 +130,10 @@
           this.$router.push({path:"/ai/"+id+""})
         }
       },
+      //首页数据获取
+      mounted(){
+
+      }
     }
 </script>
 
