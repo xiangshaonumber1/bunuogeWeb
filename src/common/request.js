@@ -41,23 +41,22 @@ request.interceptors.response.use(response=>{
   * 404 因为404页面是组件化到其他组件中，所以也不方便统一拦截
   * */
   switch (response.data.code) {
-
-    case '401'://如果返回401，则表示要继续实现该功能则需要进一步的登录，否则无法继续，直接跳转到登录页面，不需要返回response
+    case '401':// 表示该功能需要登录才能继续,
       Notice.info({
         title: "登录提示：",
-        desc: "该功能需要登录后才能操作，请先进行登录后再继续",
+        desc: response.data.msg,
       });
       router.push({name:'login'});
       break;
 
-    case '403': //服务器拒绝处理
+    case '403': // 服务器请求成功，但有，比如注册失败，登录失败，等等失败操作
       Notice.info({
         title: "验证失败：",
-        desc: "您的操作有误，无法正确执行",
+        desc: response.data.msg,
       });
       break;
 
-    case '405': // 如果 Token 不允许刷新（登录过期等等复杂情况）,提示token失效，跳转到登录页面
+    case '405': // 仅仅用于表示token拒绝刷新等处理
       Notice.info({
         title:'身份过期提示：',
         desc:response.data.msg,
@@ -65,9 +64,9 @@ request.interceptors.response.use(response=>{
       router.push({name:'login'});
       break;
 
-    case '407': //表示没有足够的身份或者权限去获取对应的信息,不需要返回response
-      Notcie.warning({
-        title:'拒绝访问提示：',
+    case '407': //表示没有足够酒店 权限 或者 身份
+      Notice.warning({
+        title:'无权访问提示：',
         desc:response.data.msg,
       });
       break;
@@ -84,9 +83,8 @@ request.interceptors.response.use(response=>{
 },error => { //请求返回错误信息时
   Notice.warning({
     title : '网络链接阻塞',
-    desc : '服务器被外星人拐跑了  @oo(▼皿▼メ;)o'
+    desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'
   });
-  console.log("网络链接阻塞\n服务器被外星人拐跑了  @oo(▼皿▼メ;)o");
   return Promise.reject(error); // 返回接口返回的错误信息
 });
 
