@@ -102,13 +102,22 @@
             case 'userFeedback'://前往帮助与反馈
               this.$router.push({name:'feedback'});break;
             case 'userExit': // 注销当前登录
-              this.$store.dispatch("clearLoginInfo");
-              this.isLogin = 'false';
-              this.$Notice.success({
-                title:'操作结果：',
-                desc:'用户登出成功'
-              });
-              this.$router.push({name:"index"});
+              const result = this.$apis.AuthenticationApi.logout();
+              console.log("返回的结果:",result);
+              if (result === 'success'){
+                this.$store.dispatch("clearLoginInfo");
+                this.isLogin = 'false';
+                this.$Notice.success({
+                  title:'操作结果：',
+                  desc:'用户登出成功'
+                });
+                this.$router.push({name:"index"});
+              }else {
+                this.$Notice.error({
+                  title:'操作结果：',
+                  desc:'用户登出失败'
+                });
+              }
               break;
           }
         },
