@@ -81,52 +81,34 @@
             pictureCover:'',    //封面图
             title:'',           //文章标题
             content:'',         //文章内容
-            label:'',           //文章标签
-            time:'',            //发布时间
             watch:0,            //文章的浏览量
             like:0,             //文章的喜欢量
             dislike:0,          //文章的不喜欢量
+            label:'',           //文章标签
+            time:'',            //发布时间
           },
           isNotFound:false,
         };
       },
       methods:{
-          //获取文章详情的方法
-          getArticleInfo(){
-            if (this.ArticleInfo.articleID !== ''){
-              this.$axios({
-                url:'/article/get_articleInfo',
-                method:'get',
-                params:{
-                  articleID : this.ArticleInfo.articleID,
-                }
-              }).then((response)=>{
-                console.log("web_articleInfo 第一次执行返回的信息:",response);
-                if (response.data.code === '404'){
-                  this.isNotFound = true;
-                  console.log("404, NotFound")
-                }else if (response.data.code === 'reTry'){
-                  console.log("web_articleInfo reTry 时 执行");
-                  this.getArticleInfo();
-                } else {
-                  this.ArticleInfo.nickname = response.data.data.nickname;
-                  this.ArticleInfo.userIcon = response.data.data.userIcon;
-                  this.ArticleInfo.content = response.data.data.content;
-                  this.ArticleInfo.title = response.data.data.title;
-                  this.ArticleInfo.label = response.data.data.label;
-                  this.ArticleInfo.time = response.data.data.time;
-                  this.ArticleInfo.watch = response.data.data.watch;
-                  this.ArticleInfo.like = response.data.data.like;
-                  this.ArticleInfo.dislike = response.data.data.dislike;
-                }
-              })
-            }
-          }
+
       },
       mounted(){
           this.ArticleInfo.articleID = this.$route.params.article_id;
 
-          this.getArticleInfo();
+          const articleInfo = this.$apis.get_articleInfo(this.$route.params.article_id);
+          if (articleInfo!=null){
+            this.ArticleInfo = articleInfo;
+            // this.ArticleInfo.nickname = articleInfo.nickname;
+            // this.ArticleInfo.userIcon = articleInfo.userIcon;
+            // this.ArticleInfo.content = articleInfo.content;
+            // this.ArticleInfo.title = articleInfo.title;
+            // this.ArticleInfo.label = articleInfo.label;
+            // this.ArticleInfo.time = articleInfo.time;
+            // this.ArticleInfo.watch = articleInfo.watch;
+            // this.ArticleInfo.like = articleInfo.like;
+            // this.ArticleInfo.dislike = articleInfo.dislike;
+          }
       },
       created(){
           //根据传递过来的ID，去请求相应文章的所有内容

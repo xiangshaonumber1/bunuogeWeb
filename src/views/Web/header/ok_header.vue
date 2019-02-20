@@ -112,7 +112,7 @@
                   desc:'用户登出成功'
                 });
                 this.$router.push({name:"index"});
-              }else {
+              }else{
                 this.$Notice.error({
                   title:'操作结果：',
                   desc:'用户登出失败'

@@ -31,11 +31,7 @@ const authentication = {
         this.$store.dispatch("saveLoginInfo",userInfo);
         router.push({name:'index'});
       }else {
-        console.log("注册失败，失败信息：",res);
-        this.$Notice.error({
-          title:"注册失败",
-          desc:res.data.msg
-        })
+        console.log("register else info :",response)
       }
     })
 
@@ -60,53 +56,45 @@ const authentication = {
         };
         this.$store.dispatch("saveLoginInfo", userInfo);
         router.push({name: 'index'});
-      } else {
-        this.$Notice.error({ //登录失败
-          title: '登录失败：',
-          desc: response.data.msg
-        })
+      }else {
+        console.log("login else info :",response)
       }
     })
   },
 
-  //注销请求
+  //注销请求，需要带token，但这个token并不用于验证，所以不需要判断402
   logout(){
     request({
      url:'/Authentication/logout',
      method:"post",
     }).then(res =>{
+      console.log("logout 返回的信息 ： ",res);
       if (res.data.code === '200'){
+        console.log("登出成功");
         return 'success'
-      }else if (res.data.code === '402'){
-       const result = this.getToken();
-       if (result === 'success'){
-         this.logout();
-       }
-      }else {
+      }else{
         return 'fail'
       }
    })
   },
 
 
-  //token过期，请求重新获取token,失败返回405
+  //token过期，请求重新获取token,header中需要带上token，但同样不用于验证，不用判断402,失败返回405
   getToken(){
     request({
       url:'/Authentication/getToken',
       method:'get',
     }).then(res=>{//这里不用考虑402
-      console.log("getToken 输出：",res);
       if (res.data.code === '200'){
-        console.log("刷新Token成功");
-        localStorage.setItem("token",res.data.data);
-        return 'success'
-      }else{
-        console.log("其他情况 输出具体信息：",res)
+        console.log("getToken 刷新成功 输出：",res);
+        localStorage.setItem("token",res.data.data); //保存刷新后的token到本地
+        return true;
+      }else{ //token刷新失败（405）,已在拦截器中做处理,跳转到登录页面
+        console.log("getToken else info：",res);
+        return false;
       }
     });
   },
-
-
 
 
 };
