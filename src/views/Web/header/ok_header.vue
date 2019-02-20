@@ -91,7 +91,7 @@
         },
 
         //用户功能
-        to_user_function(item_name){
+       async to_user_function(item_name){
           switch (item_name) {
             case 'userInfo'://前往个人信息
               this.$router.push({name:'userInfo'});break;
@@ -102,7 +102,7 @@
             case 'userFeedback'://前往帮助与反馈
               this.$router.push({name:'feedback'});break;
             case 'userExit': // 注销当前登录
-              const result = this.$apis.AuthenticationApi.logout();
+              const result = await this.$apis.AuthenticationApi.logout();
               console.log("返回的结果:",result);
               if (result === 'success'){
                 this.$store.dispatch("clearLoginInfo");
@@ -125,7 +125,12 @@
         //前往文章创作版块
         go_writeArticle(){
           this.$router.push({path:'/write/article'})
+        },
+
+        async logout(){
+
         }
+
       },
 
       mounted() {

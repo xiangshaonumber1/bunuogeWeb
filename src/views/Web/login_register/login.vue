@@ -71,32 +71,35 @@
             })
           }
 
-          this.$axios({
-              url:'/Authentication/login',
-              method:'post',
-              data:this.$qs.stringify({
-                username:this.loginInfo.username,
-                password:this.loginInfo.password,
-              })
-            }
-          ).then((response)=>{ //这里使用了 ES6 的语法
-            console.log(response);
-            if (response.data.code === '200'){ //登录成功
-              const userInfo = {
-                openID: response.data.data.openID,
-                nickname: response.data.data.nickname,
-                avatar: response.data.data.avatar,
-                token: response.data.data.token,
-              };
-              this.$store.dispatch("saveLoginInfo",userInfo);
-              this.$router.push({name:'index'});
-            }else {
-              return this.$Notice.error({ //登录失败
-                title:'登录失败：',
-                desc:response.data.msg
-              })
-            }
-          })
+          this.$apis.AuthenticationApi.login(this.loginInfo.username,this.loginInfo.password);
+
+          // this.$axios({
+          //     url:'/Authentication/login',
+          //     method:'post',
+          //     data:this.$qs.stringify({
+          //       username:this.loginInfo.username,
+          //       password:this.loginInfo.password,
+          //     })
+          //   }
+          // ).then((response)=>{ //这里使用了 ES6 的语法
+          //   console.log(response);
+          //   if (response.data.code === '200'){ //登录成功
+          //     const userInfo = {
+          //       openID: response.data.data.openID,
+          //       nickname: response.data.data.nickname,
+          //       avatar: response.data.data.avatar,
+          //       token: response.data.data.token,
+          //     };
+          //     this.$store.dispatch("saveLoginInfo",userInfo);
+          //     this.$router.push({name:'index'});
+          //   }else {
+          //     return this.$Notice.error({ //登录失败
+          //       title:'登录失败：',
+          //       desc:response.data.msg
+          //     })
+          //   }
+          // })
+
         }
       }
     }

@@ -4,6 +4,7 @@
 import request from '../common/request'
 import {Notice} from 'iview'
 import router from '../router/router'
+import store from '../blog_vuex/store'
 
 
 
@@ -28,7 +29,7 @@ const authentication = {
           avatar: res.data.data.avatar,
           token: res.data.data.token,
         };
-        this.$store.dispatch("saveLoginInfo",userInfo);
+        store.dispatch("saveLoginInfo",userInfo);
         router.push({name:'index'});
       }else {
         console.log("register else info :",response)
@@ -38,13 +39,13 @@ const authentication = {
   },
 
   //登录请求
-  login() {
+  login(username,password) {
     return request({
       url: '/Authentication/login',
       method: 'post',
       data: {
-        username: this.loginInfo.username,
-        password: this.loginInfo.password,
+        username: username,
+        password: password,
       }
     }).then(response => {
       if (response.data.code === '200') { //登录成功
@@ -54,17 +55,23 @@ const authentication = {
           avatar: response.data.data.avatar,
           token: response.data.data.token,
         };
-        this.$store.dispatch("saveLoginInfo", userInfo);
+        store.dispatch("saveLoginInfo", userInfo);
         router.push({name: 'index'});
       }else {
-        console.log("login else info :",response)
+
+        console.log("login else info :",response);
+        Notice.error({ //登录失败
+          title:'登录失败：',
+          desc:response.data.msg
+        });
+
       }
     })
   },
 
   //注销请求，需要带token，但这个token并不用于验证，所以不需要判断402
   logout(){
-    request({
+   return request({
      url:'/Authentication/logout',
      method:"post",
     }).then(res =>{
