@@ -69,29 +69,28 @@
         <Row>
           <i-col span="24">
 
-            <div class="articles" v-for="article in articleList">
+            <!--如果没有数据，显示404-->
+            <not-found v-if="notFound"></not-found>
+            <!--如果有数据，正常显示-->
+            <div class="articles" v-else v-for="article in articleList">
               <Card :bordered="false">
                 <div class="articles-title">
-                  <p><a @click="goArticleInfo(666)">现代浏览器探秘（part4）：事件处理</a></p>
+                  <p><a @click="goArticleInfo(article.articleID)">{{article.title}}</a></p>
                 </div>
                 <div class="articles-content">
-                  <span>Content of no border type. Content of no border type.
-                    <br>Content of no border type. Content of no border type.
-                    Content of no border type. Content of no border type.
-                    Content of no border type. Content of no border type.
+                  <span>
+                    {{replaceHtml(article.content)}}
                   </span>
                 </div>
                 <div class="articles-info">
-                  <span>UserNickName</span>
-                  <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>1.88W</label></span>&emsp;
-                  <span><Icon type="md-eye" size="20" />&nbsp;<label>1.88W</label></span>
-                  <span style="float: right;margin-right: 20px"><Icon type="md-time" size="20" /><Time :time="push_time"></Time></span>
+                  <span>{{article.nickname}}</span>
+                  <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>{{article.like}}</label></span>&emsp;
+                  <span><Icon type="md-eye" size="20" />&nbsp;<label>{{article.dislike}}</label></span>
+                  <span style="float: right;margin-right: 20px"><Icon type="md-time" size="20" /><Time :time="article.time"></Time></span>
                 </div>
               </Card>
               <Divider style="margin-top: 0" />
             </div>
-
-
           </i-col>
         </Row>
 
@@ -107,11 +106,13 @@
 <script>
     import BlogFooter from "../footer/footer";
     import OkHeader from "../header/ok_header";
+    import NotFound from "./404";
     export default {
       name: "index",
-      components: {OkHeader, BlogFooter},
+      components: {NotFound, OkHeader, BlogFooter},
       data(){
         return {
+          notFound:true,
           autoplaySpeed:5000,
           CarouselOrder:0,
           top_menu_theme:'light',
@@ -123,16 +124,40 @@
             {},{},{},{},{},{},{},{},{},{},
           ],
           push_time: ((new Date()).getTime() - (60 * 3 * 1000)),
+          index_article_page:1 //获取指定页号的信息
         }
       },
+
       methods:{
+        //前往文章详情页面
         goArticleInfo(id){
-          this.$router.push({path:"/ai/"+id+""})
-        }
+          //
+          let ArticleInfo = this.$router.resolve({
+            path:"/ai/"+id+"",
+          });
+          window.open(ArticleInfo.href,'_blank')
+          // this.$router.push({path:"/ai/"+id+""})
+        },
+
+        //去掉html标签
+        replaceHtml(value){
+          var result = value.replace(/<\/?.+?>/g,"");
+          result = result.replace(/ /g,"");
+          return result;
+        },
+
       },
       //首页数据获取
-      mounted(){
-
+      async mounted(){
+        const result = await this.$apis.ArticleApi.get_article_list(this.index_article_page);
+        if (result==null && this.index_article_page === 1){ //没有返回数据时
+          this.notFound = true;
+        }else { //如果获取到的数据不为空
+          this.notFound = false;
+          this.index_article_page++;
+          this.articleList = result;
+          console.log("index  this.articleList:", this.articleList);
+        }
       }
     }
 </script>

@@ -41,7 +41,7 @@
     <!--第四行，编辑内容 -->
     <Row>
       <i-col>
-        <div ref="editorContent" class="text">
+        <div ref="articleContent" class="text">
         </div>
       </i-col>
     </Row>
@@ -60,7 +60,7 @@
       data(){
           return{
             articleTitle:'',
-            editorContent:'',
+            articleContent:'',
             select_type:"原创文章",
             origin_link:'',
             onlyText:''
@@ -69,7 +69,7 @@
 
       methods:{
         //用户向服务器提交发布的文章
-        request_push_article(){
+       async request_push_article(){
           if (this.articleTitle.length <6){  //检查标题是否符合规范
             return this.$Notice.warning({
               title:'标题不规范提示',
@@ -89,25 +89,8 @@
             })
           }
 
-          this.$axios({
-            url:'/article/write_article',
-            method:'post',
-            data:this.$qs.stringify({
-              title:this.articleTitle,
-              content:this.editorContent,
-              label:this.select_type,
-              origin_link:this.origin_link,
-            })
-          }).then((response)=>{
-            //发布成功后，立即跳转到刚编辑的文章
-            if (response.data.code === '200'){
-              console.log("发布成功的文章的ID:",response.data.msg);
-              const id = response.data.msg;
-              this.$router.push({path:'/ai/'+id+''})
-            }else {
-              console.log("write_article:",response)
-            }
-          })
+         this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,this.origin_link)
+
         }
       },
 
@@ -115,7 +98,7 @@
         console.log("write_article : mounted 正在执行");
         //这句不能加，加了反而不会显示
         // var E = window.wangEditor
-        let editor = new E(this.$refs.editorMenu,this.$refs.editorContent);
+        let editor = new E(this.$refs.editorMenu,this.$refs.articleContent);
         //加上这个句，才能在编辑器中粘贴图片
         editor.customConfig.uploadImgShowBase64 = true;
         editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
@@ -125,7 +108,7 @@
         //监听编辑器内容变化，并赋给editorContent
         editor.customConfig.onchange = (html) => {
           //带html格式的文本
-          this.editorContent = html;
+          this.articleContent = html;
           //纯文字文本
           this.onlyText = html.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();
         };

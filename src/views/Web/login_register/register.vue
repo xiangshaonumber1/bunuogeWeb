@@ -85,26 +85,16 @@
               return callback(new Error("邮箱格式有误，请检查"))
             }
 
-            this.$axios({//如果前面的检查都能通过的话，就进行网络请求，判断是否被注册过
-              url:'/Authentication/isExist',
-              method:'post',
-              data:this.$qs.stringify({
-                username:this.registerInfo.email
-              })
-            }).then((response)=>{
-              console.log("then 输出信息:",response);
-              if (response.data.code === '200'){//等于200表示尚未被注册
-                this.ok_email = true;
-                return callback();
-              }else {//返回其他表示被注册了
-                return callback(new Error("该邮箱已被注册，请换一个邮箱再继续"))
-              }
-            }).catch((error)=>{
-              return this.$Notice.error({
-                title:'网络连接失败：',
-                desc:'非常抱歉，目前网络连接失败，请检查后再继续'
-              })
-            })
+            const result = this.$apis.AuthenticationApi.isExist(this.registerInfo.email);
+            console.log(" register result : ",result);
+            if (result){
+              this.ok_email = true;
+              return callback();
+            } else {
+              return callback(new Error("该邮箱已被注册，请换一个邮箱再继续"))
+            }
+
+
           };
           //密码格式验证
           const validatePassword = (rule,value,callback)=>{
@@ -174,59 +164,15 @@
               desc:'请输入有效的工作邮箱后，再获取验证码'
             })
           }
-
-          this.$axios({
-            url:'/user/request_mail',
-            method:'post',
-            data:this.$qs.stringify({
-              userMail:this.registerInfo.email,
-              type:'register'
-            })
-          }).then((response)=>{
-            if (response.status === 200){
-              this.$Notice.success({
-                title:'邮件发送成功',
-                desc:'邮件已成功发送，请注意查收'
-              })
-            }
-            console.log("输出response信息",response)
-          }).catch((error)=>{
-            console.log("出了个错误：",error)
-          })
+          //请求发送验证码
+          this.$apis.UserApi.mailCode(this.registerInfo.email,"register");
         },
 
         //注册请求
         request_register(){
           if (this.ok_email && this.ok_password && this.ok_checkPassword && this.registerInfo.emailCode!==null){
-            this.$axios({
-              url: '/Authentication/register',
-              method: 'post',
-              data:this.$qs.stringify({
-                username: this.registerInfo.email,//用户名
-                password: this.registerInfo.password,//密码
-                userMail: this.registerInfo.email,//绑定邮箱
-                MailVerificationCode: this.registerInfo.emailCode//邮箱验证码
-              })
-            }).then((response)=>{
-              if (response.data.code === '200'){
-                const userInfo = {
-                  openID: response.data.data.openID,
-                  nickname: response.data.data.nickname,
-                  avatar: response.data.data.avatar,
-                  token: response.data.data.token,
-                };
-                this.$store.dispatch("saveLoginInfo",userInfo);
-                this.$router.push({name:'index'});
-              }else {
-                console.log("注册失败，失败信息：",response);
-                this.$Notice.error({
-                  title:"注册失败",
-                  desc:response.data.msg
-                })
-              }
-            }).catch((response)=>{
-              console.log("连接出错了，错误信息：",response)
-            })
+            //注册的请求
+            this.$apis.AuthenticationApi.register(this.registerInfo.email,this.registerInfo.password,this.registerInfo.email,this.registerInfo.emailCode);
           }else {
             this.$Notice.error({
               title:'信息不完善',

@@ -12,9 +12,9 @@
             <!-- 导航栏 -->
             <div>
               <Menu mode="horizontal" theme="light" :active-name="menuActive" style="border: none">
-                <MenuItem name="index"><span>首页</span></MenuItem>
-                <MenuItem name="collection"><span>收藏</span></MenuItem>
-                <MenuItem name="recommend"><span>推荐</span></MenuItem>
+                <MenuItem name="index"><span @click="goIndex">首页</span></MenuItem>
+                <MenuItem name="collection"><span @click="goCollections">收藏</span></MenuItem>
+                <MenuItem name="dynamic"><span @click="goDynamic">动态</span></MenuItem>
               </Menu>
             </div>
 
@@ -80,6 +80,24 @@
         }
       },
       methods:{
+          //前往首页
+        goIndex(){
+          this.$router.push({name:'index'});
+        },
+        //前往我的收藏页
+        goCollections(){
+          this.$Notice.info({
+            title: '敬请期待：',
+            desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
+          })
+        },
+        //获取关注对象的动态信息
+        goDynamic(){
+          this.$Notice.info({
+            title: '敬请期待：',
+            desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
+          })
+        },
         //进行登录
         to_sign_in(){
           this.$router.push({name:'login'});

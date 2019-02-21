@@ -11,18 +11,20 @@ import store from '../blog_vuex/store'
 const authentication = {
 
   //用户注册请求
-  register() {
+  register(username,password,email,emailCode) {
     return request({
         url: '/Authentication/register',
         method: 'post',
         data:{
-          username: this.registerInfo.email,//用户名
-          password: this.registerInfo.password,//密码
-          userMail: this.registerInfo.email,//绑定邮箱
-          MailVerificationCode: this.registerInfo.emailCode//邮箱验证码
+          username: username,//用户名
+          password: password,//密码
+          userMail: email,//绑定邮箱
+          MailVerificationCode: emailCode//邮箱验证码
         }
     }).then(res =>{
       if (res.data.code === '200'){
+        console.log("register : ",res);
+        console.log("register openID",res.data.data.openID);
         const userInfo = {
           openID: res.data.data.openID,
           nickname: res.data.data.nickname,
@@ -32,10 +34,9 @@ const authentication = {
         store.dispatch("saveLoginInfo",userInfo);
         router.push({name:'index'});
       }else {
-        console.log("register else info :",response)
+        console.log("register else info :",res)
       }
     })
-
   },
 
   //登录请求
@@ -57,14 +58,6 @@ const authentication = {
         };
         store.dispatch("saveLoginInfo", userInfo);
         router.push({name: 'index'});
-      }else {
-
-        console.log("login else info :",response);
-        Notice.error({ //登录失败
-          title:'登录失败：',
-          desc:response.data.msg
-        });
-
       }
     })
   },
@@ -88,7 +81,7 @@ const authentication = {
 
   //token过期，请求重新获取token,header中需要带上token，但同样不用于验证，不用判断402,失败返回405
   getToken(){
-    request({
+  return request({
       url:'/Authentication/getToken',
       method:'get',
     }).then(res=>{//这里不用考虑402
@@ -103,6 +96,20 @@ const authentication = {
     });
   },
 
+
+  //判断邮箱是否可用（已注册）
+  isExist(email){
+    return request({
+      url:'/Authentication/isExist',
+      method:'get',
+      params:{
+        username:email,
+      }
+    }).then( res =>{
+      console.log("isExist : ",res);
+      return res.data.code === '200';
+    })
+  },
 
 };
 

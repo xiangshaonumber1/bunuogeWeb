@@ -90,24 +90,14 @@
           isNotFound:false,
         };
       },
-      methods:{
-
-      },
-      mounted(){
-          this.ArticleInfo.articleID = this.$route.params.article_id;
-
-          const articleInfo = this.$apis.get_articleInfo(this.$route.params.article_id);
-          if (articleInfo!=null){
+     async mounted(){
+        this.ArticleInfo.articleID = this.$route.params.article_id;
+        const articleInfo = await this.$apis.ArticleApi.get_articleInfo(this.$route.params.article_id);
+        console.log("web_articleInfo",articleInfo);
+          if (articleInfo!=null){ //如果不为空，则赋值
             this.ArticleInfo = articleInfo;
-            // this.ArticleInfo.nickname = articleInfo.nickname;
-            // this.ArticleInfo.userIcon = articleInfo.userIcon;
-            // this.ArticleInfo.content = articleInfo.content;
-            // this.ArticleInfo.title = articleInfo.title;
-            // this.ArticleInfo.label = articleInfo.label;
-            // this.ArticleInfo.time = articleInfo.time;
-            // this.ArticleInfo.watch = articleInfo.watch;
-            // this.ArticleInfo.like = articleInfo.like;
-            // this.ArticleInfo.dislike = articleInfo.dislike;
+          }else { //如果为空，则显示404组件
+            this.isNotFound = true;
           }
       },
       created(){
