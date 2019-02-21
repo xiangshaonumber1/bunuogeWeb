@@ -26,6 +26,8 @@ import Web_articleInfo from '../views/Web/mainContent/web_articleInfo'
 import Web_feedBack from '../views/Web/mainContent/web_feedback'
 import Web_writeArticle from '../views/Web/mainContent/web_article_write'
 import NotFound from '../views/Web/mainContent/404'
+import Web_search from '../views/Web/mainContent/web_searchInfo'
+import Web_userInfo from '../views/Web/mainContent/web_userInfo'
 
 
 //  2.定义路由
@@ -35,6 +37,8 @@ const routes = [
   {path:"/ai/:article_id",component:Web_articleInfo, name:'articleInfo'}, //ai —— article info
   {path:'/home', component: Home, name:"home"},
   {path:'/feedback',component:Web_feedBack, name:'feedback'},
+  {path:'/search/:key_word',component:Web_search, name:'search'},
+  {path:'/setting/userInfo/:openID',component:Web_userInfo, name:'userInfo'},
   {path:'/404',component:NotFound,name:'404'},
   {path: '/welcome', component: Welcome, name:"welcome",children:[
       {path:'login',component:Login, name:"login"},
