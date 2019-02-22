@@ -6,6 +6,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 //  1.定义（路由）组件
 //加载组组件
+import App from '../App'
 import Welcome from '../views/Web/login_register/welcome'
 import Home from '../views/Web/home/home'
 import Controller from '../views/Service/controller/ServiceController'
@@ -17,7 +18,6 @@ import DataArticles from '../views/Service/components/data_articles'
 import DataDiaries from '../views/Service/components/data_diaries'
 import PersonalInfo from  '../views/Service/components/personal_info'
 import BlogTotal from '../views/Service/components/blog_total'
-import Index from '../views/Web/mainContent/index'
 import Register from '../views/Web/login_register/register'
 import Login from '../views/Web/login_register/login'
 import Identity from '../views/Service/components/identity_user'
@@ -30,22 +30,25 @@ import Web_search from '../views/Web/mainContent/web_searchInfo'
 import Web_userInfo from '../views/Web/mainContent/web_userInfo'
 
 
+
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
-  {path:'/', component: Index, name:"index"},
-  {path:"/ai/:article_id",component:Web_articleInfo, name:'articleInfo'}, //ai —— article info
-  {path:'/home', component: Home, name:"home"},
+  {path:'/', component: App, name:"index"},
+  {path:'/write/article',component:Web_writeArticle,name:'web_write_article'},
   {path:'/feedback',component:Web_feedBack, name:'feedback'},
-  {path:'/search/:key_word',component:Web_search, name:'search'},
-  {path:'/setting/userInfo/:openID',component:Web_userInfo, name:'userInfo'},
   {path:'/404',component:NotFound,name:'404'},
-  {path: '/welcome', component: Welcome, name:"welcome",children:[
+  {path:'/home', component: Home, name:"home"},
+  {path:'/setting/userInfo/:openID',component:Web_userInfo, name:'userInfo'},
+  {path:"/ai/:article_id",component:Web_articleInfo, name:'articleInfo'}, //ai —— article info
+  {path:'/search/:key_word',component:Web_search, name:'search'},
+
+  {path: '/welcome', component: Welcome, name:"welcome",
+    children:[
       {path:'login',component:Login, name:"login"},
       {path:'register' , component: Register , name:"register"}
     ]},
-  {path:'/write/article',component:Web_writeArticle,name:'web_write_article'},
-  {path:'/write/'},
+
   {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
       {path: 'article', component: WriteArticle, name:"write_article"},
@@ -59,7 +62,8 @@ const routes = [
       {path: 'link',component: LinkEdit, name:"identity_link"},
       {path: 'white',component: White, name:"ServiceController/white"},
     ]},
-  {path:'/wangeditor', component: WriteArticle, name:"wangeditor"},
+
+
 ];
 
 //  3.创建 router 实例，然后传‘routes’配置

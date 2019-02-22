@@ -80,7 +80,28 @@ const article = {
        page: page,
      }
     }).then( res =>{
-      console.log("get_article_list :",res);
+      if (res.data.code === '404'){
+        return null;
+      }else {
+        return res.data.data;
+      }
+    })
+  },
+
+
+  /**
+   * 根据搜索框的关键字查询类似的文章
+   */
+  get_search(key_word,page){
+    return request({
+      url:'/article/get_search',
+      methods:'get',
+      params:{
+        keyValue:key_word,
+        page:page,
+      }
+    }).then( res =>{
+      console.log("get_search 输出:",res);
       if (res.data.code === '404'){
         return null;
       }else {

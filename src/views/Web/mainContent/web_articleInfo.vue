@@ -1,8 +1,7 @@
 <template>
     <div id="articleInfo">
-      <!-- ok导航栏（用户登录信息） -->
-      <ok-header></ok-header>
 
+      <ok-header></ok-header>
       <!-- 是否显示404页面 -->
       <div  v-if="isNotFound">
         <not-found></not-found>
@@ -15,7 +14,7 @@
           <i-col span="12" >
           <span class="article_title">
             {{this.ArticleInfo.title}}
-            {{$route.params.article_id}}
+            <!--{{$route.params.article_id}}-->
           </span>
           </i-col>
         </Row>
@@ -44,7 +43,7 @@
 
         <!--Article 文章主要内容-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-content">
-          <i-col span="12" style="border: 1px solid red">
+          <i-col span="12">
 
             <div class="article_content">
               <!-- 复制粘贴过来的，死样式，后面再删 start -->
@@ -66,11 +65,11 @@
 </template>
 
 <script>
-    import OkHeader from "../header/ok_header";
     import NotFound from "./404";
+    import OkHeader from "../header/ok_header";
     export default {
         name: "articleInfo",
-      components: {NotFound, OkHeader},
+      components: {OkHeader, NotFound},
       data() {
         return {
           ArticleInfo:{
@@ -137,7 +136,7 @@
   }
 
   .article_title{
-    font-size: 25px;
+    font-size: 35px;
     font-weight: bold;
   }
   .article_content{

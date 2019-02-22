@@ -12,21 +12,18 @@
             <!-- 导航栏 -->
             <div>
               <Menu mode="horizontal" theme="light" :active-name="menuActive" style="border: none">
-                <MenuItem name="index"><span @click="goIndex">首页</span></MenuItem>
-                <MenuItem name="collection"><span @click="goCollections">收藏</span></MenuItem>
-                <MenuItem name="dynamic"><span @click="goDynamic">动态</span></MenuItem>
+                <MenuItem name="index" @click.native="goIndex" ><span>首页</span></MenuItem>
+                <MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>
+                <MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>
               </Menu>
             </div>
 
             <!-- 搜索框 -->
-            <div>
-              <form class="navbar-form navbar-left" style=";line-height: 60px;margin: 0;padding:0 15px;">
-                <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-info" style="margin-left: 15px">搜索</button>
-              </form>
+            <div class="searchInput">
+              <Input search enter-button="搜 索" v-model.trim="search_key_word"  size="large" style="margin-top: 11px" @on-search="goSearchResult(search_key_word)"></Input>
             </div>
+
+
 
             <!-- 个人信息 -->
             <div style="line-height: 60px;float: right;padding: 0 10px;" v-if="isLogin === 'true' ">
@@ -69,6 +66,7 @@
         name: "ok-header",
       data(){
         return {
+          search_key_word:null,
           menuActive:"",
           isLogin:"false",//判断当前用户是否已经登录
           userInfo:{
@@ -106,6 +104,18 @@
         //进行注册
         to_sign_up(){
           this.$router.push({name:'register'});
+        },
+
+        //前往搜索结果页面
+        goSearchResult(key_word){
+          if (key_word !== null && key_word.length>=2){
+            this.$router.push({path:"/search/"+key_word+""})
+          }else {
+              this.$Message.warning({
+                content:"搜索的关键字不能低于2位有效字符",
+                duration:4
+              })
+          }
         },
 
         //用户功能
@@ -154,12 +164,12 @@
       mounted() {
         this.userInfo = this.$store.getters.userInfo;
         this.isLogin = this.$store.getters.isLogin;
-        if (this.isLogin === 'true'){
-          this.$Message.success({
-            content:"欢迎来到ok博客，把所有烦恼都忘掉，静下来感受知识的力量吧！",
-            duration:4
-          })
-        }
+        // if (this.isLogin === 'true'){
+        //   this.$Message.success({
+        //     content:"欢迎来到ok博客，把所有烦恼都忘掉，静下来感受知识的力量吧！",
+        //     duration:4
+        //   })
+        // }
       },
 
     }
@@ -183,4 +193,6 @@
   .index-top-affix{
     border-bottom: 1px solid rgb(220, 222, 226);
   }
+
+
 </style>

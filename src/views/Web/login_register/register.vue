@@ -45,9 +45,7 @@
 
           <p style="color: white;text-align: center">
             注册即代表您同意并遵守
-            <a @click="goArticleInfo(0)" style="color: white">《用户协议》</a>
-            和
-            <a @click="goArticleInfo(1)" style="color: white">《隐私协议》</a>
+            <a @click="goArticleInfo(0)" style="color: white">《用户使用协议》</a>
           </p>
 
         </i-form>

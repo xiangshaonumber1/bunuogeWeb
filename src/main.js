@@ -23,9 +23,7 @@ Vue.use(VueCropper);
 Vue.prototype.$apis = apis;
 
 
-import Header from './views/Web/header/header'
-import Footer from './views/Web/footer/footer'
-import OkHeader from './views/Web/header/ok_header'
+
 
 // **********************************************************  必须放到最后系列  ****************************************************************************
 //  4. 创建和挂载根实例。
@@ -38,11 +36,6 @@ const app = new Vue({
   // components: { App },
   router,
   store,
-  components:{
-    "OkHeader":OkHeader,
-    "Header":Header,
-    "Footer":Footer
-  },
   //Vue对象创建完成时
   mounted(){
     // this.$store.commit("clearLoginInfo")
