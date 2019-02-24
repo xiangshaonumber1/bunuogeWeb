@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 //  1.定义（路由）组件
 //加载组组件
 import App from '../App'
+import Index from '../views/Web/mainContent/index'
 import Welcome from '../views/Web/login_register/welcome'
 import Home from '../views/Web/home/home'
 import Controller from '../views/Service/controller/ServiceController'
@@ -34,14 +35,16 @@ import Web_userInfo from '../views/Web/mainContent/web_userInfo'
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
-  {path:'/', component: App, name:"index"},
+  {path:'/', component: App,children:[  //首页
+      {path:'/',component:Index, name:'index'}, //文章搜索页面
+      {path:'search/:key_word',component:Web_search, name:'search'}, //文章搜索页面
+      {path:"ai/:article_id",component:Web_articleInfo, name:'articleInfo'}, //文章详情页面
+      {path:'setting/userInfo/:openID',component:Web_userInfo, name:'userInfo'}, //个人设置中心
+    ]},
   {path:'/write/article',component:Web_writeArticle,name:'web_write_article'},
   {path:'/feedback',component:Web_feedBack, name:'feedback'},
   {path:'/404',component:NotFound,name:'404'},
   {path:'/home', component: Home, name:"home"},
-  {path:'/setting/userInfo/:openID',component:Web_userInfo, name:'userInfo'},
-  {path:"/ai/:article_id",component:Web_articleInfo, name:'articleInfo'}, //ai —— article info
-  {path:'/search/:key_word',component:Web_search, name:'search'},
 
   {path: '/welcome', component: Welcome, name:"welcome",
     children:[

@@ -19,4 +19,10 @@ export const clearLoginInfo = (state)=>{
     state.nickname = null;
     state.avatar = null;
     state.isLogin = 'false';
+    state.searchKey = null;
+};
+
+//保存用户搜索信息
+export const saveSearchKey = (state,searchKey) =>{
+  state.searchKey = searchKey;
 };

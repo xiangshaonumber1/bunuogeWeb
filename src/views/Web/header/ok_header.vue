@@ -66,9 +66,9 @@
         name: "ok-header",
       data(){
         return {
-          search_key_word:null,
           menuActive:"",
           isLogin:"false",//判断当前用户是否已经登录
+          search_key_word:null,//搜索框关键字
           userInfo:{
             openID:'',//用户ID
             nickname:'',//用户昵称
@@ -106,10 +106,24 @@
           this.$router.push({name:'register'});
         },
 
+        /*************************************************** 搜索暂行解决方法（新建窗口跳转）********************************************************/
         //前往搜索结果页面
         goSearchResult(key_word){
+          console.log("ok_header goSearchResult key_word :",key_word);
           if (key_word !== null && key_word.length>=2){
-            this.$router.push({path:"/search/"+key_word+""})
+            //新建窗口跳转
+            // let SearchInfo = this.$router.resolve({
+            //   path:"/search/"+key_word+""
+            // });
+            // window.open(SearchInfo.href,'_blank');
+            this.$store.dispatch("saveSearchKey",key_word);
+            this.$router.push({
+              name:"search",
+              params:{
+                key_word:key_word,
+              }
+            });
+            console.log("goSearchResult 完成");
           }else {
               this.$Message.warning({
                 content:"搜索的关键字不能低于2位有效字符",
@@ -117,6 +131,7 @@
               })
           }
         },
+        /**************************************************** 搜索暂行解决方法（新建窗口跳转）************************************************************/
 
         //用户功能
        async to_user_function(item_name){
@@ -155,13 +170,11 @@
           this.$router.push({path:'/write/article'})
         },
 
-        async logout(){
-
-        }
 
       },
 
       mounted() {
+        let key_word = this.$store.getters.searchKey;
         this.userInfo = this.$store.getters.userInfo;
         this.isLogin = this.$store.getters.isLogin;
         // if (this.isLogin === 'true'){
@@ -170,7 +183,12 @@
         //     duration:4
         //   })
         // }
+        this.search_key_word = key_word;
       },
+
+      updated() {
+
+      }
 
     }
 </script>

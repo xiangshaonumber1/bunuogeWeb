@@ -1,7 +1,6 @@
 <template>
     <div id="articleInfo">
 
-      <ok-header></ok-header>
       <!-- 是否显示404页面 -->
       <div  v-if="isNotFound">
         <not-found></not-found>

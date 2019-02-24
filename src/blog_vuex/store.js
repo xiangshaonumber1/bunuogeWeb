@@ -13,6 +13,7 @@ const state = {
   nickname:null,//用户昵称
   avatar:null,//用户头像地址
   isLogin:'false',//判断当前用户是否已经登录
+  searchKey:null,//当前用户的搜搜关键字
 };
 
 const store = new Vuex.Store({

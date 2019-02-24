@@ -92,13 +92,14 @@ const article = {
   /**
    * 根据搜索框的关键字查询类似的文章
    */
-  get_search(key_word,page){
+  get_search(key_word,page,type){
     return request({
       url:'/article/get_search',
       methods:'get',
       params:{
         keyValue:key_word,
         page:page,
+        type:type,
       }
     }).then( res =>{
       console.log("get_search 输出:",res);
