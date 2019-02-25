@@ -35,12 +35,12 @@
 
                 <!--文章标题-->
                 <div class="searchArticleTitle">
-                  <a @click="goArticleInfo(searchArticle.articleID)">{{searchArticle.title}}</a>
+                  <a @click="goArticleInfo(searchArticle.articleID)"><span v-html="brightenKeyword(searchArticle.title,key_word_list)"></span></a>
                 </div>
 
                 <!--文章内容-->
                 <div class="searchArticleContent">
-                  <span>{{replaceHtml(searchArticle.content)}}</span>
+                  <span v-html="brightenKeyword(replaceHtml(searchArticle.content),key_word_list)"></span>
                 </div>
 
                 <!--文章作者和文章状态信息-->
@@ -112,6 +112,7 @@
           isLoading:true,
           notFound:false,
           searchType:'article',
+          key_word_list:[],//分词器拆分后的结果
         }
       },
 
@@ -129,7 +130,8 @@
          }else {
            this.isLoading = false; //取消正在加载
            this.notFound = false; //取消显示404
-           this.searchInfoList = result; //赋值获取到的数据
+           this.searchInfoList = result.articleInfo; //赋值获取到的文章数据
+           this.key_word_list = result.key_word_list;  //赋值获取到的分词器
          }
         },
 
@@ -155,7 +157,23 @@
 
         },
 
+        // 筛选变色,不过英文好像无法识别大小写
+        // brightenKeyword(val, keyword) {
+        //   val = val + '';
+        //   if (val.indexOf(keyword) !== -1 && keyword !== '') {
+        //     return val.replace(keyword, '<font color="#409EFF">' + keyword + '</font>')
+        //   } else {
+        //     return val
+        //   }
+        // },
 
+        // 或者用正则表达式，能识别大小写，但是会根据搜索关键字的大小写而覆盖原本内容的大小写
+        brightenKeyword(content, keyword) {
+          const Reg = new RegExp(keyword, 'i');
+          if (content) {
+            return content.replace(Reg, `<span style="color: red;">${keyword}</span>`);
+          }
+        }
 
       },
 
@@ -197,7 +215,7 @@
     padding: 16px 16px 5px 16px;
   }
 
-  .searchArticleTitle a{
+  .searchArticleTitle a,span{
     color: black;
     font-size: 18px;
     font-weight: bold;

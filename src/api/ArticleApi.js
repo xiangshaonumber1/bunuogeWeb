@@ -97,7 +97,7 @@ const article = {
       url:'/article/get_search',
       methods:'get',
       params:{
-        keyValue:key_word,
+        key_word:key_word,
         page:page,
         type:type,
       }
