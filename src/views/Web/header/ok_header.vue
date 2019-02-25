@@ -82,6 +82,7 @@
         goIndex(){
           this.$router.push({name:'index'});
         },
+
         //前往我的收藏页
         goCollections(){
           this.$Notice.info({
@@ -89,6 +90,7 @@
             desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
           })
         },
+
         //获取关注对象的动态信息
         goDynamic(){
           this.$Notice.info({
@@ -96,6 +98,7 @@
             desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
           })
         },
+
         //进行登录
         to_sign_in(){
           this.$router.push({name:'login'});
@@ -109,21 +112,18 @@
         /*************************************************** 搜索暂行解决方法（新建窗口跳转）********************************************************/
         //前往搜索结果页面
         goSearchResult(key_word){
-          console.log("ok_header goSearchResult key_word :",key_word);
           if (key_word !== null && key_word.length>=2){
             //新建窗口跳转
             // let SearchInfo = this.$router.resolve({
             //   path:"/search/"+key_word+""
             // });
             // window.open(SearchInfo.href,'_blank');
-            this.$store.dispatch("saveSearchKey",key_word);
             this.$router.push({
               name:"search",
               params:{
                 key_word:key_word,
               }
             });
-            console.log("goSearchResult 完成");
           }else {
               this.$Message.warning({
                 content:"搜索的关键字不能低于2位有效字符",
@@ -170,11 +170,9 @@
           this.$router.push({path:'/write/article'})
         },
 
-
       },
 
       mounted() {
-        let key_word = this.$store.getters.searchKey;
         this.userInfo = this.$store.getters.userInfo;
         this.isLogin = this.$store.getters.isLogin;
         // if (this.isLogin === 'true'){
@@ -183,12 +181,17 @@
         //     duration:4
         //   })
         // }
-        this.search_key_word = key_word;
       },
 
-      updated() {
-
+      beforeRouteEnter(to, from, next) {
+        next(vm => {
+          //因为当钩子执行前，组件实例还没被创建
+          // vm 就是当前组件的实例相当于上面的 this，所以在 next 方法里你就可以把 vm 当 this 来用了。
+          console.log(vm);//当前组件的实例
+          console.log("ok_header key_word",vm.key_word);
+        });
       }
+
 
     }
 </script>

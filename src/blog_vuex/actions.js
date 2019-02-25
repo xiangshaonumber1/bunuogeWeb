@@ -11,8 +11,3 @@ export const clearLoginInfo = ({commit},user)=>{
   commit("clearLoginInfo",user)
 };
 
-//保存用户的搜索的关键字
-export const saveSearchKey = ({commit},searchKey)=>{
-  commit("saveSearchKey",searchKey)
-};
-

@@ -1,20 +1,15 @@
 <template>
   <div>
 
-    <!--ok header -->
-    <!--<ok-header></ok-header>-->
-
-
-
     <Row type="flex" class="code-row-bg" align="top" justify="center" style="margin-top: 3vh">
 
       <!--搜索类型选择-->
       <i-col span="4" style="margin-right:2vw">
         <Card icon="ios-options" :padding="0">
           <span slot="title">搜索类型</span>
-          <CellGroup @on-click="getSearchInfo">
-            <Cell title="文章" name="article" selected><Icon type="ios-paper" slot="icon" size="20"/></Cell>
-            <Cell title="用户" name="user"><Icon type="md-person" slot="icon" size="20"/></Cell>
+          <CellGroup @on-click="updateSearchInfo">
+            <Cell title="文章" name="article" :selected="searchType === 'article'"><Icon type="ios-paper" slot="icon" size="20"/></Cell>
+            <Cell title="用户" name="user" :selected="searchType === 'user'"><Icon type="md-person" slot="icon" size="20"/></Cell>
           </CellGroup>
         </Card>
       </i-col>
@@ -30,24 +25,24 @@
           <not-found></not-found>
         </Card>
 
-
         <!--如果有数据，则正常显示搜索结果-->
         <div v-else>
+
           <!--显示文章搜索结果-->
           <div v-if="searchType === 'article' ">
-            <div class="searchArticle" v-for="searchArticle in searchInfoList">
+            <div class="searchInfo" v-for="searchArticle in searchInfoList">
               <Card :bordered="false">
-                <!--文章内容和标题-->
 
+                <!--文章标题-->
                 <div class="searchArticleTitle">
                   <a @click="goArticleInfo(searchArticle.articleID)">{{searchArticle.title}}</a>
                 </div>
 
+                <!--文章内容-->
                 <div class="searchArticleContent">
-                  <span>
-                    {{replaceHtml(searchArticle.content)}}
-                  </span>
+                  <span>{{replaceHtml(searchArticle.content)}}</span>
                 </div>
+
                 <!--文章作者和文章状态信息-->
                 <div class="searchArticleOtherInfo">
                   <span>{{searchArticle.nickname}}</span>&emsp;
@@ -55,18 +50,44 @@
                   <span><Icon type="md-eye" size="16" />&nbsp;<label>{{searchArticle.dislike}}</label></span>
                   <span style="float: right;margin-right: 20px"><Icon type="md-time" size="16" />&nbsp;<Time :time="searchArticle.time"/></span>
                 </div>
+
               </Card>
               <Divider style="margin: 0;"/>
             </div>
-
-
-
           </div>
 
           <!--显示用户搜索结果-->
           <div v-else-if="searchType === 'user'">
-            选择用户
+            <div class="searchInfo" v-for="searchUser in searchInfoList">
+              <Card :bordered="false">
+
+                <div>
+                  <a @click="goUserInfo" style="color: black;text-decoration: none">
+                  <Avatar :src="searchUser.userIcon" />
+                    &nbsp;<span>{{searchUser.nickname}}</span>
+                  </a>
+                  <Button type="info" style="float: right">关注</Button>
+                </div>
+
+
+                <blockquote style="padding: 0 15px;margin: 5px 0;">
+                  <div class="userDescribe">
+                    <span style="font-size: 14px;color: gray;font-weight: normal">
+                      {{searchUser.describe}}
+                      在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等
+                      在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等
+                    </span>
+                  </div>
+                </blockquote>
+
+
+
+
+              </Card>
+              <Divider style="margin: 0;"/>
+            </div>
           </div>
+
         </div>
 
       </i-col>
@@ -95,22 +116,30 @@
       },
 
       methods:{
-
-        //修改搜索类型，并重新发送请求
-        getSearchInfo(type){
-          this.searchType = type;
-          console.log("name : ",this.searchType);
+        updateSearchInfo(type){  //修改搜索类型，并重新发送请求
+          this.searchType = type;//修改当前的搜索类型
+          this.getSearchInfo();//带上搜索类型，重新发起请求
         },
 
-        //去掉html标签
-        replaceHtml(value){
+       async getSearchInfo(){//获取相应的搜索结果
+         const result = await this.$apis.ArticleApi.get_search(this.$route.params.key_word,this.search_page,this.searchType);
+         if (result === null && this.search_page === 1){
+           this.isLoading = false; //取消正在加载
+           this.notFound = true; //显示404
+         }else {
+           this.isLoading = false; //取消正在加载
+           this.notFound = false; //取消显示404
+           this.searchInfoList = result; //赋值获取到的数据
+         }
+        },
+
+        replaceHtml(value){//去掉html标签
           var result = value.replace(/<\/?.+?>/g,"");
           result = result.replace(/ /g,"");
           return result;
         },
 
-        //前往文章详情页面
-        goArticleInfo(id){
+        goArticleInfo(id){ //前往文章详情页面
           //新建窗口跳转
           let ArticleInfo = this.$router.resolve({
             name:'articleInfo',
@@ -122,37 +151,33 @@
           // this.$router.push({path:"/ai/"+id+""})
         },
 
+        goUserInfo(){//前往用户详情页面
+
+        },
+
 
 
       },
 
-      async mounted(){
-        console.log("mounted 执行");
-        this.key_word = this.$store.getters.searchKey;
-        //保存key_word的值到vuex中
-
-        const result = await this.$apis.ArticleApi.get_search(this.$route.params.key_word,this.search_page);
-        if (result === null && this.search_page === 1){
-          this.isLoading = false; //取消正在加载
-          this.notFound = true; //显示404
-        }else {
-          this.isLoading = false; //取消正在加载
-          this.notFound = false; //取消显示404
-          this.searchInfoList = result; //赋值获取到的数据
-          this.search_page++;
-        }
+      mounted(){
+        console.log("mounted 执行",this.$route.params.key_word);
+        this.getSearchInfo();
       },
 
-      async updated(){
-        console.log("update 执行");
-        // console.log("update key_word 的 值：",this.$route.params.key_word);
-        console.log("this.key_word：——",this.key_word);
-        console.log("this.$route.params.key_word：——",this.$route.params.key_word)
+
+      beforeRouteUpdate(to,from,next){
+        //在当前路由改变，但是该组件被复用时调用
+        //对于一个带有动态参数的路径 /good/:id，在 /good/1 和 /good/2 之间跳转的时候，
+        // 由于会渲染同样的good组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+        // 可以访问组件实例 `this`
+        console.log('beforeRouteUpdate Update Update'); //当前组件实例
+        console.log("web_searchInfo",this.searchType);
+        next();
+        this.getSearchInfo();
       },
 
-      async created(){
-        console.log("created 执行");
-      }
+
+
 
     }
 </script>
@@ -164,11 +189,11 @@
     font-family: "Microsoft YaHei UI",serif;
   }
 
-  .searchArticle{
+  .searchInfo{
     margin-bottom: 10px;
   }
 
-  .searchArticle >>> .ivu-card-body{
+  .searchInfo >>> .ivu-card-body{
     padding: 16px 16px 5px 16px;
   }
 
@@ -203,5 +228,14 @@
     font-weight: normal;
   }
 
+  .userDescribe{
+    /*border: 1px solid red;*/
+    margin: 10px 0;
+    overflow: hidden;
+    text-overflow-ellipsis: true;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+  }
 
 </style>

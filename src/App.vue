@@ -10,9 +10,6 @@
 
 
 import OkHeader from "./views/Web/header/ok_header";
-import BlogFooter from "./views/Web/footer/footer";
-import Loading from "./views/Web/loading/loading";
-import NotFound from "./views/Web/mainContent/404";
 export default {
   name:'App',
   components: {OkHeader}
