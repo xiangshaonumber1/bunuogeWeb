@@ -48,27 +48,27 @@
               //每一个父菜单和其子菜单的所有设置
               {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
                 childList:[
-                  {child_title:'统计详情',child_index:'1-1',to_path:'blog_state'},
-                  {child_title:'个人详情',child_index:'1-2',to_path:'personal_info'},
+                  {child_title:'统计详情',child_index:'1-1',to_path:'service_blog_state'},
+                  {child_title:'个人详情',child_index:'1-2',to_path:'service_personal_info'},
                 ]},
               {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
                 childList:[
-                  {child_title:'写文章',child_index:'2-1',to_path:'write_article'},
-                  {child_title:'写日记',child_index:'2-2',to_path:'write_diary'},
-                  {child_title:'提问题',child_index:'2-3',to_path:'write_diary'},
+                  {child_title:'写文章',child_index:'2-1',to_path:'service_write_article'},
+                  {child_title:'写日记',child_index:'2-2',to_path:'service_write_diary'},
+                  {child_title:'提问题',child_index:'2-3',to_path:'service_white_page'},
               ]},
               {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',icon:'ios-copy',is_child:true,
                 childList:[
-                  {child_title:'我的文章',child_index:'3-1',to_path:'data_articles'},
-                  {child_title:'我的日记',child_index:'3-2',to_path:'data_diaries'},
-                  {child_title:'收藏文章',child_index:'3-3',to_path:'ServiceController/white'},
-                  {child_title:'我的评论',child_index:'3-4',to_path:'ServiceController/white'},
+                  {child_title:'我的文章',child_index:'3-1',to_path:'service_data_articles'},
+                  {child_title:'我的日记',child_index:'3-2',to_path:'service_data_diaries'},
+                  {child_title:'收藏文章',child_index:'3-3',to_path:'service_white_page'},
+                  {child_title:'我的评论',child_index:'3-4',to_path:'service_white_page'},
                 ]},
               {parent_index:'4',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
-                  {child_title:'用户管理',child_index:'4-1',to_path:'identity_user'},
-                  {child_title:'发送邮件',child_index:'4-2',to_path:'write_email'},
-                  {child_title:'链接编辑',child_index:'4-3',to_path:'identity_link'},
+                  {child_title:'用户管理',child_index:'4-1',to_path:'service_identity_user'},
+                  {child_title:'发送邮件',child_index:'4-2',to_path:'service_write_email'},
+                  {child_title:'链接编辑',child_index:'4-3',to_path:'service_identity_link'},
                 ]
               },
             ],
@@ -103,7 +103,7 @@
               }
             }
           }
-          console.log('TabClick '+this.intI++);
+          console.log('点击选项卡，跳转到相应的页面 ',path);
           this.$router.push({name:path})
         },
 
@@ -120,7 +120,7 @@
             this.openNames.push(childIndex);//将刚创建的选项卡的编号存入openNames
           }
           this.activeIndex = childIndex;
-          console.log('addTab '+this.intI++);
+          console.log('addTab 新增选项卡：',to_path);
           this.$router.push({name:to_path})
         },
 
@@ -139,7 +139,7 @@
               }
             }
           }
-          console.log('removeTab '+this.intI++);
+          console.log("删除上一个选项卡后，即将前往路径：",path);
           this.$router.push({name:path})
         },
 
@@ -147,7 +147,7 @@
       //**********************  methods end ****************************
 
       //此钩子中函数一般会做一些ajax请求获取数据进行数据初始化，mounted 在整个实例中只执行一次
-      mounted:function () {
+      mounted() {
         var open = localStorage.getItem("open-names");
         var active = localStorage.getItem("active-name");
         if (null != open){

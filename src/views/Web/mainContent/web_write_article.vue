@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import Write_article from "../../Service/components/write_article";
+  import Write_article from "../../Service/components/service_write_article";
     export default {
       name: "web_article_write",
       components: {Write_article},

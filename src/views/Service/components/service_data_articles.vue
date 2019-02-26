@@ -1,0 +1,167 @@
+<template>
+    <div class="my-articles">
+
+      <!-- Title 部分 -->
+      <div>
+        <Row>
+          <i-col span="24">
+            <span style="font-size: 20px;font-weight: bold">文章数据详情</span>
+            <div style="float: right">
+              <span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>
+            </div>
+            <hr>
+          </i-col>
+        </Row>
+      </div>
+
+      <loading v-if="isLoading"></loading>
+
+      <not-found v-else-if="notFound"></not-found>
+
+      <!-- 查询结果 部分 -->
+      <div class="myArticleInfo" v-else  v-for="myArticle in myArticleInfoList">
+        <Card :bordered="false">
+
+          <!--文章标题-->
+          <div class="myArticleTitle">
+            <a @click="goArticleInfo(myArticle.articleID)"><span v-html="myArticle.title"></span></a>
+          </div>
+
+          <!--文章内容-->
+          <div class="myArticleContent">
+            <span v-html="replaceHtml(myArticle.content)"></span>
+          </div>
+
+          <!--文章作者和文章状态信息-->
+          <div class="myArticleOtherInfo">
+            <span>{{myArticle.nickname}}</span>&emsp;
+            <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;<label>{{myArticle.like}}</label></span>&emsp;
+            <span><Icon type="md-eye" size="16" />&nbsp;<label>{{myArticle.dislike}}</label></span>
+            <span style="float: right;margin-right: 20px"><Icon type="md-time" size="16" />&nbsp;<Time :time="myArticle.time"/></span>
+          </div>
+
+        </Card>
+        <Divider style="margin: 0;"/>
+      </div>
+
+
+    </div>
+</template>
+
+<script>
+    import NotFound from "../../Web/mainContent/404";
+    import Loading from "../../Web/loading/loading";
+    export default {
+        name: "management_articles",
+      components: {Loading, NotFound},
+      data(){
+          return {
+            myArticleInfoList:[],
+            isLoading:true,
+            notFound:false,
+            page:1,
+          }
+      },
+      methods:{
+
+        replaceHtml(value){//去掉html标签
+          var result = value.replace(/<\/?.+?>/g,"");
+          result = result.replace(/ /g,"");
+          return result;
+        },
+
+       async get_myArticle() {//获取当前用户所创作的文章
+         const result = await this.$apis.ArticleApi.get_myArticle(this.page);
+          if (result ===null && this.page===1 ) {
+            this.isLoading = false; //取消正在加载
+            this.notFound = true; //显示404
+          }else {
+            console.log("此时，应该获取到结果了,输出看看是什么东西:",result);
+            this.myArticleInfoList = result;
+            this.isLoading = false;
+            this.notFound = false;
+          }
+          console.log("我应该在后面输出");
+        },
+
+        goArticleInfo(id){ //前往文章详情页面
+          //新建窗口跳转
+          let ArticleInfo = this.$router.resolve({
+            name:'web_articleInfo',
+            params:{
+              article_id:id
+            }
+          });
+          window.open(ArticleInfo.href,'_blank')
+        },
+
+      },
+
+       mounted() {
+          //从后台拉取数据
+        this.get_myArticle();
+      }
+    }
+</script>
+
+<style scoped>
+
+  span{
+    font-size: 14px;
+  }
+
+  hr{
+    margin: 10px 0;
+  }
+
+  label{
+    margin: 0;
+    padding: 0;
+  }
+  .my-articles{
+    /*padding: 15px 35px;*/
+    padding: 0;
+    margin: 0;
+  }
+
+
+  .myArticleInfo{
+    margin-bottom: 10px;
+  }
+
+  .myArticleInfo >>> .ivu-card-body{
+    padding: 16px 16px 5px 16px;
+  }
+
+  .myArticleTitle a,span{
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px;
+  }
+
+
+  .myArticleContent{
+    /* 超出长度时，出现省略号  */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    /*autoprefixer: off;*/
+    -webkit-box-orient: vertical;
+    /*autoprefixer: on;*/
+    display:-webkit-box;
+    margin: 5px 0;
+  }
+
+  .myArticleContent >span{
+    color: gray;
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+  .myArticleOtherInfo span,label{
+    font-size: 14px;
+    font-weight: normal;
+  }
+
+</style>

@@ -1,5 +1,6 @@
 <template>
     <div class="personal">
+
       <Row type="flex" justify="center" align="middle" class="code-row-bg" style="margin-bottom: 5px">
         <i-col span="5">
           <div class="text-center">
@@ -81,6 +82,12 @@
         <i-col span="24">
           <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人简介</span>
           <textarea class="form-control personal_textarea" maxlength="300"></textarea>
+        </i-col>
+      </Row>
+
+      <Row type="flex" class="code-row-bg" justify="center" style="margin-top: 20px">
+        <i-col span="5">
+          <Button type="info" size="large" long><span>保&emsp;存</span></Button>
         </i-col>
       </Row>
 
@@ -197,7 +204,9 @@
 <style scoped>
 
   .personal{
-    padding: 35px 35px 10px 35px;
+    /*padding: 35px 35px 10px 35px;*/
+    padding: 0;
+    margin: 0;
   }
 
   .wish_textarea{

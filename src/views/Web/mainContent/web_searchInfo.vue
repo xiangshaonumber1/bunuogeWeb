@@ -6,7 +6,7 @@
       <!--搜索类型选择-->
       <i-col span="4" style="margin-right:2vw">
         <Card icon="ios-options" :padding="0">
-          <span slot="title">搜索类型</span>
+          <h3 slot="title">搜索类型</h3>
           <CellGroup @on-click="updateSearchInfo">
             <Cell title="文章" name="article" :selected="searchType === 'article'"><Icon type="ios-paper" slot="icon" size="20"/></Cell>
             <Cell title="用户" name="user" :selected="searchType === 'user'"><Icon type="md-person" slot="icon" size="20"/></Cell>
@@ -63,10 +63,11 @@
 
                 <div>
                   <a @click="goUserInfo" style="color: black;text-decoration: none">
-                  <Avatar :src="searchUser.userIcon" />
+                  <Avatar :src="searchUser.userIcon" size="large" style="padding: 0;"/>
                     &nbsp;<span>{{searchUser.nickname}}</span>
                   </a>
                   <Button type="info" style="float: right">关注</Button>
+                  <!--<Button type="success" style="float: right">已关注</Button>-->
                 </div>
 
 
@@ -144,13 +145,12 @@
         goArticleInfo(id){ //前往文章详情页面
           //新建窗口跳转
           let ArticleInfo = this.$router.resolve({
-            name:'articleInfo',
+            name:'web_articleInfo',
             params:{
               article_id:id
             }
           });
           window.open(ArticleInfo.href,'_blank')
-          // this.$router.push({path:"/ai/"+id+""})
         },
 
         goUserInfo(){//前往用户详情页面

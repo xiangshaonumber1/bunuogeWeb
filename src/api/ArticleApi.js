@@ -28,7 +28,6 @@ const article = {
     }).then( async (response) => {
       //发布成功后，立即跳转到刚编辑的文章
       if (response.data.code === '200') {
-        console.log("发布成功的文章的ID:", response.data.msg);
         const id = response.data.msg;
         Notice.success({
           title: "发布成功：",
@@ -37,11 +36,11 @@ const article = {
         router.push({path: '/ai/' + id + ''});
       } else if (response.data.code === '402') {
         const result = await AuthenticationApi.getToken();
-        console.log("write_article result:", result);
         if (result) {
-          this.write_article(ArticleTitle, ArticleContent, ArticleLabel, origin_link)
+          return this.write_article(ArticleTitle, ArticleContent, ArticleLabel, origin_link)
         } else {
-          console.log(" write_article ?????? what the fuck ???????")
+          console.log(" write_article ?????????? what the fuck ?????????")
+          return this.write_article(ArticleTitle, ArticleContent, ArticleLabel, origin_link)
         }
         //Token刷新失败（405）这里不做任何处理，拦截器中会跳转
       } else {
@@ -106,6 +105,33 @@ const article = {
       if (res.data.code === '404'){
         return null;
       }else {
+        return res.data.data;
+      }
+    })
+  },
+
+  /**
+   * 获取当前用户发布的文章
+   */
+  get_myArticle(page){
+    return request({
+      url:'/article/get_myArticle',
+      method:"get",
+      params:{
+        page:page,
+      }
+    }).then( async (res) => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.get_myArticle(page);
+        }else {
+          console.log("????????????????? get_myArticle: what the fuck ???????????")
+          return this.get_myArticle(page);
+        }
+      } else if (res.data.code === '404') {
+        return null;
+      } else {
         return res.data.data;
       }
     })

@@ -12,7 +12,11 @@
 import OkHeader from "./views/Web/header/ok_header";
 export default {
   name:'App',
-  components: {OkHeader}
+  components: {OkHeader},
+  methods:{
+
+
+  }
 }
 </script>
 

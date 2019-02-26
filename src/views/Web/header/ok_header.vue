@@ -12,7 +12,7 @@
             <!-- 导航栏 -->
             <div>
               <Menu mode="horizontal" theme="light" :active-name="menuActive" style="border: none">
-                <MenuItem name="index" @click.native="goIndex" ><span>首页</span></MenuItem>
+                <MenuItem name="index" @click.native="goIndex"><span>首页</span></MenuItem>
                 <MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>
                 <MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>
               </Menu>
@@ -34,7 +34,7 @@
                   <Icon type="ios-arrow-down"></Icon>
                 </a>
                 <DropdownMenu slot="list">
-                  <DropdownItem name="userInfo"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
+                  <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
                   <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
                   <DropdownItem name="userManager"><Icon type="ios-cloudy" size="20" /><span>&emsp;管理中心&emsp;</span></DropdownItem>
                   <DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>
@@ -42,13 +42,17 @@
                 </DropdownMenu>
               </Dropdown>
 
-              <div style="line-height: 60px;padding-left: 15px">
-                <Button type="info" icon="md-create" ghost size="large" @click="go_writeArticle"> <Icon type="" size="25" color="blue" />创作文章</Button>
+              <div style="line-height: 60px;margin-left: 15px">
+                <Button type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>
+              </div>
+
+              <div style="line-height: 60px;margin-left: 15px">
+                <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>
               </div>
 
             </div>
 
-            <!-- 登录注册提示 -->
+            <!-- 没有登录时显示 立即登录和 免费注册的按钮 -->
             <div style="line-height: 60px;float: right;padding: 0 10px;" v-else>
               <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bold">立即登录</span></Button>&emsp;
               <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bold;" @click="to_sign_up"><span>免费注册</span></Button>
@@ -113,13 +117,8 @@
         //前往搜索结果页面
         goSearchResult(key_word){
           if (key_word !== null && key_word.length>=2){
-            //新建窗口跳转
-            // let SearchInfo = this.$router.resolve({
-            //   path:"/search/"+key_word+""
-            // });
-            // window.open(SearchInfo.href,'_blank');
             this.$router.push({
-              name:"search",
+              name:"web_search",
               params:{
                 key_word:key_word,
               }
@@ -136,30 +135,20 @@
         //用户功能
        async to_user_function(item_name){
           switch (item_name) {
-            case 'userInfo'://前往个人信息
-              this.$router.push({name:'userInfo'});break;
+            case 'userCenter'://前往个人信息
+              this.$router.push({name:'web_personal_info'});break;
             case 'userSetting'://前往用户设置
               this.$router.push({name:'userSetting'});break;
             case 'userManager'://前往管理中心
               this.$router.push({name:'userManager'});break;
             case 'userFeedback'://前往帮助与反馈
-              this.$router.push({name:'feedback'});break;
+              this.$router.push({name:'web_feedback'});break;
             case 'userExit': // 注销当前登录
               const result = await this.$apis.AuthenticationApi.logout();
-              console.log("返回的结果:",result);
               if (result === 'success'){
-                this.$store.dispatch("clearLoginInfo");
                 this.isLogin = 'false';
-                this.$Notice.success({
-                  title:'操作结果：',
-                  desc:'用户登出成功'
-                });
+                this.$store.dispatch("clearLoginInfo");
                 this.$router.push({name:"index"});
-              }else{
-                this.$Notice.error({
-                  title:'操作结果：',
-                  desc:'用户登出失败'
-                });
               }
               break;
           }
@@ -167,20 +156,26 @@
 
         //前往文章创作版块
         go_writeArticle(){
-          this.$router.push({path:'/write/article'})
+          this.$router.push({name:'web_write_article'})
         },
+
+        //前往笔记创作页面
+        go_writeDiary(){
+          this.$router.push({name:'web_write_diary'})
+        },
+
+        //获取当前routeName,并赋值给menuActive
+        getRouteName(){
+         console.log("ok_header 当前routeName :",this.$route.name);
+         this.menuActive = this.$route.name;
+        }
 
       },
 
       mounted() {
         this.userInfo = this.$store.getters.userInfo;
         this.isLogin = this.$store.getters.isLogin;
-        // if (this.isLogin === 'true'){
-        //   this.$Message.success({
-        //     content:"欢迎来到ok博客，把所有烦恼都忘掉，静下来感受知识的力量吧！",
-        //     duration:4
-        //   })
-        // }
+        this.getRouteName();
       },
 
       beforeRouteEnter(to, from, next) {
@@ -188,10 +183,13 @@
           //因为当钩子执行前，组件实例还没被创建
           // vm 就是当前组件的实例相当于上面的 this，所以在 next 方法里你就可以把 vm 当 this 来用了。
           console.log(vm);//当前组件的实例
-          console.log("ok_header key_word",vm.key_word);
         });
-      }
+      },
 
+      watch: {
+          //这里表示 监听 ‘$route’的值，如果值发生变化，执行函数getRouteName
+        "$route":"getRouteName"
+      },
 
     }
 </script>

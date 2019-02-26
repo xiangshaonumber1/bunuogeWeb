@@ -5,7 +5,7 @@
 
         <Row type="flex" justify="center" align="middle" class="code-row-bg">
           <i-col span="12" class="text-center">
-            <img src="/static/picture/ok_blog_logo.png" style="height: 80px;" alt="img_none">
+            <img src="/static/picture/getok.jpg" style="height: 80px;" alt="img_none">
           </i-col>
         </Row>
 

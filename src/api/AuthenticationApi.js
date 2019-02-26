@@ -70,9 +70,16 @@ const authentication = {
     }).then(res =>{
       console.log("logout 返回的信息 ： ",res);
       if (res.data.code === '200'){
-        console.log("登出成功");
+        Notice.success({
+          title:'操作结果：',
+          desc:'用户登出成功'
+        });
         return 'success'
       }else{
+        Notice.error({
+          title:'操作结果：',
+          desc:'用户登出失败'
+        });
         return 'fail'
       }
    })

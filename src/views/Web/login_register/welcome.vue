@@ -22,7 +22,6 @@
 <script>
   //局部注册部件
   import Footer from 'src/views/Web/footer/footer'
-  //axios 请求
 
     export default {
       name: "Login",
@@ -82,6 +81,7 @@
         //此时 data 已经被 observed
         this.fetchDate();
       },
+
       watch:{
         //如果路由有变化，会再次执行
         "$route":"fetchDate"

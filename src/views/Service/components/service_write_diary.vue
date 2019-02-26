@@ -14,8 +14,8 @@
           <Input v-model="diary_title" size="large" placeholder="标题：请为本次的日记起个简介的描述吧" clearable/>
         </i-col>
 
-        <i-col span="2" class="diary_confirm">
-          <Button type="info" size="large">确认发布</Button>
+        <i-col span="3" class="diary_confirm">
+          <Button type="info" size="large" long>确 认 发 布</Button>
         </i-col>
 
       </Row>

@@ -132,13 +132,12 @@
         goArticleInfo(id){
           //新建窗口跳转
           let ArticleInfo = this.$router.resolve({
-            name:'articleInfo',
+            name:'web_articleInfo',
             params:{
               article_id:id
             }
           });
           window.open(ArticleInfo.href,'_blank')
-          // this.$router.push({path:"/ai/"+id+""})
         },
 
         //去掉html标签
