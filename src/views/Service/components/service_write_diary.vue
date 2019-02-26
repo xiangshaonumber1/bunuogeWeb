@@ -5,17 +5,18 @@
       <Row style="margin: 5px 0;">
         <i-col span="4" style="z-index: 10002; padding-right: 10px;margin-bottom: 10px">
           <Select v-model="select_type" size="large" :value="select_type">
-            <Option value="公开 (所有人可见)" label="公开 (所有人可见)"></Option>
-            <Option value="私密 (仅自己可见)" label="私密 (仅自己可见)"></Option>
+            <Option value="public" label="公开 (所有人可见)"></Option>
+            <Option value="private" label="私密 (仅自己可见)"></Option>
           </Select>
         </i-col>
 
+        <!--trim 去除前后空格-->
         <i-col span="17">
-          <Input v-model="diary_title" size="large" placeholder="标题：请为本次的日记起个简介的描述吧" clearable/>
+          <Input v-model.trim="diaryTitle" size="large" placeholder="标题：请为本次的日记起个简介的描述吧" clearable/>
         </i-col>
 
         <i-col span="3" class="diary_confirm">
-          <Button type="info" size="large" long>确 认 发 布</Button>
+          <Button type="info" size="large" long @click="request_push_diary">确 认 发 布</Button>
         </i-col>
 
       </Row>
@@ -30,8 +31,7 @@
       <!--编辑内容 -->
       <Row>
         <i-col>
-          <div ref="editorContent" class="text">
-            <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+          <div ref="diaryContent" class="text">
           </div>
         </i-col>
       </Row>
@@ -47,25 +47,45 @@
       name: "write_diary",
       data() {
         return {
-          editorContent:"",
-          diary_title:"",
-          select_type:'公开 (所有人可见)'
+          diaryContent:"",
+          diaryTitle:"",
+          select_type:'public'
         }
       },
+
+      methods:{
+
+        //发起提交日记的请求
+        request_push_diary(){
+
+          if (this.diaryTitle.length<=5 || this.diaryContent.length<=5){//检查日记标题和日记内容长度是否小于5
+           return this.$Notice.warning({
+              title:'格式不规范',
+              desc:'日记标题和日记内容的长度应该不小6位有效字符，请修改后再继续'
+            })
+          }
+
+          this.$apis.ArticleApi.write_diary(this.diaryTitle,this.diaryContent,this.select_type)
+
+        },
+
+
+      },
+
       mounted(){
         console.log("write_article : mounted 正在执行");
         //这句不能加，加了反而不会显示
         // var E = window.wangEditor
-        let editor = new E(this.$refs.editorMenu,this.$refs.editorContent);
+        let editor = new E(this.$refs.editorMenu,this.$refs.diaryContent);
         //加上这个句，才能在编辑器中粘贴图片
         editor.customConfig.uploadImgShowBase64 = true;
         editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
         editor.customConfig.uploadFileName = 'file';
         // 通过 url 参数配置 debug 模式。url 中带有 write 才会开启 debug 模式
         editor.customConfig.debug = location.href.indexOf('write') > 0
-        //监听编辑器内容变化，并赋给editorContent
+        //监听编辑器内容变化，并赋给diaryContent
         editor.customConfig.onchange = (html) => {
-          this.editorContent = html
+          this.diaryContent = html
         };
         editor.create()
       },

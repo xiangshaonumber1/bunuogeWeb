@@ -29,7 +29,12 @@
     import Write_diary from "../../Service/components/service_write_diary";
     export default {
         name: "web_write_diary",
-      components: {Write_diary}
+      components: {Write_diary},
+      methods:{
+          goIndex(){
+            this.$router.push({name:'index'})
+          }
+      }
     }
 </script>
 

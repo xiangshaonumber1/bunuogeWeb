@@ -8,6 +8,7 @@ import router from '../router/router'
 import {Notice} from 'iview'
 
 const article = {
+
   /**
    * 发布新文章，需要验证token
    */
@@ -28,23 +29,65 @@ const article = {
     }).then( async (response) => {
       //发布成功后，立即跳转到刚编辑的文章
       if (response.data.code === '200') {
-        const id = response.data.msg;
         Notice.success({
           title: "发布成功：",
           desc: "文章发布成功，已为您跳转到当前页面"
         });
-        router.push({path: '/ai/' + id + ''});
+        return router.push({   //跳转到对应的文章详情页面
+          name:'web_articleInfo',
+          params:{
+            article_id:response.data.data
+          }
+        });
       } else if (response.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.write_article(ArticleTitle, ArticleContent, ArticleLabel, origin_link)
         } else {
-          console.log(" write_article ?????????? what the fuck ?????????")
-          return this.write_article(ArticleTitle, ArticleContent, ArticleLabel, origin_link)
+          return router.push({name:'login'})
         }
         //Token刷新失败（405）这里不做任何处理，拦截器中会跳转
       } else {
-        console.log("write_article else info :", response)
+        console.log("write_article else info :", response);
+        return response;
+      }
+    })
+  },
+
+  /**
+   * 发布新的日记，同样需要验证token
+   */
+  write_diary(title,content,type){
+    return request({
+      method:'post',
+      url:'/article/write_diary',
+      data:{
+        title:title,
+        content:content,
+        type:type,
+      }
+    }).then( async res => {
+      if (res.data.code === '200') {
+        Notice.success({
+          title: '日记保存成：',
+          desc: "即将为你跳转到当前日记界面"
+        });
+        return router.push({
+          name:'web_diaryInfo',
+          params:{
+            diary_id: res.data.data
+          }
+        })
+      } else if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.write_diary(title,content,type);
+        }else {
+          return router.push({name:'login'})
+        }
+      }else {
+        console.log("write_article else info :", res);
+        return res;
       }
     })
   },
@@ -54,7 +97,7 @@ const article = {
    */
   get_articleInfo(articleID){
    return request({
-      methods:'get',
+      method:'get',
       url:'/article/get_articleInfo',
       params:{
         articleID:articleID
@@ -74,7 +117,7 @@ const article = {
   get_article_list(page){
    return request({
      url:'/article/get_article_list',
-     methods:'get',
+     method:'get',
      params:{
        page: page,
      }
@@ -94,7 +137,7 @@ const article = {
   get_search(key_word,page,type){
     return request({
       url:'/article/get_search',
-      methods:'get',
+      method:'get',
       params:{
         key_word:key_word,
         page:page,
