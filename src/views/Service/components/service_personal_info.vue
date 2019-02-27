@@ -25,12 +25,14 @@
               </button>
             </div>
 
-            <div>
-              <span><Icon type="md-pin" /><input type="text" v-model="userInfo.location" disabled></input></span>
-            </div>
+            <!--<div>-->
+              <!--<span><Icon type="md-pin" /><input type="text" v-model="userInfo.location" disabled></input></span>-->
+            <!--</div>-->
 
             <div>
-              <span><Icon type="ios-pricetags" /> <Tag color="blue"  v-if="userInfo.tags !== null" v-for="user in userInfo.tags" :key="user.tag">{{user.tag}}</Tag></span>
+              <span><Icon type="ios-pricetags" />
+                <Tag color="blue" v-for="labelVale in userInfo.label" :key="userinfo.label">{{labelVale}}</Tag>
+              </span>
             </div>
 
             <div>
@@ -143,22 +145,13 @@
               canMove:false,                   // 上传图片是否可以移动
             },
             isShowModal:false,  //是否显示对话框
-            userInfo:{
-              nickname:'丿丶祥灬少',
-              location:'成都',
-              tags:[
-                {tag:'java'},
-                {tag:'SpringBoot'},
-                {tag:'vue'},
-                {tag:'Android'}
-              ],
-              email:'821940979@qq.com',
-              gender:'男',
-            },
-            userInfoStatus:"以下信息公开",
+            userInfo:{},          //用户信息
+            isLoading:true,
+            isNotFound:false,
           }
       },
       methods:{
+
         handleUpload(file){
           console.log("handleUpload",file);
           this.file = file;
@@ -183,6 +176,19 @@
         upLoadFiles(){
           alert(6666);
           this.isShowModal = false;
+        },
+
+        async getUserInfo(){ //获取用户信息
+          const result = await this.$apis.UserApi.getMyUserInfo(this.$store.getters.openID);
+          if (result === null){
+            this.isLoading = false;
+            this.isNotFound = true;
+          }else {
+            this.isLoading = false;
+            this.isNotFound = false;
+            this.userInfo = result;
+            console.log("返回的信息：",result)
+          }
         }
 
       },
@@ -197,6 +203,10 @@
         }
       }
     },
+
+    mounted() {
+        this.getUserInfo();
+    }
 
   }
 </script>

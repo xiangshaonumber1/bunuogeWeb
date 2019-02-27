@@ -1,10 +1,6 @@
 <template>
     <div class="my-diaries">
 
-      <loading v-if="isLoading"></loading>
-
-      <not-found v-else-if="notFound"></not-found>
-
       <!-- Title 部分 -->
       <Row>
         <i-col>
@@ -16,22 +12,31 @@
         </i-col>
       </Row>
 
-      <div class="diaries_content" v-for="myDiary in myDiaryInfoList">
+      <loading v-if="isLoading"></loading>
 
-        <div class="diary_data">
-          <Button type="success" ghost>公开</Button>&nbsp;
-          <Icon type="md-eye" size="18" />&nbsp;<label>2.5W</label>
-        </div>
+      <not-found v-else-if="isNotFound"></not-found>
 
-        <!--文章作者和文章状态信息-->
-        <div class="myArticleOtherInfo">
-          <span>{{myDiary.nickname}}</span>&emsp;
-          <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;<label>{{myDiary.like}}</label></span>&emsp;
-          <span><Icon type="md-eye" size="16" />&nbsp;<label>{{myDiary.dislike}}</label></span>
-          <span style="float: right;margin-right: 20px"><Icon type="md-time" size="16" />&nbsp;<Time :time="myDiary.time"/></span>
-        </div>
 
-        <hr style="margin: 5px 0;">
+      <div class="myDiaryInfo" v-else v-for="myDiary in myDiaryInfoList">
+
+        <Card :bordered="false">
+          <!--文章标题-->
+          <div class="myDiaryTitle">
+            <Button type="error" ghost v-if="myDiary.type === 'private' " >私有</Button>
+            <Button type="success" ghost v-else >公开</Button>&nbsp;
+            <a @click="goDiaryInfo(myDiary.diaryID)"><span v-html="myDiary.title"></span></a>
+
+            <span style="float: right;margin-right: 20px;line-height: 30px">记录时间：<Icon type="md-time" size="16" />&nbsp;<Time :time="myDiary.time"/></span>
+          </div>
+
+          <!--文章内容-->
+          <div class="myDiaryContent">
+            <h5 v-html="replaceHtml(myDiary.content)"></h5>
+          </div>
+        </Card>
+
+        <Divider style="margin-top: 0" />
+
       </div>
 
 
@@ -48,9 +53,51 @@
         return {
           myDiaryInfoList:[],
           isLoading:true,
-          notFound:false,
+          isNotFound:false,
+          page:1,
         }
-      }
+      },
+
+      methods:{
+
+        async get_myDiary(){  //获取当前用户的所发布的日记
+          const result = await this.$apis.ArticleApi.get_myDiary(this.page);
+          if(result === null && this.page === 1){ //只有当第一次查询的结果为空（page为1时），显示notfound
+            this.isNotFound = true;
+            this.isLoading = false;
+          }else {
+            this.isNotFound = false;
+            this.isLoading = false;
+            this.myDiaryInfoList = result;
+            console.log("vue中得到的结果：",result);
+          }
+          console.log("我应该在后面输出")
+        },
+
+        replaceHtml(value){ //去掉html标签
+          var result = value.replace(/<\/?.+?>/g,"");
+          result = result.replace(/ /g,"");
+          return result;
+        },
+
+        goDiaryInfo(diaryID){ //前往日记详情页面
+          this.$router.push({
+            name:'web_diaryInfo',
+            params:{
+              diary_id:diaryID
+            }
+          })
+        },
+
+
+      },
+
+      mounted(){
+        this.get_myDiary();
+      },
+
+
+
     }
 </script>
 
@@ -60,29 +107,27 @@
     font-size: 14px;
   }
 
-  hr{
-    margin: 5px 0;
-  }
-
-  label{
-    margin: 0;
-    padding: 0;
+  a{
+    color: black;
+    text-decoration: none;
   }
 
   .my-diaries{
     padding: 15px 35px;
   }
 
-  .diary_title, .diary_data, .diary_time{
-    /* 超出不换行 */
-    white-space: nowrap;
-    /* 超出长度时，出现省略号  */
-    overflow: hidden;
-    text-overflow:ellipsis;
+  .myDiaryInfo{
+    margin: 5px 0;
   }
 
-  .diary_data label{
-    margin: 0;
-    padding: 0;
+  .myDiaryTitle{
+    /*border: 1px solid salmon;*/
   }
+
+  .myDiaryContent{
+    /*border: 1px solid cyan;*/
+  }
+
+
+
 </style>

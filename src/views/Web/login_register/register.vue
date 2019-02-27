@@ -20,8 +20,6 @@
             <Input type="text" v-model="registerInfo.email" placeholder="请输入工作邮箱" size="large"></Input>
           </form-item>
 
-
-
           <form-item label="密码" prop="password">
             <Input type="password" v-model="registerInfo.password" placeholder="密码不少于6位" size="large"></Input>
           </form-item>
@@ -29,7 +27,6 @@
           <form-item label="确认密码" prop="checkPassword">
             <Input type="password" v-model="registerInfo.checkPassword" placeholder="请再次输入密码" size="large"></Input>
           </form-item>
-
 
           <form-item label="邮箱验证">
             <Input type="text" v-model="registerInfo.emailCode" placeholder="请输入邮箱验证码" size="large">

@@ -12,7 +12,7 @@ const article = {
   /**
    * 发布新文章，需要验证token
    */
-  write_article(ArticleTitle,ArticleContent,ArticleLabel,origin_link){
+  write_article(ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link){
     console.log(" 获取到的 ArticleTitle",ArticleTitle);
     console.log(" 获取到的 ArticleContent",ArticleContent);
     console.log(" 获取到的 ArticleLabel",ArticleLabel);
@@ -23,6 +23,7 @@ const article = {
       data:{
         title:ArticleTitle,
         content:ArticleContent,
+        type:ArticleType,
         label:ArticleLabel,
         origin_link:origin_link,
       }
@@ -112,6 +113,26 @@ const article = {
   },
 
   /**
+   * 根据日记ID(diaryID)，获取相应的日记信息
+   */
+  get_diaryInfo(diaryID){
+    return request({
+      method:'get',
+      url:'/article/get_diaryInfo',
+      params:{
+        diaryID:diaryID,
+      }
+    }).then( res => {
+      console.log("输出的信息 res：",res);
+      if (res.data.code === '404'){
+        return null; //404返回null
+      }else {
+        return res.data.data //如果有数据，则返回获取的data
+      }
+    })
+  },
+
+  /**
    * 获取首页最新发布文章信息列表
    */
   get_article_list(page){
@@ -169,8 +190,36 @@ const article = {
         if (result){
           return this.get_myArticle(page);
         }else {
-          console.log("????????????????? get_myArticle: what the fuck ???????????")
-          return this.get_myArticle(page);
+          console.log("????????????????? get_myArticle: what the fuck ???????????");
+          return null;
+        }
+      } else if (res.data.code === '404') {
+        return null;
+      } else {
+        return res.data.data;
+      }
+    })
+  },
+
+
+  /**
+   * 获取当前用户发布的日记
+   */
+  get_myDiary(page) {
+    return request({
+      url:'/article/get_myDiary',
+      method:"get",
+      params:{
+        page:page,
+      }
+    }).then( async (res) => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.get_myDiary(page);
+        }else {
+          console.log("????????????????? get_myArticle: what the fuck ???????????");
+          return null;
         }
       } else if (res.data.code === '404') {
         return null;

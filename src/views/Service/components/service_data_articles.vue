@@ -21,7 +21,6 @@
       <!-- 查询结果 部分 -->
       <div class="myArticleInfo" v-else  v-for="myArticle in myArticleInfoList">
         <Card :bordered="false">
-
           <!--文章标题-->
           <div class="myArticleTitle">
             <a @click="goArticleInfo(myArticle.articleID)"><span v-html="myArticle.title"></span></a>
@@ -34,14 +33,14 @@
 
           <!--文章作者和文章状态信息-->
           <div class="myArticleOtherInfo">
-            <span>{{myArticle.nickname}}</span>&emsp;
             <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;<label>{{myArticle.like}}</label></span>&emsp;
             <span><Icon type="md-eye" size="16" />&nbsp;<label>{{myArticle.dislike}}</label></span>
-            <span style="float: right;margin-right: 20px"><Icon type="md-time" size="16" />&nbsp;<Time :time="myArticle.time"/></span>
+            <span style="float: right;margin-right: 20px">发表时间：<Icon type="md-time" size="16" />&nbsp;<Time :time="myArticle.time"/></span>
           </div>
-
         </Card>
-        <Divider style="margin: 0;"/>
+
+        <Divider style="margin-top: 0"/>
+
       </div>
 
 
@@ -126,12 +125,12 @@
 
 
   .myArticleInfo{
-    margin-bottom: 10px;
+    margin: 5px 0;
   }
 
-  .myArticleInfo >>> .ivu-card-body{
-    padding: 16px 16px 5px 16px;
-  }
+  /*.myArticleInfo >>> .ivu-card-body{*/
+    /*padding: 16px 16px 5px 16px;*/
+  /*}*/
 
   .myArticleTitle a,span{
     color: black;
@@ -145,7 +144,7 @@
     /* 超出长度时，出现省略号  */
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 4;
     /*autoprefixer: off;*/
     -webkit-box-orient: vertical;
     /*autoprefixer: on;*/

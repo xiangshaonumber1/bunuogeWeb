@@ -3,8 +3,11 @@
  */
 import request from '../common/request'
 import {Notice} from  'iview'
+import AuthenticationApi from './AuthenticationApi'
+
 
 const user = {
+
   //请求邮箱验证码
   mailCode(email,type){
     return request({
@@ -29,6 +32,30 @@ const user = {
     })
   },
 
+
+  //获取用户信息（不包括密码等重要隐私信息）
+  getMyUserInfo(openID){
+    return request({
+      url: '/user/getUserInfo',
+      method: 'get',
+      params: {
+        openID:openID,
+      }
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.getMyUserInfo(openID)
+        }else {
+          return null;
+        }
+      }else if (res.data.code === '404') {
+        return null;
+      }else{
+        return res.data.data;
+      }
+    })
+  }
 
 };
 

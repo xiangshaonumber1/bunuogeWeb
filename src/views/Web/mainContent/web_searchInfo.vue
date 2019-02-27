@@ -170,8 +170,9 @@
         // 或者用正则表达式，能识别大小写，但是会根据搜索关键字的大小写而覆盖原本内容的大小写
         brightenKeyword(content, keyword) {
           const Reg = new RegExp(keyword, 'i');
+          console.log("高亮，reg：",Reg);
           if (content) {
-            return content.replace(Reg, `<span style="color: red;">${keyword}</span>`);
+             return content.replace(Reg, `<span style="color: red;">${keyword}</span>`);
           }
         }
 
@@ -227,7 +228,7 @@
     /* 超出长度时，出现省略号  */
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 5;
     /*autoprefixer: off;*/
     -webkit-box-orient: vertical;
     /*autoprefixer: on;*/

@@ -11,7 +11,9 @@ import router from '../router/router'
 //axios默认设置
 const request = axios.create({
   baseURL:'http://localhost:8888',
-  timeout:'30000',
+  timeout:'10000',
+  // retry:4,
+  // retryDelay:1000,
 });
 
 //http request 拦截器

@@ -89,7 +89,7 @@
             })
           }
 
-         this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,this.origin_link)
+         this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link)
 
         }
       },

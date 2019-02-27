@@ -1,10 +1,11 @@
 <template>
     <div id="articleInfo">
 
+
+      <loading v-if="isLoading"></loading>
+
       <!-- 是否显示404页面 -->
-      <div  v-if="isNotFound">
-        <not-found></not-found>
-      </div>
+      <not-found v-else-if="isNotFound"></not-found>
 
       <!-- 否则显示主要内容页面 -->
       <div v-else>
@@ -13,7 +14,6 @@
           <i-col span="12" >
           <span class="article_title">
             {{this.ArticleInfo.title}}
-            <!--{{$route.params.article_id}}-->
           </span>
           </i-col>
         </Row>
@@ -28,7 +28,7 @@
               </a>
             </div>
 
-            <!--该div 用于显示文章作者你猜，喜欢数，不喜欢数，浏览量-->
+            <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量-->
             <div style="line-height: 30px;">
               <a><span>{{this.ArticleInfo.nickname}}</span></a>
               <br>
@@ -54,7 +54,6 @@
         </Row>
       </div>
 
-
       <Divider />
 
       <!--返回顶部-->
@@ -66,9 +65,10 @@
 <script>
     import NotFound from "./404";
     import OkHeader from "../header/ok_header";
+    import Loading from "../loading/loading";
     export default {
         name: "articleInfo",
-      components: {OkHeader, NotFound},
+      components: {Loading, OkHeader, NotFound},
       data() {
         return {
           ArticleInfo:{
@@ -86,6 +86,7 @@
             time:'',            //发布时间
           },
           isNotFound:false,
+          isLoading:true,
         };
       },
      async mounted(){
@@ -94,8 +95,11 @@
         console.log("web_articleInfo",articleInfo);
           if (articleInfo!=null){ //如果不为空，则赋值
             this.ArticleInfo = articleInfo;
+            this.isLoading = false;
+            this.isNotFound = false;
           }else { //如果为空，则显示404组件
             this.isNotFound = true;
+            this.isLoading = false;
           }
       },
       created(){
@@ -138,6 +142,7 @@
     font-size: 35px;
     font-weight: bold;
   }
+
   .article_content{
 
   }

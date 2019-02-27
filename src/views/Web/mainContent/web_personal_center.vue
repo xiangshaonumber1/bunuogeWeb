@@ -69,6 +69,10 @@
 
       },
 
+      mounted(){
+          this.getRouteName();
+      },
+
       watch:{
           "$route":"getRouteName"
       }
