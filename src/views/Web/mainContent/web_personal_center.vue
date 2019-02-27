@@ -26,7 +26,7 @@
         </i-col>
 
         <!-- 对应的个人中心的内容 -->
-        <i-col span="10">
+        <i-col span="11">
           <router-view></router-view>
         </i-col>
       </Row>
