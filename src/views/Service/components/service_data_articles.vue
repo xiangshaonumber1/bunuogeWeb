@@ -23,6 +23,9 @@
         <Card :bordered="false">
           <!--文章标题-->
           <div class="myArticleTitle">
+            <Tag color="rgb(251, 114, 153)" v-if="myArticle.type === 'original' ">原创</Tag>
+            <Tag color="rgb(0, 192, 145)" v-else-if="myArticle.type === 'reprint' ">转载</Tag>
+            <Tag color="rgb(2, 181, 218)" v-else-if="myArticle.type === 'translate' ">翻译</Tag>
             <a @click="goArticleInfo(myArticle.articleID)"><span v-html="myArticle.title"></span></a>
           </div>
 
@@ -33,8 +36,8 @@
 
           <!--文章作者和文章状态信息-->
           <div class="myArticleOtherInfo">
-            <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;<label>{{myArticle.like}}</label></span>&emsp;
-            <span><Icon type="md-eye" size="16" />&nbsp;<label>{{myArticle.dislike}}</label></span>
+            <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;点赞量：<label>{{myArticle.like}}</label></span>&emsp;
+            <span><Icon type="md-eye" size="16" />&nbsp;浏览量：<label>{{myArticle.dislike}}</label></span>
             <span style="float: right;margin-right: 20px">发表时间：<Icon type="md-time" size="16" />&nbsp;<Time :time="myArticle.time"/></span>
           </div>
         </Card>
@@ -132,11 +135,23 @@
     /*padding: 16px 16px 5px 16px;*/
   /*}*/
 
+  .myArticleType{
+    float: left;
+    background: green;
+    padding: 15px;
+  }
+
   .myArticleTitle a,span{
     color: black;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     padding: 5px;
+  }
+
+  .myArticleTitle >>> .ivu-tag{
+    padding: 3px 8px;
+    height: 28px
+    /*border: 1px solid salmon;*/
   }
 
 

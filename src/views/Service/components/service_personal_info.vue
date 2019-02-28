@@ -20,7 +20,7 @@
 
             <!--用户昵称-->
             <div class="userInfo-nickname">
-              <input type="text" v-model="userInfo.nickname" disabled></input>
+              <input type="text" v-model="userInfo.nickname"  disabled></input>
             </div>
 
             <!--用户活跃天数-->
@@ -32,14 +32,22 @@
 
             <!-- 个人label 标签-->
             <div>
-              <span><Icon type="ios-pricetags" />
-                <Tag color="blue" v-for="(value,index) in labelArray" :key="index">{{value}}</Tag>
+              <span>
+                <Icon type="ios-pricetags" />
+                <Tag color="blue" v-for="(value,index) in userInfo.label" :key="index">{{value}}</Tag>
               </span>
             </div>
 
             <!--用户性别-->
             <div>
-              <span><Icon type="md-transgender" /><input type="text" v-model="userInfo.gender" disabled></span>
+              <span>
+                <Icon type="md-transgender" />
+               <i-select v-model="userInfo.gender" size="large" :value="userInfo.gender"  style="width: auto">
+                 <i-option value="男" label="男"></i-option>
+                 <i-option value="女" label="女"></i-option>
+                 <i-option value="保密" label="保密"></i-option>
+               </i-select>
+              </span>
             </div>
           </div>
         </i-col>
@@ -54,7 +62,7 @@
             <a href="#" slot="extra" @click.prevent="changeLimit">
               编辑
             </a>
-            <textarea class="wish_textarea"  wrap="hard" maxlength="100">{{userInfo.wishCard}}</textarea>
+            <textarea class="wish_textarea"  wrap="hard" maxlength="100" v-model="userInfo.wishCard"></textarea>
           </Card>
         </i-col>
 
@@ -65,19 +73,19 @@
 
         <!--关注的人和该用户粉丝数-->
         <i-col span="5"  class="text-center" >
-            <span><Tag color="rgb(2, 181, 218)" type="dot">关注数 9999</Tag></span>
-            <span><Tag color="#FFA2D3" type="dot">粉丝数 20.5W</Tag></span>
+            <span><Tag color="rgb(2, 181, 218)" type="dot">关注数&emsp;{{userInfo.markedCount}}</Tag></span>
+            <span><Tag color="#FFA2D3" type="dot">粉丝数&emsp;{{userInfo.fansCount}}</Tag></span>
         </i-col>
 
         <!--不同类型文章统计-->
         <i-col span="19">
           <div class="article_count">
-            <div style="background-color: rgb(251, 114, 153)">原创文章数：<span class="badge">{{userInfo.originArticleCount}}</span></div>
-            <div style="background-color: rgb(0, 192, 145);">转载文章数：<span class="badge">{{userInfo.reprintArticleCount}}</span></div>
-            <div style="background-color: rgb(2, 181, 218)">翻译文章数：<span class="badge">{{userInfo.translateArticleCount}}</span></div>
-            <div style="background-color: rgb(255, 93, 71);">日记文章数：<span class="badge">{{userInfo.publicDiaryCount}}</span></div>
-            <div style="background-color: rgb(243, 160, 52);">收藏文章数：<span class="badge">{{userInfo.privateDiaryCount}}</span></div>
-            <div style="background-color: rgb(243, 160, 52);">收藏文章数：<span class="badge">{{userInfo.collectArticleCount}}</span></div>
+            <div style="background-color: rgb(251, 114, 153)">原创 文章数：<span class="badge">{{userInfo.originArticleCount}}</span></div>
+            <div style="background-color: rgb(0, 192, 145);">转载 文章数：<span class="badge">{{userInfo.reprintArticleCount}}</span></div>
+            <div style="background-color: rgb(2, 181, 218)">翻译 文章数：<span class="badge">{{userInfo.translateArticleCount}}</span></div>
+            <div style="background-color: rgb(255, 93, 71);">私有 日记数：<span class="badge">{{userInfo.privateDiaryCount}}</span></div>
+            <div style="background-color: rgb(35, 201, 237);">公开 日记数：<span class="badge">{{userInfo.publicDiaryCount}}</span></div>
+            <div style="background-color: rgb(243, 160, 52);">收藏 文章数：<span class="badge">{{userInfo.collectArticleCount}}</span></div>
           </div>
         </i-col>
 
@@ -89,14 +97,15 @@
       <Row>
         <i-col span="24">
           <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人简介</span>
-          <textarea class="form-control personal_textarea" maxlength="300">{{userInfo.describe}}</textarea>
+          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" disabled />
+          <small>注：昵称，心愿墙，个人简介等，<span style="color: red">点击所在区域改</span>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
         </i-col>
       </Row>
 
       <!--保存信息按钮-->
       <Row type="flex" class="code-row-bg" justify="center" style="margin-top: 20px">
         <i-col span="5">
-          <Button type="info" size="large" long><span>保&emsp;存</span></Button>
+          <Button type="info" size="large" long @click="saveUserInfo" :disabled="saveButtonDisable"><span>保&emsp;存</span></Button>
         </i-col>
       </Row>
 
@@ -152,10 +161,22 @@
               canMove:false,                   // 上传图片是否可以移动
             },
             isShowModal:false,  //是否显示对话框
-            userInfo:{},          //用户信息
+            userInfo:{
+              nickname:'',
+              gender:'',
+              userIcon:'',
+              label:[],
+              wishCard:'',
+              myDescribe:''
+            },          //用户信息
             isLoading:true,
             isNotFound:false,
-            labelArray:[],
+            genderModel:[
+              {value:'男',label:'男'},
+              {value:'女',label:'女'},
+              {value:'保密',label:'保密'}
+            ],
+            saveButtonDisable:false,
           }
       },
       methods:{
@@ -181,8 +202,17 @@
           return false;
         },
 
-        upLoadFiles(){
-          alert(6666);
+        async upLoadFiles(){
+          console.log("正在上传图片");
+          this.$refs.cropper.getCropBlob(data =>{
+            console.log("data数据:",data);
+            let img = window.URL.createObjectURL(data);
+            this.model = true;
+            this.modelSrc = img;
+            let formData = new FormData();
+            formData.append("file",data,this.fileName);
+            // this.$apis.UserApi.
+          });
           this.isShowModal = false;
         },
 
@@ -195,9 +225,29 @@
             this.isLoading = false;
             this.isNotFound = false;
             this.userInfo = result;
-            this.labelArray = JSON.parse(result.label);
+            this.userInfo.label = JSON.parse(result.label);
           }
-        }
+        },
+
+        async saveUserInfo(){//保存用户信息
+          this.saveButtonDisable = true;
+          const result = await this.$apis.UserApi.updateMyUserInfo(this.userInfo);
+          if (result){
+            this.$Notice.success({
+              title:'保存成功：',
+              desc:'您的个人信息已修改成功'
+            });
+
+            setTimeout(()=>{ //延时指定时间后，再解冻
+              this.saveButtonDisable = false;
+            }, 2000);
+
+          }else {
+            console.log("出了点问题 信息如下：",result)
+          }
+
+        },
+
 
       },
 
@@ -271,7 +321,7 @@
     margin: 3px 5px 3px 5px;
     padding: 8px 10px;
     font-family: "Microsoft YaHei UI Light",serif ;
-    font-weight: bold;
+    font-weight: normal;
   }
 
   .article_count div span{

@@ -88,7 +88,7 @@ const authentication = {
 
   //token过期，请求重新获取token,header中需要带上token，但同样不用于验证，不用判断402,失败返回405
   getToken(){
-  return request({
+    return request({
       url:'/Authentication/getToken',
       method:'get',
     }).then(res=>{//这里不用考虑402
@@ -101,7 +101,7 @@ const authentication = {
         return false;
       }
     });
-  },
+   },
 
 
   //判断邮箱是否可用（已注册）

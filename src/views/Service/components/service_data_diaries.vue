@@ -22,10 +22,11 @@
         <Card :bordered="false">
           <!--文章标题-->
           <div class="myDiaryTitle">
-            <Button type="error" ghost v-if="myDiary.type === 'private' " >私有</Button>
-            <Button type="success" ghost v-else >公开</Button>&nbsp;
-            <a @click="goDiaryInfo(myDiary.diaryID)"><span v-html="myDiary.title"></span></a>
-
+            <Tag color="rgb(255, 93, 71)" v-if="myDiary.type === 'private'">私有</Tag>
+            <Tag color="rgb(35, 201, 237)" v-if="myDiary.type === 'public'">公开</Tag>
+            <a @click="goDiaryInfo(myDiary.diaryID)" style="padding-top: 5px">
+              <span v-html="myDiary.title" style="font-weight: bold;font-size: 20px;"></span>
+            </a>
             <span style="float: right;margin-right: 20px;line-height: 30px">记录时间：<Icon type="md-time" size="16" />&nbsp;<Time :time="myDiary.time"/></span>
           </div>
 
@@ -120,7 +121,9 @@
     margin: 5px 0;
   }
 
-  .myDiaryTitle{
+  .myDiaryTitle >>> .ivu-tag{
+    padding: 3px 8px;
+    height: 28px
     /*border: 1px solid salmon;*/
   }
 

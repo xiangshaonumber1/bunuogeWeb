@@ -36,7 +36,7 @@ const user = {
   //获取用户信息（不包括密码等重要隐私信息）
   getMyUserInfo(openID){
     return request({
-      url: '/user/getUserInfo',
+      url: '/user/getMyUserInfo',
       method: 'get',
       params: {
         openID:openID,
@@ -54,6 +54,44 @@ const user = {
       }else{
         return res.data.data;
       }
+    })
+  },
+
+  /**
+   * 保存修改后的我的个人信息
+   */
+  updateMyUserInfo(userInfo) {
+    return request({
+      url:'/user/updateMyUserInfo',
+      method:'post',
+      data:{
+        nickname:userInfo.nickname,
+        wishCard:userInfo.wishCard,
+        gender:userInfo.gender,
+        myDescribe:userInfo.myDescribe
+      }
+    }).then( async res => {
+      if (res.data.code === '200') {
+        return true;
+      } else if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result)
+          return this.updateMyUserInfo(userInfo);
+        else
+          return null;
+      } else {
+        return res.data.data;
+      }
+    })
+  },
+
+  /**
+   * 用户更换头像
+   */
+  updateUserIcon(){
+    return request({
+      url:'user/updateUserIcon',
+      method:'post',
     })
   }
 
