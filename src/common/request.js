@@ -7,7 +7,6 @@ import qs from 'qs'
 import {Message,Notice} from 'iview'
 import router from '../router/router'
 
-
 //axios默认设置
 const request = axios.create({
   baseURL:'http://localhost:8888',
@@ -24,6 +23,7 @@ request.interceptors.request.use(config=>{
   }
   //设置token
   config.headers["X-Auth-Token"] = localStorage.getItem("token");
+  // config.headers["Content-Type"] = "multipart/form-data";
   return config;
 },error => {
   Notice.error({

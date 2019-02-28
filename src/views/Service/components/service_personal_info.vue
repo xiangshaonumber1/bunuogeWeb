@@ -97,8 +97,8 @@
       <Row>
         <i-col span="24">
           <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人简介</span>
-          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" disabled />
-          <small>注：昵称，心愿墙，个人简介等，<span style="color: red">点击所在区域改</span>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
+          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" />
+          <small>注：昵称，心愿墙，个人简介等，<small style="color: red">点击所在区域改</small>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
         </i-col>
       </Row>
 
@@ -199,21 +199,33 @@
               this.isShowModal = true;
             }
           };
+          console.log("handleUpload reader:",reader);
           return false;
         },
 
         async upLoadFiles(){
-          console.log("正在上传图片");
-          this.$refs.cropper.getCropBlob(data =>{
-            console.log("data数据:",data);
-            let img = window.URL.createObjectURL(data);
-            this.model = true;
-            this.modelSrc = img;
-            let formData = new FormData();
-            formData.append("file",data,this.fileName);
-            // this.$apis.UserApi.
+
+          //获取base64格式
+          this.$refs.cropper.getCropData((data) => {
+            const file = this.base64ToFile(data,"这是文件名");
+            let param = new FormData();
+            param.append("name","filename-"+(new Date()));
+            //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+            console.log("输出 param.get：",param.get("file"));
+            console.log("输出 转换后的file：",file);
+            this.$apis.UserApi.updateUserIcon(param);
           });
+
           this.isShowModal = false;
+        },
+
+        base64ToFile(dataurl,filename){
+          var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+          while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          return new File([u8arr], filename, {type:mime});
         },
 
         async getUserInfo(){ //获取用户信息

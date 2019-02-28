@@ -88,10 +88,17 @@ const user = {
   /**
    * 用户更换头像
    */
-  updateUserIcon(){
+  updateUserIcon(formData){
     return request({
       url:'user/updateUserIcon',
       method:'post',
+      data:formData,
+    }).then( res =>{
+      console.log("updateUserIcon 输出：",res);
+      return res;
+    }).catch( err =>{
+      console.log("updateUserInfo 输出：",err);
+      return err;
     })
   }
 
