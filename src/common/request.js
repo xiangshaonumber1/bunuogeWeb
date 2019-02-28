@@ -11,6 +11,10 @@ import router from '../router/router'
 const request = axios.create({
   baseURL:'http://localhost:8888',
   timeout:'10000',
+  headers:{
+    "Content-Type":"multipart/form-data",
+    "X-Auth-Token":localStorage.getItem("token"),//设置token
+  }
   // retry:4,
   // retryDelay:1000,
 });
@@ -22,8 +26,7 @@ request.interceptors.request.use(config=>{
     config.data = qs.stringify(config.data)
   }
   //设置token
-  config.headers["X-Auth-Token"] = localStorage.getItem("token");
-  // config.headers["Content-Type"] = "multipart/form-data";
+  // config.headers["X-Auth-Token"] = localStorage.getItem("token");
   return config;
 },error => {
   Notice.error({
