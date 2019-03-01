@@ -5,7 +5,7 @@ import request from '../common/request'
 import {Notice} from 'iview'
 import router from '../router/router'
 import store from '../blog_vuex/store'
-
+import qs from 'qs'
 
 
 const authentication = {
@@ -15,12 +15,12 @@ const authentication = {
     return request({
         url: '/Authentication/register',
         method: 'post',
-        data:{
+        data:qs.stringify({
           username: username,//用户名
           password: password,//密码
           userMail: email,//绑定邮箱
           MailVerificationCode: emailCode//邮箱验证码
-        }
+        })
     }).then(res =>{
       if (res.data.code === '200'){
         console.log("register : ",res);
@@ -44,10 +44,10 @@ const authentication = {
     return request({
       url: '/Authentication/login',
       method: 'post',
-      data: {
+      data:qs.stringify({
         username: username,
         password: password,
-      }
+      })
     }).then(response => {
       if (response.data.code === '200') { //登录成功
         const userInfo = {

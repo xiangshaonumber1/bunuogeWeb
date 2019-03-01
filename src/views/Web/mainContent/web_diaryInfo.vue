@@ -9,7 +9,10 @@
 
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
           <i-col span="12" >
+
           <span class="diary_title">
+            <Tag color="rgb(255, 93, 71)" v-if="diaryInfo.type === 'private'">私有</Tag>
+            <Tag color="rgb(35, 201, 237)" v-if="diaryInfo.type === 'public'">公开</Tag>
             {{this.diaryInfo.title}}
           </span>
           </i-col>
@@ -81,6 +84,7 @@
             this.isLoading = false;
             this.isNotFound = false;
             this.diaryInfo = result;
+            this.diaryInfo.userIcon = this.$store.getters.serverPath+JSON.parse(result.userIcon)[0]
           }else {
             this.isLoading = false;
             this.isNotFound = true;
@@ -106,6 +110,13 @@
   .diary_title{
     font-size: 35px;
     font-weight: bold;
+  }
+
+  .diary_title >>> .ivu-tag{
+    font-size: 20px;
+    font-family:"Microsoft YaHei UI Light",serif ;
+    line-height: 35px;
+    height: 35px;
   }
 
   .diary_content{

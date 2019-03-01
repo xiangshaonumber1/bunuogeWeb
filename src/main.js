@@ -25,6 +25,7 @@ Vue.prototype.$apis = apis;
 
 
 
+
 // **********************************************************  必须放到最后系列  ****************************************************************************
 //  4. 创建和挂载根实例。
 //  记得要通过 router 配置参数注入路由，
@@ -38,12 +39,6 @@ const app = new Vue({
   store,
   //Vue对象创建完成时
   mounted(){
-    // this.$store.commit("clearLoginInfo")
-    if (this.$store.getters.isLogin === 'true' ){
-      console.log("欢迎博主回来")
-    }else {
-      console.log("博主尚未登录")
-    }
   },
 
 });//现在，可以试试启动喽

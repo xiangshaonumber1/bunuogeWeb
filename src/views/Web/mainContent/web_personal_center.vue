@@ -63,7 +63,7 @@
 
         //获取当前路由的Name
         getRouteName(){
-          console.log("web_personal_center getRouteName:",this.$route.name);
+          // console.log("web_personal_center getRouteName:",this.$route.name);
           this.personalCenterType = this.$route.name
         }
 

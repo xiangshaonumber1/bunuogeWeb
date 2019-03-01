@@ -82,12 +82,14 @@
         },
 
         goDiaryInfo(diaryID){ //前往日记详情页面
-          this.$router.push({
+          //新建窗口跳转
+          let DiaryInfo = this.$router.resolve({
             name:'web_diaryInfo',
             params:{
               diary_id:diaryID
             }
-          })
+          });
+          window.open(DiaryInfo.href,'_blank')
         },
 
 

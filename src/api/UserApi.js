@@ -4,11 +4,13 @@
 import request from '../common/request'
 import {Notice} from  'iview'
 import AuthenticationApi from './AuthenticationApi'
-
+import qs from  'qs'
 
 const user = {
 
-  //请求邮箱验证码
+  /**
+   * 请求邮箱验证码
+   */
   mailCode(email,type){
     return request({
       url:'/user/request_mail',
@@ -33,7 +35,9 @@ const user = {
   },
 
 
-  //获取用户信息（不包括密码等重要隐私信息）
+  /**
+   * 获取用户信息（不包括密码等重要隐私信息）
+   */
   getMyUserInfo(openID){
     return request({
       url: '/user/getMyUserInfo',
@@ -64,12 +68,12 @@ const user = {
     return request({
       url:'/user/updateMyUserInfo',
       method:'post',
-      data:{
+      data:qs.stringify({
         nickname:userInfo.nickname,
         wishCard:userInfo.wishCard,
         gender:userInfo.gender,
         myDescribe:userInfo.myDescribe
-      }
+      })
     }).then( async res => {
       if (res.data.code === '200') {
         return true;
@@ -86,21 +90,28 @@ const user = {
   },
 
   /**
-   * 用户更换头像
+   * 用户更换头像,需要验证
    */
   updateUserIcon(formData){
     return request({
       url:'user/updateUserIcon',
       method:'post',
-      data:formData,
-    }).then( res =>{
-      console.log("updateUserIcon 输出：",res);
-      return res;
-    }).catch( err =>{
-      console.log("updateUserInfo 输出：",err);
-      return err;
+      data:formData,  //上传的为文件类型，不需要qs格式化
+    }).then( async res => {
+      console.log("updateUserIcon 输出res :", res);
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result)
+          return this.updateUserIcon(formData);
+        else
+          return null;
+      }else {
+        return res.data.data;
+      }
     })
-  }
+  },
+
+
 
 };
 

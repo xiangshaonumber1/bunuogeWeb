@@ -3,7 +3,6 @@
  */
 
 import axios from 'axios';
-import qs from 'qs'
 import {Message,Notice} from 'iview'
 import router from '../router/router'
 
@@ -11,10 +10,6 @@ import router from '../router/router'
 const request = axios.create({
   baseURL:'http://localhost:8888',
   timeout:'10000',
-  headers:{
-    "Content-Type":"multipart/form-data",
-    "X-Auth-Token":localStorage.getItem("token"),//设置token
-  }
   // retry:4,
   // retryDelay:1000,
 });
@@ -22,11 +17,11 @@ const request = axios.create({
 //http request 拦截器
 request.interceptors.request.use(config=>{
   //在请求发送前做某些事情
-  if(config.method === "post"){//如果是post请求
-    config.data = qs.stringify(config.data)
-  }
+  // if(config.method === "post"){//如果是post请求
+  //   config.data = qs.stringify(config.data)
+  // }
   //设置token
-  // config.headers["X-Auth-Token"] = localStorage.getItem("token");
+  config.headers["X-Auth-Token"] = localStorage.getItem("token");
   return config;
 },error => {
   Notice.error({

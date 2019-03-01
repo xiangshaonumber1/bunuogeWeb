@@ -11,3 +11,7 @@ export const clearLoginInfo = ({commit},user)=>{
   commit("clearLoginInfo",user)
 };
 
+export const saveAvatar = ({commit},newAvatar)=>{
+  commit("saveAvatar",newAvatar)
+};
+

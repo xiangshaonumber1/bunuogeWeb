@@ -26,6 +26,7 @@
     50%  { transform: rotate(180deg);}
     to   { transform: rotate(360deg);}
   }
+
   .spin-icon-load{
     animation: ani-spin 1s linear infinite;
   }

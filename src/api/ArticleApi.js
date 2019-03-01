@@ -6,6 +6,7 @@ import request from '../common/request'
 import AuthenticationApi from './AuthenticationApi'
 import router from '../router/router'
 import {Notice} from 'iview'
+import qs from 'qs'
 
 const article = {
 
@@ -20,13 +21,13 @@ const article = {
     request({
       url:'/article/write_article',
       method:'post',
-      data:{
+      data:qs.stringify({
         title:ArticleTitle,
         content:ArticleContent,
         type:ArticleType,
         label:ArticleLabel,
         origin_link:origin_link,
-      }
+      })
     }).then( async (response) => {
       //发布成功后，立即跳转到刚编辑的文章
       if (response.data.code === '200') {
@@ -62,11 +63,11 @@ const article = {
     return request({
       method:'post',
       url:'/article/write_diary',
-      data:{
+      data:qs.stringify({
         title:title,
         content:content,
         type:type,
-      }
+      })
     }).then( async res => {
       if (res.data.code === '200') {
         Notice.success({

@@ -13,6 +13,9 @@
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
           <i-col span="12" >
           <span class="article_title">
+            <Tag color="rgb(251, 114, 153)" v-if="ArticleInfo.type === 'original' ">原创</Tag>
+            <Tag color="rgb(0, 192, 145)" v-else-if="ArticleInfo.type === 'reprint' ">转载</Tag>
+            <Tag color="rgb(2, 181, 218)" v-else-if="ArticleInfo.type === 'translate' ">翻译</Tag>
             {{this.ArticleInfo.title}}
           </span>
           </i-col>
@@ -71,20 +74,7 @@
       components: {Loading, OkHeader, NotFound},
       data() {
         return {
-          ArticleInfo:{
-            articleID:'',       //文章ID
-            openID:'',          //用户账号openID
-            nickname:'',        //用户昵称
-            userIcon:'',        //用户头像
-            pictureCover:'',    //封面图
-            title:'',           //文章标题
-            content:'',         //文章内容
-            watch:0,            //文章的浏览量
-            like:0,             //文章的喜欢量
-            dislike:0,          //文章的不喜欢量
-            label:'',           //文章标签
-            time:'',            //发布时间
-          },
+          ArticleInfo:{},
           isNotFound:false,
           isLoading:true,
         };
@@ -94,9 +84,10 @@
         const articleInfo = await this.$apis.ArticleApi.get_articleInfo(this.$route.params.article_id);
         console.log("web_articleInfo",articleInfo);
           if (articleInfo!=null){ //如果不为空，则赋值
-            this.ArticleInfo = articleInfo;
             this.isLoading = false;
             this.isNotFound = false;
+            this.ArticleInfo = articleInfo;
+            this.ArticleInfo.userIcon = this.$store.getters.serverPath+JSON.parse(articleInfo.userIcon)[0]
           }else { //如果为空，则显示404组件
             this.isNotFound = true;
             this.isLoading = false;
@@ -142,6 +133,14 @@
     font-size: 35px;
     font-weight: bold;
   }
+
+  .article_title >>> .ivu-tag{
+    font-size: 20px;
+    font-family:"Microsoft YaHei UI Light",serif ;
+    line-height: 35px;
+    height: 35px;
+  }
+
 
   .article_content{
 

@@ -6,7 +6,7 @@
         <!--头像部分-->
         <i-col span="5">
           <div class="text-center">
-            <img src="/static/picture/avatar_default.jpg" alt="..." class="img-circle img-thumbnail" style="width: 175px;height: 175px;">
+            <img :src="userInfo.userIcon" alt="..." class="img-circle img-thumbnail" style="width: 175px;height: 175px;">
             <Upload action="upload_url"
                     :before-upload="handleUpload">
               <Button style="margin-top: 10px" size="large">上传头像</Button>
@@ -20,7 +20,7 @@
 
             <!--用户昵称-->
             <div class="userInfo-nickname">
-              <input type="text" v-model="userInfo.nickname"  disabled></input>
+              <input type="text" v-model="userInfo.nickname"></input>
             </div>
 
             <!--用户活跃天数-->
@@ -148,6 +148,7 @@
             file:null,
             loadingStatus: true,
             uploadBase64:null,
+            //Vue-cropper 配置
             option:{
               img:'',                          // 裁剪图片的地址
               info: true,                      // 裁剪框的大小信息
@@ -181,10 +182,9 @@
       },
       methods:{
 
+        //这里的信息，全是本地原图的信息，并发是裁剪后的信息
         handleUpload(file){
-          console.log("handleUpload",file);
           this.file = file;
-
           //创建一个FileReader 对象
           let reader = new FileReader();
           // readAsDataURL 方法用于读取指定 Blob 或 File 的内容
@@ -194,39 +194,61 @@
           reader.onload =() =>{
             this.uploadBase64 = reader.result;
             if (this.uploadBase64 !== null){
-              // console.log("this.uploadBase64 : ",this.uploadBase64);
               this.option.img = reader.result;
               this.isShowModal = true;
             }
           };
-          console.log("handleUpload reader:",reader);
           return false;
         },
 
-        async upLoadFiles(){
 
-          //获取base64格式
-          this.$refs.cropper.getCropData((data) => {
-            const file = this.base64ToFile(data,"这是文件名");
-            let param = new FormData();
-            param.append("name","filename-"+(new Date()));
-            //FormData私有类对象，访问不到，可以通过get判断值是否传进去
-            console.log("输出 param.get：",param.get("file"));
-            console.log("输出 转换后的file：",file);
-            this.$apis.UserApi.updateUserIcon(param);
+        /**
+         * 用户选择图片，裁剪后进行上传头像的操作
+         */
+        async upLoadFiles() {
+          //点击上传之后隐藏对话框
+          this.isShowModal = false;
+          //立即显示Spin，防止期间错误
+          this.$Spin.show({
+            render: (h) => {
+              return h('div', [
+                h('Icon', {
+                  'class': 'spin-icon-load',
+                  props: {
+                    type: 'ios-loading',
+                    size: 30
+                  }
+                }),
+                h('div', '正在上传文件......')
+              ])
+            }
           });
 
-          this.isShowModal = false;
+          setTimeout(()=>{
+            console.log("5秒之后开始执行：");
+            // 获取截图的base64 数据
+            this.$refs.cropper.getCropData(async (data) => {
+              //获取 base64 格式X-Auth-Token
+              const file = this.base64ToFile(data, this.file.name);
+              let param = new FormData();
+              param.append("file", file);
+              const result = await this.$apis.UserApi.updateUserIcon(param);
+              if (result !== null) {
+                this.userInfo.userIcon = this.$store.getters.serverPath + result[0];
+                console.log("上传后，重新给userInfo的userIcon赋值", this.userInfo.userIcon);
+                this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
+              } else {
+                this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
+              }
+            });
+
+          },5000);
+
+
+
+
         },
 
-        base64ToFile(dataurl,filename){
-          var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-          while(n--){
-            u8arr[n] = bstr.charCodeAt(n);
-          }
-          return new File([u8arr], filename, {type:mime});
-        },
 
         async getUserInfo(){ //获取用户信息
           const result = await this.$apis.UserApi.getMyUserInfo(this.$store.getters.openID);
@@ -238,6 +260,8 @@
             this.isNotFound = false;
             this.userInfo = result;
             this.userInfo.label = JSON.parse(result.label);
+            this.userInfo.userIcon = this.$store.getters.serverPath+JSON.parse(result.userIcon)[0];
+            this.$store.dispatch("saveAvatar",this.userInfo.userIcon);
           }
         },
 
@@ -261,6 +285,16 @@
         },
 
 
+        //将base64转换为file
+        base64ToFile(dataurl,filename){
+          var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+          while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          return new File([u8arr],filename,{type:mime});
+        },
+
       },
 
     computed:{
@@ -283,6 +317,11 @@
 </script>
 
 <style scoped>
+
+  .demo-spin-icon-load{
+    animation: ani-demo-spin 1s linear infinite;
+  }
+
 
   .personal{
     /*padding: 35px 35px 10px 35px;*/
@@ -379,5 +418,6 @@
     line-height: 40px;
     font-weight: bold;
   }
+
 
 </style>
