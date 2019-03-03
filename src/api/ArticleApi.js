@@ -16,6 +16,7 @@ const article = {
   write_article(ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link){
     console.log(" 获取到的 ArticleTitle",ArticleTitle);
     console.log(" 获取到的 ArticleContent",ArticleContent);
+    console.log(" 获取到的 ArticleType",ArticleType);
     console.log(" 获取到的 ArticleLabel",ArticleLabel);
     console.log(" 获取到的 origin_link",origin_link);
     request({
@@ -44,7 +45,7 @@ const article = {
       } else if (response.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result) {
-          return this.write_article(ArticleTitle, ArticleContent, ArticleLabel, origin_link)
+          return this.write_article(ArticleTitle, ArticleContent,ArticleType,ArticleLabel, origin_link)
         } else {
           return router.push({name:'login'})
         }
@@ -228,7 +229,31 @@ const article = {
         return res.data.data;
       }
     })
-  }
+  },
+
+  /**
+   * 作者确认删除该片文章(type = article)或者日记(type = diary)
+   * ID 为articleID,或者 DiaryID
+   */
+  delete_article(deleteID,type){
+    return request({
+      url:'/article/delete_article',
+      method:"post",
+      data:qs.stringify({
+        deleteID:deleteID,
+        type:type,
+      })
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.delete_article(deleteID,type)
+        }
+      }else {
+        return res.data;
+      }
+    })
+  },
 
 };
 

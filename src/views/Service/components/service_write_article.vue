@@ -8,9 +8,9 @@
     <Row style="margin: 5px 0;">
       <i-col span="3" style="z-index: 10002">
         <i-select v-model="select_type" class="article_type_select" size="large" :value="select_type">
-          <Option value="原创文章" label="原创文章"></Option>
-          <Option value="转载文章" label="转载文章"></Option>
-          <Option value="翻译文章" label="翻译文章"></Option>
+          <Option value="original" label="原创文章"></Option>
+          <Option value="reprint" label="转载文章"></Option>
+          <Option value="translate" label="翻译文章"></Option>
         </i-select>
       </i-col>
 
@@ -25,7 +25,7 @@
     </Row>
 
     <!--第二行（默认隐藏）  如何选择的是“转载文章”或者“翻译文章” 都必须要备注原文链接 -->
-    <Row v-if="select_type!=='原创文章'" style="margin: 5px 0;">
+    <Row v-if="select_type!=='original'" style="margin: 5px 0;">
       <i-col>
         <Input  v-model.trim="origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
       </i-col>
@@ -61,7 +61,7 @@
           return{
             articleTitle:'',
             articleContent:'',
-            select_type:"原创文章",
+            select_type:"original",
             origin_link:'',
             onlyText:''
           }
@@ -76,7 +76,7 @@
               desc:'文章标题不符合规范，标题应该至少有6位有效字符'
             })
           }
-          if (this.select_type !== '原创文章' && this.origin_link.length <6){ //如果不是原创文章，检查原文链接是否符合规范
+          if (this.select_type !== 'original' && this.origin_link.length <6){ //如果不是原创文章，检查原文链接是否符合规范
             return this.$Notice.warning({
               title:'原文链接不规范提示',
               desc:'原文链接不规范，请检查后再继续'

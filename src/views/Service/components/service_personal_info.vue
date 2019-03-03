@@ -224,28 +224,20 @@
             }
           });
 
-          setTimeout(()=>{
-            console.log("5秒之后开始执行：");
-            // 获取截图的base64 数据
-            this.$refs.cropper.getCropData(async (data) => {
-              //获取 base64 格式X-Auth-Token
-              const file = this.base64ToFile(data, this.file.name);
-              let param = new FormData();
-              param.append("file", file);
-              const result = await this.$apis.UserApi.updateUserIcon(param);
-              if (result !== null) {
-                this.userInfo.userIcon = this.$store.getters.serverPath + result[0];
-                console.log("上传后，重新给userInfo的userIcon赋值", this.userInfo.userIcon);
-                this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
-              } else {
-                this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
-              }
-            });
-
-          },5000);
-
-
-
+          this.$refs.cropper.getCropData(async (data) => {
+            //获取 base64 格式X-Auth-Token
+            const file = this.base64ToFile(data, this.file.name);
+            let param = new FormData();
+            param.append("file", file);
+            const result = await this.$apis.UserApi.updateUserIcon(param);
+            if (result !== null) {
+              this.userInfo.userIcon = this.$store.getters.serverPath + result[0];
+              console.log("上传后，重新给userInfo的userIcon赋值", this.userInfo.userIcon);
+              this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
+            } else {
+              this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
+            }
+          });
 
         },
 

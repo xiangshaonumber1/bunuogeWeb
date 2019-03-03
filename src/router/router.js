@@ -40,7 +40,8 @@ const routes = [
       {path:'search/:key_word',component:Web_search, name:'web_search'},                    //搜索结果页面
       {path:"article/:article_id",component:Web_articleInfo, name:'web_articleInfo'},            //文章详情页面
       {path:"diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo'},            //文章详情页面
-      {path:'setting/personalCenter',component:Web_personalCenter,name:'personal_center', children:[       //
+      {path:'setting/personalCenter',component:Web_personalCenter,name:'personal_center',
+        children:[
           {path: 'personalInfo', component: PersonalInfo, name:"web_personal_info"},     //用户个人数据页
           {path: 'articles', component: DataArticles, name:"web_data_articles"},        //用户文章数据页
           {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页

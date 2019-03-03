@@ -11,9 +11,9 @@
           <i-col span="12" >
 
           <span class="diary_title">
-            <Tag color="rgb(255, 93, 71)" v-if="diaryInfo.type === 'private'">私有</Tag>
-            <Tag color="rgb(35, 201, 237)" v-if="diaryInfo.type === 'public'">公开</Tag>
-            {{this.diaryInfo.title}}
+            <Tag color="rgb(255, 93, 71)" v-if="DiaryInfo.type === 'private'">私有</Tag>
+            <Tag color="rgb(35, 201, 237)" v-if="DiaryInfo.type === 'public'">公开</Tag>
+            {{DiaryInfo.title}}
           </span>
           </i-col>
         </Row>
@@ -24,15 +24,33 @@
             <!--该div用于显示用户头像-->
             <div style="float: left">
               <a style="text-decoration: none;margin: 0 10px">
-                <img :src="this.diaryInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
+                <img :src="DiaryInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
               </a>
             </div>
 
             <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量-->
             <div style="line-height: 30px;">
-              <a><span>{{this.diaryInfo.nickname}}</span></a>
+              <a><span>{{DiaryInfo.nickname}}</span></a>
               <br>
-              <span style="color: gray">发布时间：{{diaryInfo.time}}</span>&emsp;
+              <span style="color: gray">发布时间：{{DiaryInfo.time}}</span>&emsp;
+              <div class="more-function">
+                <a href="javascript:void(0)">
+                  <Dropdown trigger="click" @on-click="chooseFunction">
+                    <span style="color: white;">更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
+                    <DropdownMenu slot="list">
+                      <!--这里表示如果该片文章的作者是当前用户的话，开放修改和删除功能-->
+                      <div v-if="DiaryInfo.openID === this.$store.getters.openID">
+                        <DropdownItem name="update">修改</DropdownItem>
+                        <DropdownItem name="delete">删除</DropdownItem>
+                      </div>
+                      <!--如果不是作者本人，则只开放举报功能-->
+                      <div v-else>
+                        <DropdownItem name="report">举报</DropdownItem>
+                      </div>
+                    </DropdownMenu>
+                  </Dropdown>
+                </a>
+              </div>
             </div>
 
           </i-col>
@@ -44,7 +62,7 @@
 
             <div class="diary_content">
               <!-- 复制粘贴过来的，死样式，后面再删 start -->
-              <span v-html="this.diaryInfo.content"></span>
+              <span v-html="DiaryInfo.content"></span>
               <!-- 复制粘贴过来的，死样式，后面再删 end -->
             </div>
           </i-col>
@@ -71,7 +89,7 @@
         return {
           isLoading:true,
           isNotFound:false,
-          diaryInfo:{}
+          DiaryInfo:{}
         }
       },
 
@@ -83,11 +101,26 @@
           if (result!==null){
             this.isLoading = false;
             this.isNotFound = false;
-            this.diaryInfo = result;
-            this.diaryInfo.userIcon = this.$store.getters.serverPath+JSON.parse(result.userIcon)[0]
+            this.DiaryInfo = result;
+            this.DiaryInfo.userIcon = this.$store.getters.serverPath+JSON.parse(result.userIcon)[0]
           }else {
             this.isLoading = false;
             this.isNotFound = true;
+          }
+        },
+
+        //根据选择的功能，进行对应的操作
+        chooseFunction(name){
+          switch (name) {
+            case "update"://点击修改
+              console.log("点击了修改按钮");
+              break;
+            case "delete"://点击删除
+              console.log("点击删除按钮");
+              break;
+            case "report"://点击举报
+              console.log("点击举报按钮")
+              break
           }
         }
 
@@ -134,6 +167,19 @@
   .row-content{
     padding-top: 20px;
     padding-bottom: 20px;
+  }
+
+  .more-function{
+    float: right;
+    background-color: rgb(45, 183, 245);
+    border-radius: 3px;
+  }
+  .more-function span{
+    padding: 0 10px;
+    line-height: 35px;
+  }
+  .more-function >>> .ivu-dropdown-item{
+    font-size: 14px!important;
   }
 
 </style>
