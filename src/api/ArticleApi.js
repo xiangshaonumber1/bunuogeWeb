@@ -14,12 +14,7 @@ const article = {
    * 发布新文章，需要验证token
    */
   write_article(ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link){
-    console.log(" 获取到的 ArticleTitle",ArticleTitle);
-    console.log(" 获取到的 ArticleContent",ArticleContent);
-    console.log(" 获取到的 ArticleType",ArticleType);
-    console.log(" 获取到的 ArticleLabel",ArticleLabel);
-    console.log(" 获取到的 origin_link",origin_link);
-    request({
+   return request({
       url:'/article/write_article',
       method:'post',
       data:qs.stringify({
@@ -46,13 +41,43 @@ const article = {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.write_article(ArticleTitle, ArticleContent,ArticleType,ArticleLabel, origin_link)
-        } else {
-          return router.push({name:'login'})
         }
         //Token刷新失败（405）这里不做任何处理，拦截器中会跳转
       } else {
         console.log("write_article else info :", response);
         return response;
+      }
+    })
+  },
+
+
+  /**
+   * 修改已发布的文章的信息
+   */
+  update_article(ArticleID,ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link){
+    return request({
+      url:'/article/update_article',
+      method:'post',
+      data:qs.stringify({
+        articleID:ArticleID,
+        title:ArticleTitle,
+        content:ArticleContent,
+        type:ArticleType,
+        label:ArticleLabel,
+        origin_link:origin_link,
+      })
+    }).then( async res => {
+      if (res.data.code === '200'){
+        return true;
+      }
+      else if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if(result){
+          return this.update_article(ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link)
+        }
+        return res;
+      }else {
+        return res;
       }
     })
   },
@@ -90,6 +115,36 @@ const article = {
         }
       }else {
         console.log("write_article else info :", res);
+        return res;
+      }
+    })
+  },
+
+
+  /**
+   * 修改已经发布的日记的信息
+   */
+  update_diary(diaryID,title,content,type){
+    return request({
+      url:"/article/update_diary",
+      method:"post",
+      data:qs.stringify({
+        diaryID:diaryID,
+        title:title,
+        content:content,
+        type:type,
+      })
+    }).then( async res => {
+      if (res.data.code === '200'){
+        return true;
+      }
+      else if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.update_diary(diaryID,title,content,type)
+        }
+        return false;
+      }else {
         return res;
       }
     })

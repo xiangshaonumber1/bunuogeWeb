@@ -37,7 +37,7 @@
         </i-col>
 
         <i-col span="2" class="article_confirm">
-          <Button v-if="this.type === 'update' " type="success" size="large" long @click="request_update_article">修&nbsp;改&nbsp;保&nbsp;存</Button>
+          <Button v-if="this.type === 'update' " type="success" size="large" long @click="request_push_article">修&nbsp;改&nbsp;保&nbsp;存</Button>
           <Button v-else type="info" size="large" long @click="request_push_article">确&nbsp;认&nbsp;发&nbsp;布</Button>
         </i-col>
       </Row>
@@ -116,7 +116,7 @@
           this.editor.create()
         },
 
-        //用户向服务器提交发布的文章
+        //向服务器发送请求
        async request_push_article(){
           if (this.articleTitle.length <6){  //检查标题是否符合规范
             return this.$Notice.warning({
@@ -136,13 +136,21 @@
               desc:'文章主要内容不能少于6个有效字符，请编写好后再继续'
             })
           }
-         this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link)
+          let result = false;
+          if(this.type === 'write'){  //新建文章请求
+            result = await this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
+          }else if (this.type === 'update'){  //修改已发布的文章
+            result = await this.$apis.ArticleApi.update_article(this.ArticleInfo.articleID,this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
+            if (result){
+              this.$Notice.success({
+                title:'修改成功：',
+                desc:'修改已生效，即将为你跳转到详情页面'
+              });
+              this.$router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID})
+            }
+          }
         },
 
-        //向服务器提交修改文章的请求
-        async request_update_article(){
-
-        },
 
       },
 
