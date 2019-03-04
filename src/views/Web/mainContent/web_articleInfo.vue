@@ -1,7 +1,6 @@
 <template>
     <div id="articleInfo">
 
-
       <loading v-if="isLoading"></loading>
 
       <!-- 是否显示404页面 -->
@@ -9,6 +8,9 @@
 
       <!-- 否则显示主要内容页面 -->
       <div v-else>
+        <!--ok_header 导航栏-->
+        <ok-header></ok-header>
+
         <!--Article 文章标题部分-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
           <i-col span="12" >
@@ -80,9 +82,10 @@
       <!--返回顶部-->
       <BackTop></BackTop>
 
+
       <!-- ***********************************  其他调用显示类容 **************************************** -->
       <!--确认删除Modal-->
-      <Modal v-model="founctionConfirm"
+      <Modal v-model="functionConfirm"
              title="请确认是否继续："
              @on-ok="delete_article">
 
@@ -98,25 +101,32 @@
     import Loading from "../loading/loading";
 
     export default {
-        name: "articleInfo",
+      name: "articleInfo",
       components: {Loading, OkHeader, NotFound},
       data() {
         return {
           ArticleInfo:{},
           isNotFound:false,
           isLoading:true,
-          founctionConfirm:false,
+          functionConfirm:false,
         };
       },
       methods:{
         //根据选择的功能，进行对应的操作
         chooseFunction(name){
-          this.founctionConfirm = true;
           switch (name) {
             case "update"://点击修改
               console.log("点击了修改按钮");
+              localStorage.setItem("update_articleInfo",JSON.stringify(this.ArticleInfo));
+              this.$router.push({
+                name:'article_update',
+                params:{
+                  article_id:this.ArticleInfo.articleID,
+                }
+              });
               break;
             case "delete"://点击删除
+              this.functionConfirm = true;
               console.log("点击删除按钮");
               break;
             case "report"://点击举报
@@ -130,6 +140,10 @@
           const result = await this.$apis.ArticleApi.delete_article(this.$route.params.article_id,"article");
           console.log("返回的结果：",result);
           if (result.msg === 'success'){//表示删除成功
+            this.$Notice.success({
+              title: '操作成功',
+              desc: '该篇文章已成功删除！所有人都将无法再获取该篇文章的信息'
+            });
             // this.$router.go(-1);//返回上一页
             this.$router.push({name:'index'});//返回首页
           }

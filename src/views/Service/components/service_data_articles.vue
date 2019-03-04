@@ -2,21 +2,19 @@
     <div class="my-articles">
 
       <!-- Title 部分 -->
-      <div>
-        <Row>
-          <i-col span="24">
-            <span style="font-size: 20px;font-weight: bold">文章数据详情</span>
-            <div style="float: right">
-              <span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>
-            </div>
-            <hr>
-          </i-col>
-        </Row>
-      </div>
+      <Row style="border: 1px solid red">
+        <i-col>
+          <span style="font-size: 20px;font-weight: bold">文章数据详情</span>
+          <div style="float: right">
+            <span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>
+          </div>
+          <hr>
+        </i-col>
+      </Row>
 
       <loading v-if="isLoading"></loading>
 
-      <not-found v-else-if="notFound"></not-found>
+      <not-found v-else-if="isNotFound"></not-found>
 
       <!-- 查询结果 部分 -->
       <div class="myArticleInfo" v-else  v-for="myArticle in myArticleInfoList">
@@ -60,7 +58,7 @@
           return {
             myArticleInfoList:[],
             isLoading:true,
-            notFound:false,
+            isNotFound:false,
             page:1,
           }
       },
@@ -76,12 +74,12 @@
          const result = await this.$apis.ArticleApi.get_myArticle(this.page);
           if (result ===null && this.page===1 ) {
             this.isLoading = false; //取消正在加载
-            this.notFound = true; //显示404
+            this.isNotFound = true; //显示404
           }else {
             console.log("此时，应该获取到结果了,输出看看是什么东西:",result);
             this.myArticleInfoList = result;
             this.isLoading = false;
-            this.notFound = false;
+            this.isNotFound = false;
           }
           console.log("我应该在后面输出");
         },
@@ -120,6 +118,7 @@
     margin: 0;
     padding: 0;
   }
+
   .my-articles{
     /*padding: 15px 35px;*/
     padding: 0;
@@ -141,7 +140,7 @@
     padding: 15px;
   }
 
-  .myArticleTitle a,span{
+  .myArticleTitle a, .myArticleTitle span{
     color: black;
     font-size: 20px;
     font-weight: bold;
@@ -173,7 +172,7 @@
     font-weight: normal;
   }
 
-  .myArticleOtherInfo span,label{
+  .myArticleOtherInfo span, .myArticleOtherInfo label{
     font-size: 14px;
     font-weight: normal;
   }

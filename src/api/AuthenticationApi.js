@@ -53,7 +53,7 @@ const authentication = {
         const userInfo = {
           openID: response.data.data.openID,
           nickname: response.data.data.nickname,
-          avatar: response.data.data.avatar,
+          avatar: store.getters.serverPath+JSON.parse(response.data.data.avatar)[0],
           token: response.data.data.token,
         };
         store.dispatch("saveLoginInfo", userInfo);

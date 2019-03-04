@@ -248,6 +248,8 @@ const article = {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.delete_article(deleteID,type)
+        }else{
+          return null;
         }
       }else {
         return res.data;

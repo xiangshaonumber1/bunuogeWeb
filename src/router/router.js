@@ -26,8 +26,6 @@ import LinkEdit from '../views/Service/components/service_link_edit'
 import Web_articleInfo from '../views/Web/mainContent/web_articleInfo'
 import Web_diaryInfo from '../views/Web/mainContent/web_diaryInfo'
 import Web_feedBack from '../views/Web/mainContent/web_feedback'
-import Web_writeArticle from '../views/Web/mainContent/web_write_article'
-import Web_writeDiary from '../views/Web/mainContent/web_write_diary'
 import NotFound from '../views/Web/mainContent/404'
 import Web_search from '../views/Web/mainContent/web_searchInfo'
 import Web_personalCenter from '../views/Web/mainContent/web_personal_center'
@@ -38,8 +36,6 @@ const routes = [
   {path:'/', component: App,children:[                                                  //
       {path:'',component:Index, name:'index'},                                          //首页
       {path:'search/:key_word',component:Web_search, name:'web_search'},                    //搜索结果页面
-      {path:"article/:article_id",component:Web_articleInfo, name:'web_articleInfo'},            //文章详情页面
-      {path:"diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo'},            //文章详情页面
       {path:'setting/personalCenter',component:Web_personalCenter,name:'personal_center',
         children:[
           {path: 'personalInfo', component: PersonalInfo, name:"web_personal_info"},     //用户个人数据页
@@ -47,8 +43,16 @@ const routes = [
           {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页
         ]},
     ]},
-  {path:'/write/article',component:Web_writeArticle,name:'web_write_article'},          //用户文章编辑页
-  {path:'/write/diary',component:Web_writeDiary,name:'web_write_diary'},          //用户文章编辑页
+
+  {path:"/article/:article_id",component:Web_articleInfo, name:'web_articleInfo'},     //文章详情
+  {path:"/diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo'},     //日记详情页面
+
+
+  {path:'/article/update/:article_id',component:WriteArticle,name:'article_update'},          //用户文章修改页
+  {path:'/diary/update/:diary_id',component:WriteDiary, name:'diary_update'},    //用户修改日记页面
+
+  {path:'/write/article',component:WriteArticle,name:'web_write_article'},          //用户文章编辑页
+  {path:'/write/diary',component:WriteDiary,name:'web_write_diary'},          //用户文章编辑页
 
   {path:'/feedback',component:Web_feedBack, name:'web_feedback'},                           //意见反馈页
   {path:'/404',component:NotFound,name:'404'},                                          //404

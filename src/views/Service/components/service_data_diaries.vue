@@ -2,7 +2,7 @@
     <div class="my-diaries">
 
       <!-- Title 部分 -->
-      <Row>
+      <Row style="border: 1px solid red">
         <i-col>
           <span style="font-size: 20px;font-weight: bold">日记创作详情</span>
           <div style="float: right">
@@ -115,8 +115,14 @@
     text-decoration: none;
   }
 
+  hr{
+    margin: 10px 0;
+  }
+
   .my-diaries{
-    padding: 15px 35px;
+    /*padding: 15px 35px;*/
+    padding: 0;
+    margin: 0;
   }
 
   .myDiaryInfo{

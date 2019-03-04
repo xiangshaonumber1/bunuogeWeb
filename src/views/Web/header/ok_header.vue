@@ -174,6 +174,7 @@
 
       mounted() {
         this.userInfo = this.$store.getters.userInfo;
+        console.log("当前头像地址",this.userInfo.avatar);
         this.isLogin = this.$store.getters.isLogin;
         this.getRouteName();
       },
