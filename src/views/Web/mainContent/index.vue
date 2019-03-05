@@ -119,7 +119,8 @@
             '“崩溃了？不可能，我全 Catch 住了” | Java 异常处理 '],
           articleList:[], //首页基本文章信息
           posterList:[],  //首页海报信息
-          index_article_page:1 //获取指定页号的信息
+          index_article_page:1, //获取指定页号的信息
+          load_more:true, //是否允许加载下一页数据
         }
       },
 
@@ -146,15 +147,27 @@
         //获取首页基本文章信息
         async get_article_list(articlePage) {
           const result = await this.$apis.ArticleApi.get_article_list(articlePage);
-          if (result == null && articlePage === 1) { //没有返回数据时
+          console.log("当前 result：",result);
+          console.log("当前 articlePage：",articlePage);
+          if (result === null && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
             this.notFound = true;
             this.isLoading = false;
-          } else { //如果获取到的数据不为空
+          }else {                                                         //情况二：有具体的返回数据
             this.notFound = false;
             this.isLoading = false;
+            this.load_more = true;
             this.index_article_page++;
-            console.log("push 前 输出 this.articleList：", result);
-            for (let value of result){
+            if (result === null){                                         //情况三：如果加载的数据为空(上次的加载量正好加载完),不允许加载下页数据，且不能执行后面的操作，所以return
+              console.log("情况三出现，返回结果为null");
+              return this.load_more = false;
+            }
+            if (result.length < 5){                                       //情况四：数据量小于3（本次已加载完全部数据），不允许加载下页数据，但要把现有的数据添加完，允许进行后面的操作
+              this.load_more = false;
+              console.log("情况四出现，数据量小于3")
+            }
+
+            console.log("push 前 输出 result结果：", result);
+            for (let value of result){ //循环向
               console.log("执行push");
               this.articleList.push(value)
             }
@@ -173,11 +186,11 @@
           }else{
             this.posterList = [{},{},{},{},{}];
           }
-          console.log("this.posterList : ",this.posterList.length)
+          // console.log("this.posterList : ",this.posterList.length)
         },
 
         //滚动到底部，自定加载数据
-        scroll(){
+        async scroll(){
           window.onscroll = () =>{
             /**
              * document.documentElement.offsetHeight：网页可见区域高，获取元素自身的高度（包含边框）
@@ -185,10 +198,9 @@
              * window.innerHeight：获取浏览器页面可用高度
              */
             let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight <=200;
-            if (bottomOfWindow && this.isLoading === false){
-              this.isLoading = true;
-              console.log("这时候加载数据");
-              this.get_article_list();
+            if (bottomOfWindow && this.load_more === true){
+              console.log("这时候加载数据，当前page为",this.index_article_page);
+              this.get_article_list(this.index_article_page);
             }
           }
         }
@@ -203,6 +215,7 @@
         //获取首页轮播海报图片
         this.getPosterList();
 
+        //滑到距离底部一定距离时，自动加载下一页的数据
         this.scroll();
       },
 
