@@ -2,82 +2,91 @@
 
     <div class="web_diaryInfo">
 
-        <loading v-if="isLoading"></loading>
+      <!-- ok_header 导航栏-->
+      <ok-header></ok-header>
 
-        <not-found v-else-if="isNotFound"></not-found>
+      <loading v-if="isLoading"></loading>
 
-        <div v-else>
-          <!-- ok_header 导航栏-->
-          <ok-header></ok-header>
+      <not-found v-else-if="isNotFound"></not-found>
 
-          <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
-            <i-col span="12" >
+      <div v-else>
 
-          <span class="diary_title">
-            <Tag color="rgb(255, 93, 71)" v-if="DiaryInfo.type === 'private'">私有</Tag>
-            <Tag color="rgb(35, 201, 237)" v-if="DiaryInfo.type === 'public'">公开</Tag>
-            {{DiaryInfo.title}}
-          </span>
-            </i-col>
-          </Row>
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
+          <i-col span="12" >
+              <span class="diary_title">
+                <Tag color="rgb(255, 93, 71)" v-if="DiaryInfo.type === 'private'">私有</Tag>
+                <Tag color="rgb(35, 201, 237)" v-if="DiaryInfo.type === 'public'">公开</Tag>
+                {{DiaryInfo.title}}
+              </span>
+          </i-col>
+        </Row>
 
-          <!--Diary 文章用户信息-->
-          <Row type="flex" align="middle" justify="center" class="code-row-bg row-userInfo">
-            <i-col span="12" style="line-height: 60px" >
-              <!--该div用于显示用户头像-->
-              <div style="float: left">
-                <a style="text-decoration: none;margin: 0 10px">
-                  <img :src="DiaryInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
+        <!--Diary 文章用户信息-->
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-userInfo">
+          <i-col span="12" style="line-height: 60px" >
+            <!--该div用于显示用户头像-->
+            <div style="float: left">
+              <a style="text-decoration: none;margin: 0 10px">
+                <img :src="DiaryInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
+              </a>
+            </div>
+
+            <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量-->
+            <div style="line-height: 30px;">
+              <a><span>{{DiaryInfo.nickname}}</span></a>
+              <br>
+              <span style="color: gray">发布时间：{{DiaryInfo.time}}</span>&emsp;
+              <div class="more-function">
+                <a href="javascript:void(0)">
+                  <Dropdown trigger="click" @on-click="chooseFunction">
+                    <span style="color: white;">更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
+                    <DropdownMenu slot="list">
+                      <!--这里表示如果该片文章的作者是当前用户的话，开放修改和删除功能-->
+                      <div v-if="DiaryInfo.openID === this.$store.getters.openID">
+                        <DropdownItem name="update">修改</DropdownItem>
+                        <DropdownItem name="delete">删除</DropdownItem>
+                      </div>
+                      <!--如果不是作者本人，则只开放举报功能-->
+                      <div v-else>
+                        <DropdownItem name="report">举报</DropdownItem>
+                      </div>
+                    </DropdownMenu>
+                  </Dropdown>
                 </a>
               </div>
+            </div>
 
-              <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量-->
-              <div style="line-height: 30px;">
-                <a><span>{{DiaryInfo.nickname}}</span></a>
-                <br>
-                <span style="color: gray">发布时间：{{DiaryInfo.time}}</span>&emsp;
-                <div class="more-function">
-                  <a href="javascript:void(0)">
-                    <Dropdown trigger="click" @on-click="chooseFunction">
-                      <span style="color: white;">更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
-                      <DropdownMenu slot="list">
-                        <!--这里表示如果该片文章的作者是当前用户的话，开放修改和删除功能-->
-                        <div v-if="DiaryInfo.openID === this.$store.getters.openID">
-                          <DropdownItem name="update">修改</DropdownItem>
-                          <DropdownItem name="delete">删除</DropdownItem>
-                        </div>
-                        <!--如果不是作者本人，则只开放举报功能-->
-                        <div v-else>
-                          <DropdownItem name="report">举报</DropdownItem>
-                        </div>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </a>
-                </div>
-              </div>
+          </i-col>
+        </Row>
 
-            </i-col>
-          </Row>
+        <!--Diary 文章主要内容-->
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-content">
+          <i-col span="12">
 
-          <!--Diary 文章主要内容-->
-          <Row type="flex" align="middle" justify="center" class="code-row-bg row-content">
-            <i-col span="12">
+            <div class="diary_content">
+              <!-- 复制粘贴过来的，死样式，后面再删 start -->
+              <span v-html="DiaryInfo.content"></span>
+              <!-- 复制粘贴过来的，死样式，后面再删 end -->
+            </div>
+          </i-col>
+        </Row>
 
-              <div class="diary_content">
-                <!-- 复制粘贴过来的，死样式，后面再删 start -->
-                <span v-html="DiaryInfo.content"></span>
-                <!-- 复制粘贴过来的，死样式，后面再删 end -->
-              </div>
-            </i-col>
-          </Row>
+      </div>
 
-        </div>
+      <!-- 分割线 -->
+      <Divider />
 
-        <!-- 分割线 -->
-        <Divider />
+      <!--返回顶部-->
+      <BackTop></BackTop>
 
-        <!--返回顶部-->
-        <BackTop></BackTop>
+
+      <!-- ***********************************  其他调用显示类容 **************************************** -->
+      <!--确认删除Modal-->
+      <Modal v-model="functionConfirm" title="请确认是否继续：" @on-ok="delete_diary" :mask-closable="false">
+        <p>正在确认是否删除标题为：【{{this.DiaryInfo.title}}】 的笔记</p>
+        <p>如果非必要，我们不建议您删除您的任何一篇文章</p>
+        <p>确认后，所有相关数据都将删除，<strong style="color: red">无法恢复</strong>，请确认后再继续</p>
+      </Modal>
 
     </div>
 
@@ -95,12 +104,13 @@
           isLoading:true,
           isNotFound:false,
           DiaryInfo:{},
+          functionConfirm:false,  //控制是否显示确认删除对话框
         }
       },
 
       methods:{
 
-        async getDiaryInfo(){//根据diaryID，获取对饮的信息
+        async getDiaryInfo(){   //根据diaryID，获取对饮的信息
           const result = await this.$apis.ArticleApi.get_diaryInfo(this.$route.params.diary_id);
           if (result!==null){
             this.isLoading = false;
@@ -118,10 +128,17 @@
           switch (name) {
             case "update"://点击修改
               console.log("点击了修改按钮");
+              localStorage.setItem("update_diaryInfo",JSON.stringify(this.DiaryInfo));
+              this.$router.push({
+                name:'diary_update',
+                params:{
+                  diary_id:this.DiaryInfo.diaryID,
+                }
+              });
               break;
             case "delete"://点击删除
               console.log("点击删除按钮");
-              this.delete_diary();
+              this.functionConfirm = true;
               break;
             case "report"://点击举报
               console.log("点击举报按钮");
@@ -129,6 +146,7 @@
           }
         },
 
+        //确认删除该篇日记
         async delete_diary() {
           const result = await this.$apis.ArticleApi.delete_article(this.$route.params.diary_id, "diary");
           if (result.msg === 'success') {
@@ -151,6 +169,10 @@
 </script>
 
 <style scoped>
+
+  span{
+    font-size: 16px;
+  }
 
   a{
     color: black;

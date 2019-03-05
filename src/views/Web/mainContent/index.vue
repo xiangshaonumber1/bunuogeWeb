@@ -1,31 +1,24 @@
 <template>
+
     <div class="index">
+
       <!--首页主要内容-->
       <div class="index-content center-block">
 
         <Row type="flex" align="middle" class="code-row-bg" justify="space-between">
           <i-col span="15">
             <Carousel autoplay v-model="CarouselOrder" loop :autoplay-speed="autoplaySpeed">
-              <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/home1.jpg" alt="none"> </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/home2.jpg" alt="none"></div>
-              </CarouselItem>
-              <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/home3.jpg" alt="none"></div>
-              </CarouselItem>
-              <CarouselItem>
-                <div class="my-carousel"><img src="/static/picture/home4.jpg" alt="none"></div>
+              <CarouselItem v-for="(poster,index) in posterList" :key="index">
+                <div class="my-carousel"><img :src="poster" alt=""></div>
               </CarouselItem>
             </Carousel>
           </i-col>
 
           <i-col span="8" class="official-activities">
             <div>
-              <p class="bg-info">推荐版块location1</p>
-              <p class="bg-success">推荐版块location1</p>
-              <p class="bg-danger">推荐版块location1</p>
+              <p class="bg-info">前端：Vue学习</p>
+              <p class="bg-success">后端：SpringBoot</p>
+              <p class="bg-danger">书籍：优质书籍推荐</p>
             </div>
 
             <div class="excellent-articles">
@@ -69,6 +62,7 @@
 
             <!--数据获取完成前显示正在加载-->
             <loading v-if="isLoading"></loading>
+
             <!--如果没有数据，显示404-->
             <not-found v-else-if="notFound"></not-found>
 
@@ -90,14 +84,19 @@
               </Card>
               <Divider style="margin-top: 0" />
             </div>
+
           </i-col>
         </Row>
+
+
 
       </div>
 
       <!--返回顶部-->
       <BackTop></BackTop>
+
       <blog-footer></blog-footer>
+
     </div>
 </template>
 
@@ -105,6 +104,7 @@
     import Loading from "../loading/loading";
     import NotFound from "./404";
     import BlogFooter from "../footer/footer";
+
     export default {
         name: "index",
       components: {BlogFooter, NotFound, Loading},
@@ -112,17 +112,13 @@
         return {
           isLoading:true,
           notFound:true,
-          autoplaySpeed:5000,
-          CarouselOrder:0,
-          top_menu_theme:'light',
-          top_menuItem_name:'articles',
+          autoplaySpeed:5000, //轮播切换时间
+          CarouselOrder:0,  //幻灯片的索引，从 0 开始
           topList:['Centos下安装docker以及docker-composer以及docker-composer',
             '【跃迁之路】【696天】程序员高效学习方法论探索系列（实验阶段453-2019.1.16）',
             '“崩溃了？不可能，我全 Catch 住了” | Java 异常处理 '],
-          articleList:[
-            {},{},{},{},{},{},{},{},{},{},
-          ],
-          push_time: ((new Date()).getTime() - (60 * 3 * 1000)),
+          articleList:[], //首页基本文章信息
+          posterList:[],  //首页海报信息
           index_article_page:1 //获取指定页号的信息
         }
       },
@@ -147,24 +143,67 @@
           return result;
         },
 
+        //获取首页基本文章信息
+        async get_article_list(articlePage) {
+          const result = await this.$apis.ArticleApi.get_article_list(articlePage);
+          if (result == null && articlePage === 1) { //没有返回数据时
+            this.notFound = true;
+            this.isLoading = false;
+          } else { //如果获取到的数据不为空
+            this.notFound = false;
+            this.isLoading = false;
+            this.index_article_page++;
+            console.log("push 前 输出 this.articleList：", result);
+            for (let value of result){
+              console.log("执行push");
+              this.articleList.push(value)
+            }
+            console.log("push 后 输出 this.articleList：",this.articleList)
+          }
+        },
 
+        //获取首页海报信息
+        async getPosterList() {
+          const result = await this.$apis.CommonApi.getPostList();
+          if (result){
+            for (let i=0;i<result.length;i++){ //为获取到的图片路径，添加服务器地址
+              result[i] = this.$store.getters.serverPath+result[i];
+            }
+            this.posterList = result;
+          }else{
+            this.posterList = [{},{},{},{},{}];
+          }
+          console.log("this.posterList : ",this.posterList.length)
+        },
+
+        //滚动到底部，自定加载数据
+        scroll(){
+          window.onscroll = () =>{
+            /**
+             * document.documentElement.offsetHeight：网页可见区域高，获取元素自身的高度（包含边框）
+             * document.documentElement.scrollTop; 获取当前页面的滚动条纵坐标位置，网页被卷去的高
+             * window.innerHeight：获取浏览器页面可用高度
+             */
+            let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight <=200;
+            if (bottomOfWindow && this.isLoading === false){
+              this.isLoading = true;
+              console.log("这时候加载数据");
+              this.get_article_list();
+            }
+          }
+        }
 
       },
 
       //首页数据获取
       async mounted(){
-        const result = await this.$apis.ArticleApi.get_article_list(this.index_article_page);
-        if (result==null && this.index_article_page === 1){ //没有返回数据时
-          this.notFound = true;
-          this.isLoading = false;
-        }else { //如果获取到的数据不为空
-          this.notFound = false;
-          this.isLoading = false;
-          this.index_article_page++;
-          this.articleList = result;
-          console.log("index  this.articleList:", this.articleList);
-        }
+        //获取首页基本文章信息
+        this.get_article_list(this.index_article_page);
 
+        //获取首页轮播海报图片
+        this.getPosterList();
+
+        this.scroll();
       },
 
     }
@@ -204,13 +243,18 @@
   }
 
   .my-carousel{
-    height: 400px;
-    text-align: center;
+    height: 450px;
     color: white;
+    background: rgb(217, 237, 247);
+    border-radius: 5px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .my-carousel img{
     margin: 0;
     padding: 0;
-  }
-  .my-carousel img{
+    border-radius: 5px;
     width: 100%;
     height: 100%;
   }

@@ -2,7 +2,7 @@
     <div class="my-diaries">
 
       <!-- Title 部分 -->
-      <Row style="border: 1px solid red">
+      <Row>
         <i-col>
           <span style="font-size: 20px;font-weight: bold">日记创作详情</span>
           <div style="float: right">

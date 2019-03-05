@@ -2,7 +2,7 @@
     <div class="my-articles">
 
       <!-- Title 部分 -->
-      <Row style="border: 1px solid red">
+      <Row>
         <i-col>
           <span style="font-size: 20px;font-weight: bold">文章数据详情</span>
           <div style="float: right">

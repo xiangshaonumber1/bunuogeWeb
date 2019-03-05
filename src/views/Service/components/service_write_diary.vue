@@ -20,10 +20,10 @@
         <!--日记编辑类型选择-->
         <Row type="flex" class="row-code-bg" justify="center" align="middle" style="margin-bottom: 10px">
           <i-col span="3" style="z-index: 10002; padding-right: 10px;">
-            <Select v-model="select_type" size="large" :value="select_type">
-              <Option value="public" label="公开 (所有人可见)"></Option>
-              <Option value="private" label="私密 (仅自己可见)"></Option>
-            </Select>
+            <i-select v-model="select_type" size="large">
+              <i-option value="public" label="公开 (所有人可见)"></i-option>
+              <i-option value="private" label="私密 (仅自己可见)"></i-option>
+            </i-select>
           </i-col>
 
           <!--trim 去除前后空格-->
@@ -33,7 +33,7 @@
 
           <!-- 确认发布按钮 -->
           <i-col span="2" style="padding-left: 10px">
-            <Button v-if="this.type ==='update' " type="success" size="large" long @click="request_update_diary">修&nbsp;改&nbsp;保&nbsp;存</Button>
+            <Button v-if="this.type ==='update' " type="success" size="large" long @click="request_push_diary">修&nbsp;改&nbsp;保&nbsp;存</Button>
             <Button v-else type="info" size="large" long @click="request_push_diary">确&nbsp;认&nbsp;发&nbsp;布</Button>
           </i-col>
 
@@ -69,6 +69,7 @@
       components: {QuickRouter},
       data() {
         return {
+          editor:'',
           diaryContent:"",
           diaryTitle:"",
           select_type:'public',
@@ -84,50 +85,80 @@
         },
 
         //发起提交日记的请求
-        request_push_diary(){
-          if (this.diaryTitle.length<=5 || this.diaryContent.length<=5){//检查日记标题和日记内容长度是否小于5
-           return this.$Notice.warning({
-              title:'格式不规范',
-              desc:'日记标题和日记内容的长度应该不小6位有效字符，请修改后再继续'
+        async request_push_diary() {
+          if (this.diaryTitle.length <= 5 || this.diaryContent.length <= 5) {//检查日记标题和日记内容长度是否小于5
+            return this.$Notice.warning({
+              title: '格式不规范',
+              desc: '日记标题和日记内容的长度应该不小6位有效字符，请修改后再继续'
             })
           }
-          this.$apis.ArticleApi.write_diary(this.diaryTitle,this.diaryContent,this.select_type)
+
+          let result = false;
+          if (this.type === 'write') {
+            result = await this.$apis.ArticleApi.write_diary(this.diaryTitle, this.diaryContent, this.select_type)
+          } else if (this.type === 'update') {
+            result = await this.$apis.ArticleApi.update_diary(this.DiaryInfo.diaryID,this.diaryTitle,this.diaryContent,this.select_type);
+            if(result){
+              this.$Notice.success({
+                title:'修改成功：',
+                desc:'修改已生效，即将为你跳转到详情页面'
+              });
+              this.$router.push({name:'web_diaryInfo',params:this.DiaryInfo.diaryID})
+            }
+          }
+
         },
 
-        //发起修改日记内容的请求
-        request_update_diary(){
-
-        },
 
         //初始化文本编辑器
         editorCreate(){
-          let editor = new E(this.$refs.editorMenu,this.$refs.diaryContent);
+          this.editor = new E(this.$refs.editorMenu,this.$refs.diaryContent);
           //加上这个句，才能在编辑器中粘贴图片
-          editor.customConfig.uploadImgShowBase64 = true;
-          editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
-          editor.customConfig.uploadFileName = 'file';
+          this.editor.customConfig.uploadImgShowBase64 = true;
+          this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
+          this.editor.customConfig.uploadFileName = 'file';
           // 通过 url 参数配置 debug 模式。url 中带有 write 才会开启 debug 模式
-          editor.customConfig.debug = location.href.indexOf('write') > 0;
+          this.editor.customConfig.debug = location.href.indexOf('write') > 0;
           //监听编辑器内容变化，并赋给diaryContent
-          editor.customConfig.onchange = (html) => {
+          this.editor.customConfig.onchange = (html) => {
             this.diaryContent = html
           };
-          editor.create()
-        }
+          this.editor.create()
+        },
+
+
+        //update操作类型初始化
+        updateInstance(){
+          this.type = 'update';
+          this.DiaryInfo = JSON.parse(localStorage.getItem("update_diaryInfo"));
+          console.log("输出DiaryInfo信息：",this.DiaryInfo);
+          console.log("this.DiaryInfo.type" , this.DiaryInfo.type);
+          this.select_type = this.DiaryInfo.type;
+          console.log("this.select_type" , this.select_type);
+          this.diaryTitle = this.DiaryInfo.title;
+          this.diaryContent = this.DiaryInfo.content;
+          this.editor.txt.html(this.DiaryInfo.content);
+        },
 
 
       },
 
       mounted(){
-        console.log("write_article : mounted 正在执行");
         this.editorCreate();//执行初始化文本编辑器
 
-        if (this.$route.path.endsWith("update")){
-          console.log("update 结尾，是修改文章的请求");
-          this.type = 'update'
+        if (this.$route.params.diary_id){
+          this.updateInstance();
+        }else {
+          console.log("是新建日记的请求");
         }
 
       },
+
+      Destroy(){
+        console.log("执行删除");
+        localStorage.removeItem("update_diaryInfo");
+      },
+
     }
 </script>
 

@@ -67,17 +67,15 @@ const article = {
         origin_link:origin_link,
       })
     }).then( async res => {
+      console.log("返回信息 ： ",res);
       if (res.data.code === '200'){
         return true;
       }
       else if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if(result){
-          return this.update_article(ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link)
+          return this.update_article(ArticleID,ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link)
         }
-        return res;
-      }else {
-        return res;
       }
     })
   },
@@ -143,9 +141,6 @@ const article = {
         if (result){
           return this.update_diary(diaryID,title,content,type)
         }
-        return false;
-      }else {
-        return res;
       }
     })
   },

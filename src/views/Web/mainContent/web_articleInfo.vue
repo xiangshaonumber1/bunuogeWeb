@@ -1,6 +1,9 @@
 <template>
     <div id="articleInfo">
 
+      <!--ok_header 导航栏-->
+      <ok-header></ok-header>
+
       <loading v-if="isLoading"></loading>
 
       <!-- 是否显示404页面 -->
@@ -8,8 +11,6 @@
 
       <!-- 否则显示主要内容页面 -->
       <div v-else>
-        <!--ok_header 导航栏-->
-        <ok-header></ok-header>
 
         <!--Article 文章标题部分-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
@@ -37,7 +38,7 @@
             <div style="line-height: 30px;">
               <a><span>{{this.ArticleInfo.nickname}}</span></a>
               <br>
-              <span style="color: gray">{{ArticleInfo.time}}</span>&emsp;
+              <span style="color: gray">发布时间：{{ArticleInfo.time}}</span>&emsp;
               <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="22"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
               <span><Icon type="md-eye" size="22" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.watch}}</label></span>
               <div class="more-function">
@@ -85,10 +86,10 @@
 
       <!-- ***********************************  其他调用显示类容 **************************************** -->
       <!--确认删除Modal-->
-      <Modal v-model="functionConfirm"
-             title="请确认是否继续："
-             @on-ok="delete_article">
-
+      <Modal v-model="functionConfirm" title="删除文章确认提示：" @on-ok="delete_article" :mask-closable="false">
+        <p>正在确认是否删除标题为：【{{this.ArticleInfo.title}}】 的笔记</p>
+        <p>如果非必要，我们不建议您删除您的任何一篇文章</p>
+        <p>确认后，所有相关数据都将删除，且<strong style="color: red">无法恢复</strong>，请确认后再继续</p>
       </Modal>
 
     </div>

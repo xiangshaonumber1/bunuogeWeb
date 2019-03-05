@@ -21,13 +21,11 @@
     <!--主要配置-->
     <div>
       <Row type="flex" class="row-code-bg" justify="center" align="middle" style="margin-bottom: 10px">
-
-        <!-- 发布文章类型选择 -->
-        <i-col span="3" style="z-index: 10002">
-          <i-select v-model="select_type" class="article_type_select" size="large" :value="select_type">
-            <Option value="original" label="原创文章"></Option>
-            <Option value="reprint" label="转载文章"></Option>
-            <Option value="translate" label="翻译文章"></Option>
+        <i-col span="3" style="z-index: 10002;padding-right: 10px;">
+          <i-select v-model="select_type" size="large">
+            <i-option value="original" label="原创文章"></i-option>
+            <i-option value="reprint" label="转载文章"></i-option>
+            <i-option value="translate" label="翻译文章"></i-option>
           </i-select>
         </i-col>
 
@@ -45,7 +43,7 @@
       <!--第二行（默认隐藏）  如何选择的是“转载文章”或者“翻译文章” 都必须要备注原文链接 -->
       <Row v-if="select_type!=='original'" type="flex" class="row-code-bg" justify="center" align="middle" style="margin-bottom: 10px">
         <i-col span="14">
-          <Input  v-model.trim="origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
+          <Input v-model.trim="origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
         </i-col>
       </Row>
 
@@ -84,8 +82,8 @@
             editor:'',
             articleTitle:'',
             articleContent:'',
-            select_type:"original",
-            origin_link:'',
+            select_type:'original',
+            origin_link:"",
             onlyText:'',
             type:'write', //write,update 是新建文章，还是修改文章,
             ArticleInfo:{},
@@ -111,19 +109,21 @@
             //带html格式的文本
             this.articleContent = html;
             //纯文字文本
-            this.onlyText = html.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();
+            this.onlyText = this.articleContent.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();
           };
           this.editor.create()
         },
 
         //向服务器发送请求
        async request_push_article(){
+          // return console.log("this. select_type 的值：",this.select_type);
           if (this.articleTitle.length <6){  //检查标题是否符合规范
             return this.$Notice.warning({
               title:'标题不规范提示',
               desc:'文章标题不符合规范，标题应该至少有6位有效字符'
             })
           }
+
           if (this.select_type !== 'original' && this.origin_link.length <6){ //如果不是原创文章，检查原文链接是否符合规范
             return this.$Notice.warning({
               title:'原文链接不规范提示',
@@ -136,48 +136,64 @@
               desc:'文章主要内容不能少于6个有效字符，请编写好后再继续'
             })
           }
+
           let result = false;
           if(this.type === 'write'){  //新建文章请求
             result = await this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
           }else if (this.type === 'update'){  //修改已发布的文章
+            if (this.select_type === 'original'){ //是其他类型的文章修改为原创文章，把original手动设置为null
+              this.origin_link = null;
+            }
             result = await this.$apis.ArticleApi.update_article(this.ArticleInfo.articleID,this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
-            if (result){
+            console.log("在这里输出 result ",result);
+            if (result === true){
               this.$Notice.success({
                 title:'修改成功：',
                 desc:'修改已生效，即将为你跳转到详情页面'
               });
               this.$router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID})
+            }else {
+              console.log("执行 else")
             }
           }
         },
+
+        //update操作类型初始化
+        updateInstance(){
+          this.type = 'update';                                                                                         //辨别操作类型
+          this.ArticleInfo = JSON.parse(localStorage.getItem("update_articleInfo"));                                    //取出存放在本地session中的文章信息
+          this.select_type = this.ArticleInfo.type;                                                                     //文章类型赋值
+          console.log("this.select_type 的值：",this.select_type);
+          this.articleTitle = this.ArticleInfo.title;                                                                   //文章标题赋值
+          this.onlyText = this.ArticleInfo.content.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();                //用于检验纯文本字数
+          if (this.ArticleInfo.type !== 'original'){
+            this.origin_link = this.ArticleInfo.originLink;
+          }
+          this.editor.txt.html(this.ArticleInfo.content);                                                               //文章主要内容赋值
+          this.articleContent = this.ArticleInfo.content;
+        }
 
 
       },
 
       mounted(){
 
+        //执行编辑工具初始化
         this.editorCreate();
-        console.log("write_article : mounted 正在执行");
 
+        //如果是有值传递过来，表示是修改类型的操作，
         if (this.$route.params.article_id){
-          console.log("是修改文章的请求");
-          this.type = 'update';
-          this.ArticleInfo = JSON.parse(localStorage.getItem("update_articleInfo"));
-          console.log("localStorage 获取到的信息:",JSON.parse(localStorage.getItem("update_articleInfo")));
-          this.articleTitle = this.ArticleInfo.title;
-          this.select_type = this.ArticleInfo.type;
-          this.origin_link = this.ArticleInfo.origin_link;
-          this.editor.txt.html(this.ArticleInfo.content)
+          this.updateInstance();
         }else {
           console.log("是新建文章的请求")
         }
-
       },
 
       Destroy(){
       console.log("执行删除");
       localStorage.removeItem("update_articleInfo");
       },
+
     }
 
 
@@ -189,10 +205,6 @@
   a{
     color: black;
     text-decoration: none;
-  }
-
-  .article_type_select{
-    padding-right: 10px;
   }
 
   .article_confirm{

@@ -64,6 +64,13 @@ request.interceptors.response.use(response=>{
       router.push({name:'login'});
       break;
 
+    case '406': //用于修改，删除等需要对数据进行变动，但变动无效的，类似无效的修改，或者删除已删除的信息
+      Notice.info({
+        title:'无效的操作：',
+        desc:response.data.msg
+      });
+      break;
+
     case '407': //表示没有足够酒店 权限 或者 身份
       Notice.warning({
         title:'无权访问提示：',
