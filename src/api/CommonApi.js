@@ -16,7 +16,7 @@ const common = {
       url:'/common/getPosterList',
       method:'get',
     }).then( res =>{
-      console.log("getPosterList 返回的信息:",res);
+      // console.log("getPosterList 返回的信息:",res);
       return res.data.data;
     })
   }

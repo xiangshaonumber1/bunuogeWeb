@@ -57,7 +57,7 @@
         </Row>
 
         <!--正文内容-->
-        <Row>
+        <Row type="flex" class="code-row-bg" justify="center">
           <i-col span="24">
 
             <!--数据获取完成前显示正在加载-->
@@ -86,6 +86,16 @@
             </div>
 
           </i-col>
+
+          <!--加载更多Button,当自动加载次数超过三次时，需要手动加载更多-->
+          <i-col span="12">
+            <div class="loadMoreButton">
+              <Button v-if="page > 3" type="info" size="large" @click="get_article_list(page)" long >
+                <span>加&nbsp;载&nbsp;更&nbsp;多&nbsp;<<<</span>
+              </Button>
+            </div>
+          </i-col>
+
         </Row>
 
 
@@ -110,8 +120,11 @@
       components: {BlogFooter, NotFound, Loading},
       data(){
         return {
-          isLoading:true,
-          notFound:true,
+          isLoading:true,       //第一次请求加载等待
+          notFound:true,        //第一次请求失败显示
+          page:1, //获取指定页号的信息
+          loadMore:true, //是否允许加载下一页
+          scrollLoadSwitch:true, //滚动数据加载开关,防止滚动到底部的时候，防止多次请求
           autoplaySpeed:5000, //轮播切换时间
           CarouselOrder:0,  //幻灯片的索引，从 0 开始
           topList:['Centos下安装docker以及docker-composer以及docker-composer',
@@ -119,8 +132,6 @@
             '“崩溃了？不可能，我全 Catch 住了” | Java 异常处理 '],
           articleList:[], //首页基本文章信息
           posterList:[],  //首页海报信息
-          index_article_page:1, //获取指定页号的信息
-          load_more:true, //是否允许加载下一页数据
         }
       },
 
@@ -146,34 +157,66 @@
 
         //获取首页基本文章信息
         async get_article_list(articlePage) {
-          const result = await this.$apis.ArticleApi.get_article_list(articlePage);
-          console.log("当前 result：",result);
-          console.log("当前 articlePage：",articlePage);
-          if (result === null && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
-            this.notFound = true;
-            this.isLoading = false;
-          }else {                                                         //情况二：有具体的返回数据
-            this.notFound = false;
-            this.isLoading = false;
-            this.load_more = true;
-            this.index_article_page++;
-            if (result === null){                                         //情况三：如果加载的数据为空(上次的加载量正好加载完),不允许加载下页数据，且不能执行后面的操作，所以return
-              console.log("情况三出现，返回结果为null");
-              return this.load_more = false;
+          //只有允许加载下一页的情况下，才去请求数据
+          if (this.loadMore){
+            const result = await this.$apis.ArticleApi.get_article_list(articlePage);
+            if (result === null && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
+              this.notFound = true;
+              this.isLoading = false;
+            }else {                                                         //情况二：有具体的返回数据
+              /**
+               * 情况三：如果下一页没有数据（上一页正好加载完）,则 return 允许加载下一页数据为false,不做处理
+               */
+              if (result === null){
+                console.log("情况三：上一页正好加载完数据");
+                return this.loadMore = false;
+              }
+              /**
+               * 情况四：如果本页数据不足5条，则本页是最后一页，设置允许加载下一页为false,并继续执行，把现有的数据添加的数组元素中
+               */
+              if (result.length < 5){
+                console.log("情况四");
+                this.loadMore = false;
+              }
+              //只有在loadMore为true的情况下，才允许page+1
+              if (this.loadMore){
+                this.page++;
+              }
+              //防止意料之外的情况，设置 notFound 和 isLoading 为 false
+              this.notFound = false;  //不显示404
+              this.isLoading = false; //不显示第一次的正在加载
+              //循环向现有的文章数组中添加元素
+              for (let value of result){
+                this.articleList.push(value)
+              }
+              //数据加载完毕，启用滚动加载开关，可滚动加载数据
+              this.scrollLoadSwitch = true;
+              console.log("push 后 输出 this.articleList 长度：",this.articleList.length);
             }
-            if (result.length < 5){                                       //情况四：数据量小于3（本次已加载完全部数据），不允许加载下页数据，但要把现有的数据添加完，允许进行后面的操作
-              this.load_more = false;
-              console.log("情况四出现，数据量小于3")
-            }
-
-            console.log("push 前 输出 result结果：", result);
-            for (let value of result){ //循环向
-              console.log("执行push");
-              this.articleList.push(value)
-            }
-            console.log("push 后 输出 this.articleList：",this.articleList)
+          }else {
+            console.log("数据已加载完毕")
           }
         },
+
+        //滚动到底部，自定加载数据
+        async scroll(){
+          window.onscroll = () =>{
+            /**
+             * document.documentElement.offsetHeight：网页可见区域高，获取元素自身的高度（包含边框）
+             * document.documentElement.scrollTop; 获取当前页面的滚动条纵坐标位置，网页被卷去的高
+             * window.innerHeight：获取浏览器页面可用高度
+             */
+            let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight < 100;
+            //注：只有距离满足条件，允许加载下一页数据，且当前page为1,2,3时，才允许滚动加载
+            if (bottomOfWindow && this.loadMore===true && this.page<=3 && this.scrollLoadSwitch === true){
+              //打开滚动加载数据开关，防止重复请求
+              this.scrollLoadSwitch = false;
+              console.log("请求加载数据，请求page为",this.page);
+              this.get_article_list(this.page);
+            }
+          }
+        },
+
 
         //获取首页海报信息
         async getPosterList() {
@@ -189,34 +232,18 @@
           // console.log("this.posterList : ",this.posterList.length)
         },
 
-        //滚动到底部，自定加载数据
-        async scroll(){
-          window.onscroll = () =>{
-            /**
-             * document.documentElement.offsetHeight：网页可见区域高，获取元素自身的高度（包含边框）
-             * document.documentElement.scrollTop; 获取当前页面的滚动条纵坐标位置，网页被卷去的高
-             * window.innerHeight：获取浏览器页面可用高度
-             */
-            let bottomOfWindow = document.documentElement.offsetHeight - document.documentElement.scrollTop - window.innerHeight <=200;
-            if (bottomOfWindow && this.load_more === true){
-              console.log("这时候加载数据，当前page为",this.index_article_page);
-              this.get_article_list(this.index_article_page);
-            }
-          }
-        }
-
       },
 
       //首页数据获取
       async mounted(){
         //获取首页基本文章信息
-        this.get_article_list(this.index_article_page);
+       await this.get_article_list(this.page);
 
         //获取首页轮播海报图片
-        this.getPosterList();
+       await this.getPosterList();
 
         //滑到距离底部一定距离时，自动加载下一页的数据
-        this.scroll();
+       await this.scroll();
       },
 
     }
@@ -325,4 +352,10 @@
     margin-left: 5px;
     font-size: 14px;
   }
+
+  .loadMoreButton{
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+
 </style>
