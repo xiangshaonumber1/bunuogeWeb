@@ -11,7 +11,6 @@
 
       <!-- 否则显示主要内容页面 -->
       <div v-else>
-
         <!--Article 文章标题部分-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
           <i-col span="12" >

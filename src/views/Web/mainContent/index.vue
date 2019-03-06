@@ -82,8 +82,8 @@
                 </div>
                 <div class="articles-info">
                   <span>{{article.nickname}}</span>
-                  <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>{{article.like}}</label></span>&emsp;
-                  <span><Icon type="md-eye" size="20" />&nbsp;<label>{{article.dislike}}</label></span>
+                  <span>点赞量：<Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>{{article.like}}</label></span>&emsp;
+                  <span>浏览量：<Icon type="md-eye" size="20" />&nbsp;<label>{{article.watch}}</label></span>
                   <span style="float: right;margin-right: 20px"><Icon type="md-time" size="20" /><Time :time="article.time"></Time></span>
                 </div>
               </Card>
