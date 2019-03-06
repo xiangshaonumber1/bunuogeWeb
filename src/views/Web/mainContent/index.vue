@@ -16,14 +16,17 @@
 
           <i-col span="8" class="official-activities">
             <div>
-              <p class="bg-info">前端：Vue学习</p>
-              <p class="bg-success">后端：SpringBoot</p>
-              <p class="bg-danger">书籍：优质书籍推荐</p>
+              <a @click="goSpecialArea()"><p class="bg-info">前端：Vue学习</p></a>
+              <a @click="goSpecialArea()"><p class="bg-success">后端：SpringBoot</p></a>
+              <a @click="goSpecialArea()"><p class="bg-danger">书籍：优质书籍推荐</p></a>
             </div>
 
             <div class="excellent-articles">
 
-              <p style="font-size: 22px;margin-bottom: 0"><Icon type="md-star-outline" size="30" color="rgb(251, 114, 153)" />&nbsp;&nbsp;今日星推荐</p>
+              <p style="font-size: 22px;margin-bottom: 0">
+                <Icon type="md-star-outline" size="30" color="rgb(251, 114, 153)" />
+                &nbsp;今日星推荐
+              </p>
 
               <div>
                 <Button type="text" style="background-color: rgba(255,255,0,0.7);"><span>Top&emsp;1</span></Button>
@@ -49,7 +52,9 @@
 
         <Row>
           <i-col span="24">
-            <p style="font-size: 20px;font-weight: bold;float: left">为你推送</p>
+            <p style="float: left;font-size: 20px;font-weight: bold;">
+              <Icon type="md-trophy" style="float: left" size="25" color="goldenrod" />
+              &nbsp;为你推送</p>
             <div style="float: right">
               <span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>
             </div>
@@ -136,6 +141,15 @@
       },
 
       methods:{
+
+        //前往指定专区
+        goSpecialArea(area){
+          this.$Notice.info({
+            title:'敬请期待：',
+            desc:'该板块正开发，敬请期待'
+          })
+        },
+
         //前往文章详情页面
         goArticleInfo(id){
           //新建窗口跳转
@@ -232,18 +246,23 @@
           // console.log("this.posterList : ",this.posterList.length)
         },
 
+        //获取近三日热门推荐文章
+        async getTop(){
+            const result = await this.$apis.ArticleApi.getTop();
+        }
+
       },
 
       //首页数据获取
-      async mounted(){
+      mounted(){
         //获取首页基本文章信息
-       await this.get_article_list(this.page);
+        this.get_article_list(this.page);
 
         //获取首页轮播海报图片
-       await this.getPosterList();
+        this.getPosterList();
 
         //滑到距离底部一定距离时，自动加载下一页的数据
-       await this.scroll();
+        this.scroll();
       },
 
     }
@@ -307,6 +326,11 @@
     width: 65vw;
   }
 
+  .official-activities a{
+    color: black;
+    text-decoration: none;
+  }
+
   .official-activities p{
     border-radius: 5px;
     padding: 15px 10px;
@@ -330,7 +354,7 @@
   .articles-content{
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     /*autoprefixer: off;*/
     -webkit-box-orient: vertical;
     /*autoprefixer: on;*/

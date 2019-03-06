@@ -307,6 +307,18 @@ const article = {
     })
   },
 
+  /**
+   * 获取近三日热门推荐文章
+   */
+  getTop(){
+    return request({
+      url:'/article/getTop',
+      method:"get"
+    }).then( res =>{
+      return res.data.data;
+    })
+  }
+
 };
 
 export default article
