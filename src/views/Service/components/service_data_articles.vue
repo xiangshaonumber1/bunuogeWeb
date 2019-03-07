@@ -35,7 +35,7 @@
           <!--文章作者和文章状态信息-->
           <div class="myArticleOtherInfo">
             <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;点赞量：<label>{{myArticle.like}}</label></span>&emsp;
-            <span><Icon type="md-eye" size="16" />&nbsp;浏览量：<label>{{myArticle.dislike}}</label></span>
+            <span><Icon type="md-eye" size="16" />&nbsp;浏览量：<label>{{myArticle.watch}}</label></span>
             <span style="float: right;margin-right: 20px">发表时间：<Icon type="md-time" size="16" />&nbsp;<Time :time="myArticle.time"/></span>
           </div>
         </Card>
@@ -166,12 +166,15 @@
     margin: 5px 0;
   }
 
+
+  .myArticleOtherInfo{
+    margin-top: 20px;
+  }
   .myArticleContent >span{
     color: gray;
     font-size: 14px;
     font-weight: normal;
   }
-
   .myArticleOtherInfo span, .myArticleOtherInfo label{
     font-size: 14px;
     font-weight: normal;

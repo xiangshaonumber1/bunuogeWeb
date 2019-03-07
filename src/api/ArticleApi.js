@@ -317,6 +317,56 @@ const article = {
     }).then( res =>{
       return res.data.data;
     })
+  },
+
+  /**
+   * 用户对该篇文章进行点赞,如果通过token来获取openID点赞
+   * 如果token刷新失败，会强制返回到登录页，而且是在拦截器中执行的，这样体验不友好
+   * 所以手动传入
+   */
+  clickLike(articleID,openID){
+    return request({
+      url:'/article/clickLike',
+      method:"post",
+      data:qs.stringify({
+        articleID:articleID,
+        openID:openID,
+      })
+    }).then( res =>{
+      return res.data.code === '200';
+    })
+  },
+
+  /**
+   * 取消点赞
+   */
+  cancelLike(articleID,openID){
+    return request({
+      url:'/article/cancelLike',
+      method:"post",
+      data:qs.stringify({
+        articleID:articleID,
+        openID:openID
+      })
+    }).then( res =>{
+      return res.data.code === '200';
+    })
+  },
+
+  /**
+   * 判断用户是否对该篇文章进行有点赞
+   */
+  getLikeStatus(articleID,openID){
+    return request({
+      url:'/article/getLikeStatus',
+      method:'get',
+      params:{
+        articleID:articleID,
+        openID:openID
+      }
+    }).then( res =>{
+      return res.data.data;
+    })
   }
 
 };

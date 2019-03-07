@@ -33,13 +33,13 @@
 
             <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量-->
             <div style="line-height: 30px;">
-              <a><span>{{DiaryInfo.nickname}}</span></a>
+              <a><span v-html="DiaryInfo.nickname"></span></a>
               <br>
               <span style="color: gray">发布时间：{{DiaryInfo.time}}</span>&emsp;
               <div class="more-function">
                 <a href="javascript:void(0)">
                   <Dropdown trigger="click" @on-click="chooseFunction">
-                    <span style="color: white;">更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
+                    <span>更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
                     <DropdownMenu slot="list">
                       <!--这里表示如果该片文章的作者是当前用户的话，开放修改和删除功能-->
                       <div v-if="DiaryInfo.openID === this.$store.getters.openID">
@@ -141,7 +141,10 @@
               this.functionConfirm = true;
               break;
             case "report"://点击举报
-              console.log("点击举报按钮");
+              this.$Notice.info({
+                title:'敬请期待：',
+                desc:'客官大人，该功能正在开发中，敬请期待！'
+              });
               break;
           }
         },
@@ -216,6 +219,8 @@
   .more-function span{
     padding: 0 10px;
     line-height: 35px;
+    color: white;
+    font-size: 14px;
   }
   .more-function >>> .ivu-dropdown-item{
     font-size: 14px!important;

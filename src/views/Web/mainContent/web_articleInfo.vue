@@ -35,7 +35,7 @@
 
             <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量，如果作者是自己，开启更多功能-->
             <div style="line-height: 30px;">
-              <a><span>{{this.ArticleInfo.nickname}}</span></a>
+              <a><span v-html="ArticleInfo.nickname"></span></a>
               <br>
               <span style="color: gray">发布时间：{{ArticleInfo.time}}</span>&emsp;
               <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="22"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
@@ -43,7 +43,7 @@
               <div class="more-function">
                 <a href="javascript:void(0)">
                   <Dropdown trigger="click" @on-click="chooseFunction">
-                    <span style="color: white;">更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
+                    <span>更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
                     <DropdownMenu slot="list">
                       <!--这里表示如果该片文章的作者是当前用户的话，开放修改和删除功能-->
                       <div v-if="ArticleInfo.openID === this.$store.getters.openID">
@@ -63,7 +63,7 @@
           </i-col>
         </Row>
 
-        <!--Article 文章主要内容-->
+        <!--Article 文章详情主要内容-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-content">
           <i-col span="12">
 
@@ -73,6 +73,17 @@
               <!-- 复制粘贴过来的，死样式，后面再删 end -->
             </div>
 
+          </i-col>
+        </Row>
+
+        <!--用户点赞支持-->
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-likeButton">
+          <i-col span="12" class="text-center">
+            <Button class="likeButtonNormal" v-bind:class="{likeButtonClick:isClick}" @click="changeLikeStatus">
+              <Icon type="md-heart"/>
+              <span v-if="isClick === false">&nbsp;赞一个呗&nbsp;</span>
+              <span v-else>&nbsp;已点赞&nbsp;</span>
+            </Button>
           </i-col>
         </Row>
       </div>
@@ -105,6 +116,7 @@
       components: {Loading, OkHeader, NotFound},
       data() {
         return {
+          isClick:false,//是否有点击过支持一下的按钮
           ArticleInfo:{},
           isNotFound:false,
           isLoading:true,
@@ -112,26 +124,23 @@
         };
       },
       methods:{
+
         //根据选择的功能，进行对应的操作
         chooseFunction(name){
           switch (name) {
             case "update"://点击修改
-              console.log("点击了修改按钮");
-              localStorage.setItem("update_articleInfo",JSON.stringify(this.ArticleInfo));
-              this.$router.push({
-                name:'article_update',
-                params:{
-                  article_id:this.ArticleInfo.articleID,
-                }
-              });
+              localStorage.setItem("update_articleInfo",JSON.stringify(this.ArticleInfo)); //临时保存文章信息
+              this.$router.push({name:'article_update', params:{article_id:this.ArticleInfo.articleID,}});
               break;
             case "delete"://点击删除
               this.functionConfirm = true;
-              console.log("点击删除按钮");
               break;
             case "report"://点击举报
-              console.log("点击举报按钮");
-              break
+              this.$Notice.info({
+                title:'敬请期待：',
+                desc:'客官大人，该功能正在开发中，敬请期待！'
+              });
+              break;
           }
         },
 
@@ -147,14 +156,38 @@
             // this.$router.go(-1);//返回上一页
             this.$router.push({name:'index'});//返回首页
           }
-        }
+        },
 
-      },
+        //改变点赞按钮当前的状态
+       async changeLikeStatus(){
+          if (this.$store.getters.openID === null){
+            return this.$Message.info({
+              content:"温馨提示：该功能需要登录后才能实现！"
+            })
+          }
+          //点击后，判断this.isClick是什么状态
+         //false 状态下点击，说明是点赞操作
+         if (!this.isClick){ //如果当前点赞是非点亮状态，执行点赞操作
+           console.log("执行点赞操作");
+           const result = await this.$apis.ArticleApi.clickLike(this.ArticleInfo.articleID,this.$store.getters.openID);
+           if (result){//后台点赞成功，前端也设置为true
+             return this.isClick = true;
+           }
+         }
+         //true状态下点击，说明是取消点赞操作
+         else {
+           console.log("执行取消点赞操作");
+           const result = await this.$apis.ArticleApi.cancelLike(this.ArticleInfo.articleID,this.$store.getters.openID)
+           if (result){//后台取消点赞成功，前端也设置为false
+              return this.isClick = false;
+           }
+         }
+        },
 
-     async mounted(){
-        this.ArticleInfo.articleID = this.$route.params.article_id;
-        const articleInfo = await this.$apis.ArticleApi.get_articleInfo(this.$route.params.article_id);
-        console.log("web_articleInfo",articleInfo);
+        //获取指定articleID的所有信息
+        async getArticleInfo(articleID){
+          const articleInfo = await this.$apis.ArticleApi.get_articleInfo(articleID);
+          console.log("web_articleInfo",articleInfo);
           if (articleInfo!=null){ //如果不为空，则赋值
             this.isLoading = false;
             this.isNotFound = false;
@@ -164,15 +197,66 @@
             this.isNotFound = true;
             this.isLoading = false;
           }
-      },
-      created(){
-          //根据传递过来的ID，去请求相应文章的所有内容
+        },
+
+        //获取用户对该篇文章的点赞状态
+        async getLikeStatus(articleID,openID){
+          if (this.$store.getters.openID === null){
+            return; //如果是游客或者尚未登录的用户，则不用进行检查
+          }
+          this.isClick = await this.$apis.ArticleApi.getLikeStatus(articleID,openID);
+        }
 
       },
+
+     async mounted(){
+        //请求获取该篇文章的所有信息
+        this.getArticleInfo(this.$route.params.article_id);
+        //请求用户对该篇文章的点赞状态
+        this.getLikeStatus(this.$route.params.article_id,this.$store.getters.openID);
+      },
+
     }
 </script>
 
 <style scoped>
+
+  /* 点赞的非点亮常态 */
+  .likeButtonNormal{
+    padding: 10px 20px;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    color: black;
+  }
+  .likeButtonNormal span{
+    float: left;
+    font-size: 18px;
+    /*font-weight: bold;*/
+    color: black;
+  }
+  .likeButtonNormal i{
+    float: left;
+    font-size: 27px;
+    color: gray;
+    /*color: rgb(251, 114, 153);*/
+  }
+
+  /* 点赞的点亮状态 */
+  .likeButtonClick{
+    background-color: rgb(251, 114, 153);
+    border: 1px solid rgb(251, 114, 153);
+  }
+  .likeButtonClick i{
+    color: white;
+  }
+  .likeButtonClick span{
+    color: white;
+  }
+
+
+
+
 
   span{
     font-size: 16px;
@@ -189,13 +273,15 @@
   }
 
   .row-title{
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding: 30px 0;
   }
 
   .row-content{
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding: 20px 0;
+  }
+
+  .row-likeButton{
+    padding: 30px 0;
   }
 
   .article_title{
@@ -218,6 +304,8 @@
   .more-function span{
     padding: 0 10px;
     line-height: 35px;
+    color: white;
+    font-size: 14px;
   }
   .more-function >>> .ivu-dropdown-item{
     font-size: 14px!important;

@@ -72,8 +72,8 @@
             <not-found v-else-if="notFound"></not-found>
 
             <!--如果有数据，正常显示-->
-            <div class="articles" v-else v-for="article in articleList">
-              <Card :bordered="false">
+            <div  v-else v-for="article in articleList">
+              <Card :bordered="false" class="articleCard">
                 <div class="articles-title">
                   <p><a @click="goArticleInfo(article.articleID)">{{article.title}}</a></p>
                 </div>
@@ -81,13 +81,13 @@
                   <span style="color: gray;font-size: 14px">{{replaceHtml(article.content)}}</span>
                 </div>
                 <div class="articles-info">
-                  <span>{{article.nickname}}</span>
+                  <span v-html="article.nickname"></span>&emsp;
                   <span>点赞量：<Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>{{article.like}}</label></span>&emsp;
                   <span>浏览量：<Icon type="md-eye" size="20" />&nbsp;<label>{{article.watch}}</label></span>
                   <span style="float: right;margin-right: 20px"><Icon type="md-time" size="20" /><Time :time="article.time"></Time></span>
                 </div>
               </Card>
-              <Divider style="margin-top: 0" />
+              <Divider style="margin-top: 0;" />
             </div>
 
           </i-col>
@@ -338,9 +338,13 @@
     font-family: "微软雅黑",serif;
   }
 
-  .articles{
-    margin: 10px 0;
+  .articleCard:hover{
+    /*border: 1px solid red;*/
+    margin-left: 15px;
+    margin-right: -15px;
+    margin-bottom: 15px;
   }
+
 
   .articles-title{
     font-size: 20px;
