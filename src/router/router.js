@@ -29,6 +29,7 @@ import Web_feedBack from '../views/Web/mainContent/web_feedback'
 import NotFound from '../views/Web/mainContent/404'
 import Web_search from '../views/Web/mainContent/web_searchInfo'
 import Web_personalCenter from '../views/Web/mainContent/web_personal_center'
+import Web_userInfo from '../views/Web/mainContent/web_userInfo'
 
 //  2.定义路由
 //  每个路由应该映射一个组件
@@ -36,17 +37,20 @@ const routes = [
   {path:'/', component: App,children:[                                                  //
       {path:'',component:Index, name:'index'},                                          //首页
       {path:'search/:key_word',component:Web_search, name:'web_search'},                    //搜索结果页面
+      {path:'userInfo/:open_id',component:Web_userInfo, name:'web_userInfo',children:[      //用户信息页面(可公开信息)
+          {path: 'articles', component: DataArticles, name:"user_data_articles"},        //用户文章数据页
+          {path: 'diaries', component: DataDiaries, name:"user_data_diaries"},           //用户文章日记页(只显示作者设置为公开的)
+        ]},
       {path:'setting/personalCenter',component:Web_personalCenter,name:'personal_center',
         children:[
           {path: 'personalInfo', component: PersonalInfo, name:"web_personal_info"},     //用户个人数据页
           {path: 'articles', component: DataArticles, name:"web_data_articles"},        //用户文章数据页
-          {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页
+          {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页(作者可获取公开和非公开)
         ]},
     ]},
 
   {path:"/article/:article_id",component:Web_articleInfo, name:'web_articleInfo'},     //文章详情
   {path:"/diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo'},     //日记详情页面
-
 
   {path:'/article/update/:article_id',component:WriteArticle,name:'article_update'},          //用户文章修改页
   {path:'/diary/update/:diary_id',component:WriteDiary, name:'diary_update'},    //用户修改日记页面

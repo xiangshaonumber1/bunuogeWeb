@@ -28,14 +28,14 @@
           <i-col span="12" style="line-height: 60px" >
             <!--该div用于显示用户头像-->
             <div style="float: left">
-              <a style="text-decoration: none;margin: 0 10px">
+              <a style="text-decoration: none;margin: 0 10px" @click="goUserInfo">
                 <img :src="this.ArticleInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
               </a>
             </div>
 
             <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量，如果作者是自己，开启更多功能-->
             <div style="line-height: 30px;">
-              <a><span v-html="ArticleInfo.nickname"></span></a>
+              <a @click="goUserInfo"><span v-html="ArticleInfo.nickname"></span></a>
               <br>
               <span style="color: gray">发布时间：{{ArticleInfo.time}}</span>&emsp;
               <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="22"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
@@ -205,8 +205,13 @@
             return; //如果是游客或者尚未登录的用户，则不用进行检查
           }
           this.isClick = await this.$apis.ArticleApi.getLikeStatus(articleID,openID);
-        }
+        },
 
+        //前往用户详情页面
+        goUserInfo(){
+          console.log("前往用户信息：");
+          this.$router.push({name:'web_userInfo',params:{open_id:this.ArticleInfo.openID}})
+        },
       },
 
      async mounted(){

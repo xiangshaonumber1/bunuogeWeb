@@ -6,7 +6,7 @@
         <!--头像部分-->
         <i-col span="5">
           <div class="text-center">
-            <img :src="userInfo.userIcon" alt="..." class="img-circle img-thumbnail" style="width: 175px;height: 175px;">
+            <img :src="userInfo.userIcon" alt="..." class="img-circle img-thumbnail" style="width: 165px">
             <Upload action="upload_url"
                     :before-upload="handleUpload">
               <Button style="margin-top: 10px" size="large">上传头像</Button>
@@ -15,12 +15,12 @@
         </i-col>
 
         <!--用户基本信息-->
-        <i-col span="9" style="padding: 5px">
+        <i-col span="10" style="padding: 5px">
           <div class="userInfo">
 
             <!--用户昵称-->
             <div class="userInfo-nickname">
-              <input type="text" v-model="userInfo.nickname"></input>
+              <input type="text" v-model="userInfo.nickname" style="bwidth: 100%"></input>
             </div>
 
             <!--用户活跃天数-->
@@ -53,7 +53,7 @@
         </i-col>
 
         <!--心愿墙部分-->
-        <i-col span="10" style="padding: 0 15px">
+        <i-col span="9" style="padding: 0 15px">
           <Card style="height: 220px;">
             <span slot="title" style="font-size: 16px;font-weight: normal;">
               <Icon type="md-clipboard" />
@@ -97,13 +97,13 @@
       <Row>
         <i-col span="24">
           <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人简介</span>
-          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" />
+          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" /><br>
           <small>注：昵称，心愿墙，个人简介等，<small style="color: red">点击所在区域改</small>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
         </i-col>
       </Row>
 
       <!--保存信息按钮-->
-      <Row type="flex" class="code-row-bg" justify="center" style="margin-top: 20px">
+      <Row type="flex" class="code-row-bg" justify="center" style="margin-top: 20px;">
         <i-col span="5">
           <Button type="info" size="large" long @click="saveUserInfo" :disabled="saveButtonDisable"><span>保&emsp;存</span></Button>
         </i-col>
@@ -253,26 +253,34 @@
             this.userInfo = result;
             this.userInfo.label = JSON.parse(result.label);
             this.userInfo.userIcon = this.$store.getters.serverPath+JSON.parse(result.userIcon)[0];
+            this.userInfo.nickname = this.replaceHtml(result.nickname);
             this.$store.dispatch("saveAvatar",this.userInfo.userIcon);
           }
         },
 
         async saveUserInfo(){//保存用户信息
-          this.saveButtonDisable = true;
-          const result = await this.$apis.UserApi.updateMyUserInfo(this.userInfo);
-          if (result){
-            this.$Notice.success({
-              title:'保存成功：',
-              desc:'您的个人信息已修改成功'
-            });
-
-            setTimeout(()=>{ //延时指定时间后，再解冻
-              this.saveButtonDisable = false;
-            }, 2000);
-
+          //昵称长度应不小于位，且不能大于18位
+          if (1<this.userInfo.nickname.length && this.userInfo.nickname.length<19){
+            this.saveButtonDisable = true;
+            const result = await this.$apis.UserApi.updateMyUserInfo(this.userInfo);
+            if (result){
+              this.$Notice.success({
+                title:'保存成功：',
+                desc:'您的个人信息已修改成功'
+              });
+              setTimeout(()=>{ //延时指定时间后，再解冻
+                this.saveButtonDisable = false;
+              }, 2000);
+            }else {
+              console.log("出了点问题 信息如下：",result)
+            }
           }else {
-            console.log("出了点问题 信息如下：",result)
+            this.$Notice.warning({
+              title:"昵称不规范提示：",
+              desc:"您输入的昵称不符合规范，长度范围应该在2——18位之间"
+            })
           }
+
 
         },
 
@@ -285,6 +293,13 @@
             u8arr[n] = bstr.charCodeAt(n);
           }
           return new File([u8arr],filename,{type:mime});
+        },
+
+        //去掉html标签
+        replaceHtml(value){
+          var result = value.replace(/<\/?.+?>/g,"");
+          result = result.replace(/ /g,"");
+          return result;
         },
 
       },

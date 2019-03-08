@@ -154,7 +154,8 @@
         },
 
         goUserInfo(){//前往用户详情页面
-
+          console.log("前往用户信息：");
+          this.$router.push({name:'userInfo',params:{open_id:this.userInfo.openID}})
         },
 
         // 筛选变色,不过英文好像无法识别大小写
