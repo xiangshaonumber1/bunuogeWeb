@@ -73,6 +73,7 @@
 
   import E from 'wangeditor'
   import QuickRouter from "../../Common/quickRouter";
+  import store from '../../../blog_vuex/store'
 
     export default {
     name: "write_article",
@@ -99,9 +100,10 @@
         editorCreate(){   //初始化文本编辑器
           this.editor = new E(this.$refs.editorMenu,this.$refs.articleContent);
           //加上这个句，才能在编辑器中粘贴图片
-          this.editor.customConfig.uploadImgShowBase64 = true;
-          this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
+          this.editor.customConfig.uploadImgShowBase64 = true;  // 使用 base64 保存图片
+          this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024; // 将图片大小限制为 3M
           this.editor.customConfig.uploadFileName = 'file';
+          this.editor.customConfig.uploadImgServer = this.$store.getters.serverPath+'/common/uploadPicture';
           // 通过 url 参数配置 debug 模式。url 中带有 write 才会开启 debug 模式
           this.editor.customConfig.debug = location.href.indexOf('write') > 0;
           //监听编辑器内容变化，并赋给editorContent
@@ -111,7 +113,32 @@
             //纯文字文本
             this.onlyText = this.articleContent.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();
           };
-          this.editor.create()
+          this.editor.customConfig.uploadImgHooks = {
+            success:function (xhr, editor, result) {
+              //图片上传并返回结果，图片插入成功之后触发
+              console.log("success 返回信息",result);
+            },
+            fail:function(xhr, editor, result){
+              //图片上传并返回结果，但图片插入错误时触发
+              console.log("fail 返回信息",result);
+            },
+            error:function(xhr, editor){
+              //图片上传出错时触发
+              console.log("error 图片上传出错时触发");
+            },
+            timeout:function (xhr, editor) {
+              //图片上传超时时触发
+              console.log("timeout 图片上传超时时触发");
+            },
+
+            customInsert:function (insertImg,result,editor) {
+              // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+              console.log("返回的信息：",result);
+              var url = store.getters.serverPath + result.data;
+              insertImg(url);
+            }
+          }
+          this.editor.create();
         },
 
         //向服务器发送请求

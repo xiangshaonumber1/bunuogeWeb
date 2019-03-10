@@ -19,6 +19,13 @@ const common = {
       // console.log("getPosterList 返回的信息:",res);
       return res.data.data;
     })
+  },
+
+  uploadPicture(){
+    return request({
+      url:'/common/uploadPicture',
+      method: "post",
+    })
   }
 
 };
