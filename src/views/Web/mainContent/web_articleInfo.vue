@@ -79,11 +79,19 @@
         <!--用户点赞支持-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-likeButton">
           <i-col span="12" class="text-center">
-            <Button class="likeButtonNormal" v-bind:class="{likeButtonClick:isClick}" @click="changeLikeStatus">
+            <!--点赞情况-->
+            <Button class="likeButtonNormal" v-bind:class="{likeButtonClick:isClickLike}" @click="changeLikeStatus">
               <Icon type="md-heart"/>
-              <span v-if="isClick === false">&nbsp;赞一个呗&nbsp;</span>
+              <span v-if="isClickLike === false">&nbsp;赞一个呗&nbsp;</span>
               <span v-else>&nbsp;已点赞&nbsp;</span>
             </Button>
+
+            <!--收藏情况-->
+            <Button class="collectButtonNormal" v-bind:class="{collectButtonClick:isClickCollect}">
+              <span v-if="isClickCollect === false">&nbsp;喜欢就收藏呗&nbsp;</span>
+              <span v-else>&nbsp;已收藏&nbsp;</span>
+            </Button>
+
           </i-col>
         </Row>
       </div>
@@ -116,7 +124,8 @@
       components: {Loading, OkHeader, NotFound},
       data() {
         return {
-          isClick:false,//是否有点击过支持一下的按钮
+          isClickLike:false,//是否有点击过支持一下的按钮
+          isClickCollect:true,//是否已收藏
           ArticleInfo:{},
           isNotFound:false,
           isLoading:true,
@@ -165,13 +174,13 @@
               content:"温馨提示：该功能需要登录后才能实现！"
             })
           }
-          //点击后，判断this.isClick是什么状态
+          //点击后，判断this.isClickLike是什么状态
          //false 状态下点击，说明是点赞操作
-         if (!this.isClick){ //如果当前点赞是非点亮状态，执行点赞操作
+         if (!this.isClickLike){ //如果当前点赞是非点亮状态，执行点赞操作
            console.log("执行点赞操作");
            const result = await this.$apis.ArticleApi.clickLike(this.ArticleInfo.articleID,this.$store.getters.openID);
            if (result){//后台点赞成功，前端也设置为true
-             return this.isClick = true;
+             return this.isClickLike = true;
            }
          }
          //true状态下点击，说明是取消点赞操作
@@ -179,7 +188,7 @@
            console.log("执行取消点赞操作");
            const result = await this.$apis.ArticleApi.cancelLike(this.ArticleInfo.articleID,this.$store.getters.openID)
            if (result){//后台取消点赞成功，前端也设置为false
-              return this.isClick = false;
+              return this.isClickLike = false;
            }
          }
         },
@@ -199,13 +208,15 @@
           }
         },
 
-        //获取用户对该篇文章的点赞状态
-        async getLikeStatus(articleID,openID){
+        //获取用户对该篇文章的点赞状态  和 对该篇文章的收藏状态
+        async getLikeStatusAndCollectStatus(articleID,openID){
           if (this.$store.getters.openID === null){
             return; //如果是游客或者尚未登录的用户，则不用进行检查
           }
-          this.isClick = await this.$apis.ArticleApi.getLikeStatus(articleID,openID);
+          this.isClickLike = await this.$apis.ArticleApi.getLikeStatus(articleID,openID);
+          this.isClickCollect = await this.$apis.ArticleApi.
         },
+
 
         //前往用户详情页面
         goUserInfo(){
@@ -227,20 +238,20 @@
 <style scoped>
 
   /* 点赞的非点亮常态 */
-  .likeButtonNormal{
+  .likeButtonNormal, .collectButtonNormal{
     padding: 10px 20px;
     background-color: white;
     border: 1px solid gray;
     border-radius: 5px;
     color: black;
   }
-  .likeButtonNormal span{
+  .likeButtonNormal span, .collectButtonNormal span{
     float: left;
     font-size: 18px;
     /*font-weight: bold;*/
     color: black;
   }
-  .likeButtonNormal i{
+  .likeButtonNormal i, .collectButtonNormal i{
     float: left;
     font-size: 27px;
     color: gray;
@@ -252,12 +263,18 @@
     background-color: rgb(251, 114, 153);
     border: 1px solid rgb(251, 114, 153);
   }
-  .likeButtonClick i{
+  .collectButtonClick{
+    background-color: rgb(243, 160, 52);
+    border: 1px solid rgb(243, 160, 52);
+  }
+  .likeButtonClick i, .collectButtonClick i{
     color: white;
   }
-  .likeButtonClick span{
+  .likeButtonClick span, .collectButtonClick span{
     color: white;
   }
+
+
 
 
 
