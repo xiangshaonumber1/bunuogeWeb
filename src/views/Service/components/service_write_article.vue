@@ -74,6 +74,7 @@
   import E from 'wangeditor'
   import QuickRouter from "../../Common/quickRouter";
   import store from '../../../blog_vuex/store'
+  import {Message} from 'iview'
 
     export default {
     name: "write_article",
@@ -93,19 +94,17 @@
 
       methods:{
 
-        goIndex(){//前往首页
+        //前往首页
+        goIndex(){
           this.$router.push({name:'index'})
         },
 
-        editorCreate(){   //初始化文本编辑器
+        //初始化文本编辑器
+        editorCreate(){
           this.editor = new E(this.$refs.editorMenu,this.$refs.articleContent);
-          //加上这个句，才能在编辑器中粘贴图片
-          this.editor.customConfig.uploadImgShowBase64 = true;  // 使用 base64 保存图片
           this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024; // 将图片大小限制为 3M
-          this.editor.customConfig.uploadFileName = 'file';
-          this.editor.customConfig.uploadImgServer = this.$store.getters.serverPath+'/common/uploadPicture';
-          // 通过 url 参数配置 debug 模式。url 中带有 write 才会开启 debug 模式
-          this.editor.customConfig.debug = location.href.indexOf('write') > 0;
+          this.editor.customConfig.uploadFileName = 'file'; // * 指定上传类型为file
+          this.editor.customConfig.uploadImgServer = this.$store.getters.serverPath+'/common/uploadPicture?savePath=article'; // *  上传文件请求地址
           //监听编辑器内容变化，并赋给editorContent
           this.editor.customConfig.onchange = (html) => {
             //带html格式的文本
@@ -114,30 +113,40 @@
             this.onlyText = this.articleContent.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();
           };
           this.editor.customConfig.uploadImgHooks = {
-            success:function (xhr, editor, result) {
-              //图片上传并返回结果，图片插入成功之后触发
-              console.log("success 返回信息",result);
+            success:function (xhr, editor, result) {//图片上传并返回结果，图片插入成功之后触发
+              Message.success({
+                content:'图片上传成功 ヾ(๑╹◡╹)ﾉ" ',
+                duration:3
+              });
             },
-            fail:function(xhr, editor, result){
-              //图片上传并返回结果，但图片插入错误时触发
-              console.log("fail 返回信息",result);
+            fail:function(xhr, editor, result){ //图片上传并返回结果，但图片插入错误时触发
+              Message.error({
+                content:'图片插入过程中出现错误，请稍后再试 (＞人＜；)，任何问题均可联系管理员'
+              })
             },
-            error:function(xhr, editor){
-              //图片上传出错时触发
-              console.log("error 图片上传出错时触发");
+            error:function(xhr, editor){ //图片上传出错时触发
+              Message.error({
+                content:'图片上传过程中出现错误，请稍后再试 (＞人＜；)，任何问题均可联系管理员 ',
+                duration:3
+              })
             },
-            timeout:function (xhr, editor) {
-              //图片上传超时时触发
-              console.log("timeout 图片上传超时时触发");
+            timeout:function (xhr, editor) { //图片上传超时时触发
+              Message.error({
+                content:'图片上传超时，请稍后再试 (＞人＜；)，任何问题均可联系管理员 ',
+                duration:3
+              })
             },
 
+            //如果服务器返回的不是wangeditor指定的格式时，可使用该配置，但是服务器必须返回JSON格式字符串！！！ 否则会报错
             customInsert:function (insertImg,result,editor) {
-              // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+              //图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片） insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
               console.log("返回的信息：",result);
-              var url = store.getters.serverPath + result.data;
-              insertImg(url);
+              if (result.code === '200'){//表示上传图片成功,上传失败，在上面error中处理
+                var url = store.getters.serverPath + result.data;
+                insertImg(url);
+              }
             }
-          }
+          };
           this.editor.create();
         },
 
@@ -185,7 +194,7 @@
           }
         },
 
-        //update操作类型初始化
+        //请求修改类型：update操作类型初始化
         updateInstance(){
           this.type = 'update';                                                                                         //辨别操作类型
           this.ArticleInfo = JSON.parse(localStorage.getItem("update_articleInfo"));                                    //取出存放在本地session中的文章信息
@@ -199,7 +208,6 @@
           this.editor.txt.html(this.ArticleInfo.content);                                                               //文章主要内容赋值
           this.articleContent = this.ArticleInfo.content;
         }
-
 
       },
 
@@ -216,6 +224,7 @@
         }
       },
 
+      //当前页面销毁时需要做的一些事
       Destroy(){
       console.log("执行删除");
       localStorage.removeItem("update_articleInfo");

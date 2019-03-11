@@ -28,20 +28,26 @@
                 &nbsp;今日星推荐
               </p>
 
-              <div>
-                <Button type="text" style="background-color: rgba(255,255,0,0.7);"><span>Top&emsp;1</span></Button>
-                <span>&emsp;<a>{{topList[0]}}</a></span>
-              </div>
+              <a>
+                <div>
+                  <Button type="text" style="background-color: rgba(255,255,0,0.7);"><span>Top&nbsp;1</span></Button>
+                  <span>&nbsp;{{topList[0]}}</span>
+                </div>
+              </a>
 
-              <div>
-                <Button type="text" style="background-color: rgba(220,220,220,0.7);"><span>Top&emsp;2</span></Button>
-                <span>&emsp;<a>{{topList[1]}}</a></span>
-              </div>
+              <a>
+                <div>
+                  <Button type="text" style="background-color: rgba(220,220,220,0.7);"><span>Top&nbsp;2</span></Button>
+                  <span>&nbsp;{{topList[1]}}</span>
+                </div>
+              </a>
 
-              <div>
-                <Button type="text" style="background-color: rgba(205, 154, 98,0.7);"><span>Top&emsp;3</span></Button>
-                <span>&emsp;<a>{{topList[2]}}</a></span>
-              </div>
+              <a>
+                <div>
+                  <Button type="text" style="background-color: rgba(205, 154, 98,0.7);"><span>Top&nbsp;3</span></Button>
+                  <span>&nbsp;{{topList[2]}}</span>
+                </div>
+              </a>
 
             </div>
 
@@ -81,7 +87,7 @@
                   <span style="color: gray;font-size: 14px">{{replaceHtml(article.content)}}</span>
                 </div>
                 <div class="articles-info">
-                  <span v-html="article.nickname"></span>&emsp;
+                  作者：<span v-html="article.nickname"></span>&emsp;
                   <span>点赞量：<Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>{{article.like}}</label></span>&emsp;
                   <span>浏览量：<Icon type="md-eye" size="20" />&nbsp;<label>{{article.watch}}</label></span>
                   <span style="float: right;margin-right: 20px"><Icon type="md-time" size="20" /><Time :time="article.time"></Time></span>
@@ -369,6 +375,7 @@
     line-height: 30px;
     width: 100%;
     margin-top: 10px;
+    color:cadetblue;
   }
 
   .articles-info img {
