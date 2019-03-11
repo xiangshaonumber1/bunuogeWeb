@@ -87,7 +87,7 @@
             </Button>
 
             <!--收藏情况-->
-            <Button class="collectButtonNormal" v-bind:class="{collectButtonClick:isClickCollect}">
+            <Button class="collectButtonNormal" v-bind:class="{collectButtonClick:isClickCollect}" @click="changeCollectStatus">
               <span v-if="isClickCollect === false">&nbsp;喜欢就收藏呗&nbsp;</span>
               <span v-else>&nbsp;已收藏&nbsp;</span>
             </Button>
@@ -125,7 +125,7 @@
       data() {
         return {
           isClickLike:false,//是否有点击过支持一下的按钮
-          isClickCollect:true,//是否已收藏
+          isClickCollect:false,//是否已收藏
           ArticleInfo:{},
           isNotFound:false,
           isLoading:true,
@@ -174,23 +174,17 @@
               content:"温馨提示：该功能需要登录后才能实现！"
             })
           }
-          //点击后，判断this.isClickLike是什么状态
-         //false 状态下点击，说明是点赞操作
-         if (!this.isClickLike){ //如果当前点赞是非点亮状态，执行点赞操作
-           console.log("执行点赞操作");
-           const result = await this.$apis.ArticleApi.clickLike(this.ArticleInfo.articleID,this.$store.getters.openID);
-           if (result){//后台点赞成功，前端也设置为true
-             return this.isClickLike = true;
-           }
-         }
-         //true状态下点击，说明是取消点赞操作
-         else {
-           console.log("执行取消点赞操作");
-           const result = await this.$apis.ArticleApi.cancelLike(this.ArticleInfo.articleID,this.$store.getters.openID)
-           if (result){//后台取消点赞成功，前端也设置为false
-              return this.isClickLike = false;
-           }
-         }
+          this.isClickLike = await this.$apis.ArticleApi.clickLike(this.ArticleInfo.articleID,this.$store.getters.openID,this.isClickLike);
+        },
+
+        //改变收藏按钮当前的状态
+        async changeCollectStatus(){
+          if (this.$store.getters.openID === null){
+            return this.$Message.info({
+              content:"温馨提示：该功能需要登录后才能实现！"
+            })
+          }
+          this.isClickCollect = await this.$apis.ArticleApi.clickCollect(this.ArticleInfo.articleID,this.$store.getters.openID,this.isClickCollect);
         },
 
         //获取指定articleID的所有信息
@@ -213,8 +207,10 @@
           if (this.$store.getters.openID === null){
             return; //如果是游客或者尚未登录的用户，则不用进行检查
           }
-          this.isClickLike = await this.$apis.ArticleApi.getLikeStatus(articleID,openID);
-          this.isClickCollect = await this.$apis.ArticleApi.
+          const result = await this.$apis.ArticleApi.getLikeAndCollectStatus(articleID,openID);
+          console.log("文章状态信息：",result);
+          this.isClickLike = result.likeStatus;
+          this.isClickCollect = result.collectStatus
         },
 
 
@@ -229,7 +225,7 @@
         //请求获取该篇文章的所有信息
         this.getArticleInfo(this.$route.params.article_id);
         //请求用户对该篇文章的点赞状态
-        this.getLikeStatus(this.$route.params.article_id,this.$store.getters.openID);
+        this.getLikeStatusAndCollectStatus(this.$route.params.article_id,this.$store.getters.openID);
       },
 
     }

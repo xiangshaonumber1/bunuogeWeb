@@ -324,39 +324,44 @@ const article = {
    * 如果token刷新失败，会强制返回到登录页，而且是在拦截器中执行的，这样体验不友好
    * 所以手动传入
    */
-  clickLike(articleID,openID){
+  clickLike(articleID,openID,executeType){
     return request({
       url:'/article/clickLike',
       method:"post",
       data:qs.stringify({
         articleID:articleID,
         openID:openID,
+        executeType:executeType,
       })
     }).then( res =>{
-      return res.data.code === '200';
+      return res.data.data;
     })
   },
 
   /**
-   * 取消点赞
+   * 用户点击收藏按钮，executeType为点击的按钮原本状态
+   * 如果传入为false,则表示新增收藏操作
+   * 如果传入为true,则表示删除收藏操作
    */
-  cancelLike(articleID,openID){
+  clickCollect(articleID,openID,executeType){
     return request({
-      url:'/article/cancelLike',
+      url:"/article/clickCollect",
       method:"post",
       data:qs.stringify({
         articleID:articleID,
-        openID:openID
+        openID:openID,
+        executeType:executeType,
       })
     }).then( res =>{
-      return res.data.code === '200';
+      return res.data.data;
     })
   },
 
+
   /**
-   * 判断用户是否对该篇文章进行有点赞
+   * 判断用户是否对该篇文章进行有点赞和收藏
    */
-  getLikeStatus(articleID,openID){
+  getLikeAndCollectStatus(articleID,openID){
     return request({
       url:'/article/getLikeStatus',
       method:'get',
