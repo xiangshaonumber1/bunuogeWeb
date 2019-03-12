@@ -37,11 +37,13 @@
             <div style="line-height: 30px;">
               <a @click="goUserInfo"><span v-html="ArticleInfo.nickname"></span></a>
               <br>
-              <span style="color: gray">发布时间：{{ArticleInfo.time}}</span>&emsp;
-              <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="22"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
-              <span><Icon type="md-eye" size="22" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.watch}}</label></span>
-              <div class="more-function">
-                <a href="javascript:void(0)">
+              <span style="color: gray;">发布时间：{{ArticleInfo.time}}</span>&emsp;
+              <span>点赞量:<Icon type="md-heart" color="rgb(251, 114, 153)" size="22" style="margin-bottom: 2px" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
+              <span>浏览量:<Icon type="md-eye" size="22" style="margin-bottom: 2px" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.watch}}</label></span>&emsp;
+              <span>收藏量:<Icon type="md-star" size="22" style="margin-bottom: 5px" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.collection}}</label></span>
+
+
+                <a class="more-function" href="javascript:void(0)">
                   <Dropdown trigger="click" @on-click="chooseFunction">
                     <span>更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
                     <DropdownMenu slot="list">
@@ -57,7 +59,6 @@
                     </DropdownMenu>
                   </Dropdown>
                 </a>
-              </div>
             </div>
 
           </i-col>
@@ -88,6 +89,7 @@
 
             <!--收藏情况-->
             <Button class="collectButtonNormal" v-bind:class="{collectButtonClick:isClickCollect}" @click="changeCollectStatus">
+              <Icon type="md-star" />
               <span v-if="isClickCollect === false">&nbsp;喜欢就收藏呗&nbsp;</span>
               <span v-else>&nbsp;已收藏&nbsp;</span>
             </Button>
@@ -171,7 +173,7 @@
        async changeLikeStatus(){
           if (this.$store.getters.openID === null){
             return this.$Message.info({
-              content:"温馨提示：该功能需要登录后才能实现！"
+              content:"温馨提示：该功能需要登录后才能实现！",
             })
           }
           this.isClickLike = await this.$apis.ArticleApi.clickLike(this.ArticleInfo.articleID,this.$store.getters.openID,this.isClickLike);
@@ -181,7 +183,7 @@
         async changeCollectStatus(){
           if (this.$store.getters.openID === null){
             return this.$Message.info({
-              content:"温馨提示：该功能需要登录后才能实现！"
+              content:"温馨提示：该功能需要登录后才能实现！",
             })
           }
           this.isClickCollect = await this.$apis.ArticleApi.clickCollect(this.ArticleInfo.articleID,this.$store.getters.openID,this.isClickCollect);
@@ -235,6 +237,7 @@
 
   /* 点赞的非点亮常态 */
   .likeButtonNormal, .collectButtonNormal{
+    margin: 0 10px;
     padding: 10px 20px;
     background-color: white;
     border: 1px solid gray;

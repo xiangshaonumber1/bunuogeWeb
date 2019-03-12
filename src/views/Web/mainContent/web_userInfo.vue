@@ -23,6 +23,13 @@
 
       methods:{
 
+        //去掉html标签
+        replaceHtml(value){
+          var result = value.replace(/<\/?.+?>/g,"");
+          result = result.replace(/ /g,"");
+          return result;
+        },
+
           //获取用户信息
         async getUserInfo(openID){ //获取用户信息
           const result = await this.$apis.UserApi.getMyUserInfo(openID);

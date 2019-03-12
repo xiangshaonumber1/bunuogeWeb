@@ -74,7 +74,7 @@
                 <blockquote style="padding: 0 15px;margin: 5px 0;">
                   <div class="userDescribe">
                     <span style="font-size: 14px;color: gray;font-weight: normal">
-                      {{searchUser.describe}}
+                      {{searchUser.myDescribe}}
                     </span>
                   </div>
                 </blockquote>
@@ -123,7 +123,7 @@
 
        async getSearchInfo(){//获取相应的搜索结果
          const result = await this.$apis.ArticleApi.get_search(this.$route.params.key_word,this.search_page,this.searchType);
-         if (result === null && this.search_page === 1){
+         if (result.result.length === 0 && this.search_page === 1){
            this.isLoading = false; //取消正在加载
            this.notFound = true; //显示404
          }else {
@@ -132,7 +132,6 @@
            console.log("输出返回的信息：",result);
            this.searchInfoList = result.result; //赋值获取到的文章数据
            for (var searchInfo of this.searchInfoList){
-             console.log("输出searchInfo ：",searchInfo);
              searchInfo.userIcon =  this.$store.getters.serverPath+ JSON.parse(searchInfo.userIcon)[0];
            }
 
@@ -174,12 +173,14 @@
         // },
 
         // 或者用正则表达式，能识别大小写，但是会根据搜索关键字的大小写而覆盖原本内容的大小写
-        brightenKeyword(content, keyword) {
-          const Reg = new RegExp(keyword, 'i');
-          console.log("高亮，reg：",Reg);
-          if (content) {
-             return content.replace(Reg, `<span style="color: red;">${keyword}</span>`);
+        brightenKeyword(content, key_word_list) {
+          for (var keyword of key_word_list){
+            // console.log("输出需要高亮的词：",keyword);
+            const Reg = new RegExp(keyword, 'i');
+            content = content.replace(Reg, `<span style="color: red;">${keyword}</span>`);
           }
+          return content
+
         }
 
       },
