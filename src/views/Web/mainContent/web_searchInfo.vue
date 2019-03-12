@@ -45,7 +45,7 @@
 
                 <!--文章作者和文章状态信息-->
                 <div class="searchArticleOtherInfo">
-                  <span>{{searchArticle.nickname}}</span>&emsp;
+                  <span v-html="searchArticle.nickname"></span>&emsp;
                   <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;<label>{{searchArticle.like}}</label></span>&emsp;
                   <span><Icon type="md-eye" size="16" />&nbsp;<label>{{searchArticle.dislike}}</label></span>
                   <span style="float: right;margin-right: 20px"><Icon type="md-time" size="16" />&nbsp;<Time :time="searchArticle.time"/></span>
@@ -64,7 +64,7 @@
                 <div>
                   <a @click="goUserInfo" style="color: black;text-decoration: none">
                   <Avatar :src="searchUser.userIcon" size="large" style="padding: 0;"/>
-                    &nbsp;<span>{{searchUser.nickname}}</span>
+                    &nbsp;<span v-html="searchUser.nickname"></span>
                   </a>
                   <Button type="info" style="float: right">关注</Button>
                   <!--<Button type="success" style="float: right">已关注</Button>-->
@@ -75,8 +75,6 @@
                   <div class="userDescribe">
                     <span style="font-size: 14px;color: gray;font-weight: normal">
                       {{searchUser.describe}}
-                      在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等
-                      在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等在这里添加的个人描述，个人签名等等...在这里添加的个人描述，个人签名等等
                     </span>
                   </div>
                 </blockquote>
@@ -131,7 +129,14 @@
          }else {
            this.isLoading = false; //取消正在加载
            this.notFound = false; //取消显示404
-           this.searchInfoList = result.articleInfo; //赋值获取到的文章数据
+           console.log("输出返回的信息：",result);
+           this.searchInfoList = result.result; //赋值获取到的文章数据
+           for (var searchInfo of this.searchInfoList){
+             console.log("输出searchInfo ：",searchInfo);
+             searchInfo.userIcon =  this.$store.getters.serverPath+ JSON.parse(searchInfo.userIcon)[0];
+           }
+
+           this.searchInfoList.userIcon =
            this.key_word_list = result.key_word_list;  //赋值获取到的分词器
          }
         },
@@ -246,6 +251,7 @@
   .searchArticleOtherInfo span,label{
     font-size: 14px;
     font-weight: normal;
+    color:cadetblue;
   }
 
   .userDescribe{
