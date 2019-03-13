@@ -36,7 +36,7 @@
             <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量，如果作者是自己，开启更多功能-->
             <div style="line-height: 30px;">
               <a @click="goUserInfo"><span v-html="ArticleInfo.nickname"></span></a>&emsp;
-              <Button v-if="this.$store.getters.openID !== ArticleInfo.openID" class="markButtonNormal"
+              <Button v-if="$store.getters.openID !== ArticleInfo.openID" class="markButtonNormal"
                       v-bind:class="{markButtonClick:isClickMark}" @click="changeMarkStatus">
                 <span v-if="isClickMark === false">&nbsp;+加个关注&nbsp;</span>
                 <span v-else>&nbsp;已关注&nbsp;</span>
@@ -52,7 +52,7 @@
                     <span>更多功能&nbsp;<Icon type="ios-arrow-down" color="white" /></span>
                     <DropdownMenu slot="list">
                       <!--这里表示如果该片文章的作者是当前用户的话，开放修改和删除功能-->
-                      <div v-if="ArticleInfo.openID === this.$store.getters.openID">
+                      <div v-if="ArticleInfo.openID === $store.getters.openID">
                         <DropdownItem name="update">修改</DropdownItem>
                         <DropdownItem name="delete">删除</DropdownItem>
                       </div>
@@ -232,6 +232,7 @@
           this.isClickCollect = result.collectStatus
         },
 
+        //获取当前搜索用户对作者的关注状态
         async getMarkStatus(openID,aim_openID){
           if (this.$store.getters.openID === null || openID===aim_openID){
             return; //如果是游客或者尚未登录的用户,或者是作者本人，则不用进行检查
