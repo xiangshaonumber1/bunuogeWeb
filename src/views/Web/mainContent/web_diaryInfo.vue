@@ -27,7 +27,7 @@
             <!--该div用于显示用户头像-->
             <div style="float: left">
               <a style="text-decoration: none;margin: 0 10px">
-                <img :src="DiaryInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
+                <img :src="DiaryInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px" height="45px"/>
               </a>
             </div>
 

@@ -6,7 +6,7 @@
         <!--头像部分-->
         <i-col span="5">
           <div class="text-center">
-            <img :src="userInfo.userIcon" alt="..." class="img-circle img-thumbnail" style="width: 165px">
+            <img :src="userInfo.userIcon" alt="..." class="img-circle img-thumbnail" style="width: 135px;height: 135px;">
             <Upload action="upload_url"
                     :before-upload="handleUpload">
               <Button style="margin-top: 10px" size="large">上传头像</Button>
@@ -15,7 +15,7 @@
         </i-col>
 
         <!--用户基本信息-->
-        <i-col span="10" style="padding: 5px">
+        <i-col span="9" style="padding:0 5px">
           <div class="userInfo">
 
             <!--用户昵称-->
@@ -53,7 +53,7 @@
         </i-col>
 
         <!--心愿墙部分-->
-        <i-col span="9" style="padding: 0 15px">
+        <i-col span="10" style="padding: 0 5px;">
           <Card style="height: 220px;">
             <span slot="title" style="font-size: 16px;font-weight: normal;">
               <Icon type="md-clipboard" />
@@ -103,7 +103,7 @@
       </Row>
 
       <!--保存信息按钮-->
-      <Row type="flex" class="code-row-bg" justify="center" style="margin-top: 20px;">
+      <Row type="flex" class="code-row-bg" justify="center" style="margin: 20px 0;">
         <i-col span="5">
           <Button type="info" size="large" long @click="saveUserInfo" :disabled="saveButtonDisable"><span>保&emsp;存</span></Button>
         </i-col>
@@ -242,8 +242,10 @@
         },
 
 
-        async getUserInfo(){ //获取用户信息
+        //获取用户信息
+        async getUserInfo(){
           const result = await this.$apis.UserApi.getMyUserInfo(this.$store.getters.openID);
+          console.log("输出获取到的getMyUserInfo信息：",result);
           if (result === null){
             this.isLoading = false;
             this.isNotFound = true;
@@ -258,7 +260,8 @@
           }
         },
 
-        async saveUserInfo(){//保存用户信息
+        //保存用户信息
+        async saveUserInfo(){
           //昵称长度应不小于位，且不能大于18位
           if (1<this.userInfo.nickname.length && this.userInfo.nickname.length<19){
             this.saveButtonDisable = true;

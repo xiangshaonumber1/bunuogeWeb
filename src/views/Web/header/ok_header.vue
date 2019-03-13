@@ -30,7 +30,7 @@
 
               <Dropdown placement="bottom" @on-click="to_user_function">
                 <a style="text-decoration: none;line-height: 60px;">
-                  <img :src="userInfo.avatar"  alt="none" class="img-circle" width="40px"/>
+                  <img :src="userInfo.avatar"  alt="none" class="img-circle" width="40px" height="40px"/>
                   <Icon type="ios-arrow-down"></Icon>
                 </a>
                 <DropdownMenu slot="list">

@@ -123,7 +123,7 @@
 
        async getSearchInfo(){//获取相应的搜索结果
          const result = await this.$apis.ArticleApi.get_search(this.$route.params.key_word,this.search_page,this.searchType);
-         if (result.result.length === 0 && this.search_page === 1){
+         if (result === null && this.search_page === 1){
            this.isLoading = false; //取消正在加载
            this.notFound = true; //显示404
          }else {
@@ -132,6 +132,7 @@
            console.log("输出返回的信息：",result);
            this.searchInfoList = result.result; //赋值获取到的文章数据
            for (var searchInfo of this.searchInfoList){
+             console.log("输出searchInfo ：",searchInfo);
              searchInfo.userIcon =  this.$store.getters.serverPath+ JSON.parse(searchInfo.userIcon)[0];
            }
 
@@ -174,13 +175,14 @@
 
         // 或者用正则表达式，能识别大小写，但是会根据搜索关键字的大小写而覆盖原本内容的大小写
         brightenKeyword(content, key_word_list) {
-          for (var keyword of key_word_list){
-            // console.log("输出需要高亮的词：",keyword);
-            const Reg = new RegExp(keyword, 'i');
-            content = content.replace(Reg, `<span style="color: red;">${keyword}</span>`);
+          for (var key_word of key_word_list){
+            // console.log("需要加红的字：",key_word);
+            const Reg = new RegExp(key_word, 'i');
+            if (content) {
+              content = content.replace(Reg, `<span style="color: red;">${key_word}</span>`);
+            }
           }
-          return content
-
+          return content;
         }
 
       },

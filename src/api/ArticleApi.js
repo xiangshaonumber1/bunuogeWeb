@@ -363,7 +363,7 @@ const article = {
    */
   getLikeAndCollectStatus(articleID,openID){
     return request({
-      url:'/article/getLikeStatus',
+      url:'/article/getLikeAndCollectStatus',
       method:'get',
       params:{
         articleID:articleID,
