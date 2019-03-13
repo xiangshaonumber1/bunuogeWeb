@@ -74,7 +74,7 @@
                 <blockquote style="padding: 0 15px;margin: 5px 0;">
                   <div class="userDescribe">
                     <span style="font-size: 14px;color: gray;font-weight: normal">
-                      {{searchUser.describe}}
+                      {{searchUser.myDescribe}}
                     </span>
                   </div>
                 </blockquote>
@@ -174,12 +174,15 @@
         // },
 
         // 或者用正则表达式，能识别大小写，但是会根据搜索关键字的大小写而覆盖原本内容的大小写
-        brightenKeyword(content, keyword) {
-          const Reg = new RegExp(keyword, 'i');
-          console.log("高亮，reg：",Reg);
-          if (content) {
-             return content.replace(Reg, `<span style="color: red;">${keyword}</span>`);
+        brightenKeyword(content, key_word_list) {
+          for (var key_word of key_word_list){
+            // console.log("需要加红的字：",key_word);
+            const Reg = new RegExp(key_word, 'i');
+            if (content) {
+              content = content.replace(Reg, `<span style="color: red;">${key_word}</span>`);
+            }
           }
+          return content;
         }
 
       },

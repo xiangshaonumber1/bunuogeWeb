@@ -111,7 +111,36 @@ const user = {
     })
   },
 
+  /**
+   * 用户点击关注按钮，根据按钮点击前的状态，判断是执行新增关注还是取消关注
+   */
+  clickMark(openID,aim_openID,executeType){
+    return request({
+      url:'user/clickMark',
+      method:"post",
+      data:qs.stringify({
+        openID:openID,
+        aim_openID:aim_openID,
+        executeType:executeType
+      })
+    }).then( res =>{
+      return res.data.data;
+    })
+  },
 
+  //获取请求用户对该目标用户的关注状态
+  getMarkStatus(openID,aim_openID) {
+    return request({
+      url:'user/getMarkStatus',
+      method:"get",
+      params:{
+        openID:openID,
+        aim_openID:aim_openID,
+      }
+    }).then( res =>{
+      return res.data.data;
+    });
+  },
 
 };
 

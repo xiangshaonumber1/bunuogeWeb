@@ -29,17 +29,23 @@
             <!--该div用于显示用户头像-->
             <div style="float: left">
               <a style="text-decoration: none;margin: 0 10px" @click="goUserInfo">
-                <img :src="this.ArticleInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px"/>
+                <img :src="this.ArticleInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px" height="45px"/>
               </a>
             </div>
 
             <!--该div 用于显示文章作者，喜欢数，不喜欢数，浏览量，如果作者是自己，开启更多功能-->
             <div style="line-height: 30px;">
-              <a @click="goUserInfo"><span v-html="ArticleInfo.nickname"></span></a>
+              <a @click="goUserInfo"><span v-html="ArticleInfo.nickname"></span></a>&emsp;
+              <Button v-if="this.$store.getters.openID !== ArticleInfo.openID" class="markButtonNormal"
+                      v-bind:class="{markButtonClick:isClickMark}" @click="changeMarkStatus">
+                <span v-if="isClickMark === false">&nbsp;+加个关注&nbsp;</span>
+                <span v-else>&nbsp;已关注&nbsp;</span>
+              </Button>
               <br>
               <span style="color: gray">发布时间：{{ArticleInfo.time}}</span>&emsp;
-              <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="22"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
-              <span><Icon type="md-eye" size="22" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.watch}}</label></span>
+              <span>点赞量：<Icon type="md-heart" color="rgb(251, 114, 153)" size="20" style="margin-bottom: 2px"/>&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.like}}</label></span>&emsp;
+              <span>浏览量：<Icon type="md-eye" size="20" style="margin-bottom: 2px" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.watch}}</label></span>&emsp;
+              <span>收藏量：<Icon type="md-star" size="20" style="margin-bottom: 5px" />&nbsp;<label style="margin: 0;padding: 0">{{this.ArticleInfo.collection}}</label></span>
               <div class="more-function">
                 <a href="javascript:void(0)">
                   <Dropdown trigger="click" @on-click="chooseFunction">
@@ -126,6 +132,7 @@
         return {
           isClickLike:false,//是否有点击过支持一下的按钮
           isClickCollect:false,//是否已收藏
+          isClickMark:false,//是否关注该用户
           ArticleInfo:{},
           isNotFound:false,
           isLoading:true,
@@ -187,6 +194,16 @@
           this.isClickCollect = await this.$apis.ArticleApi.clickCollect(this.ArticleInfo.articleID,this.$store.getters.openID,this.isClickCollect);
         },
 
+        //改变当前关注状态
+        async changeMarkStatus(){
+          if (this.$store.getters.openID === null){
+            return this.$Message.info({
+              content:"温馨提示：该功能需要登录后才能实现！"
+            })
+          }
+          this.isClickMark = await this.$apis.UserApi.clickMark(this.$store.getters.openID,this.ArticleInfo.openID,this.isClickMark);
+        },
+
         //获取指定articleID的所有信息
         async getArticleInfo(articleID){
           const articleInfo = await this.$apis.ArticleApi.get_articleInfo(articleID);
@@ -196,6 +213,8 @@
             this.isNotFound = false;
             this.ArticleInfo = articleInfo;
             this.ArticleInfo.userIcon = this.$store.getters.serverPath+JSON.parse(articleInfo.userIcon)[0]
+            //获取到文章信息后，再用文章的作者openID和请求用户的openID去判断请求者是否关注作者
+            this.getMarkStatus(this.$store.getters.openID,articleInfo.openID)
           }else { //如果为空，则显示404组件
             this.isNotFound = true;
             this.isLoading = false;
@@ -211,6 +230,15 @@
           console.log("文章状态信息：",result);
           this.isClickLike = result.likeStatus;
           this.isClickCollect = result.collectStatus
+        },
+
+        async getMarkStatus(openID,aim_openID){
+          if (this.$store.getters.openID === null || openID===aim_openID){
+            return; //如果是游客或者尚未登录的用户,或者是作者本人，则不用进行检查
+          }
+          const result = await this.$apis.UserApi.getMarkStatus(openID,aim_openID);
+          console.log("用户【",openID,"】对作者【",aim_openID,"】的关注情况：",result);
+          this.isClickMark = result;
         },
 
 
@@ -233,8 +261,24 @@
 
 <style scoped>
 
-  /* 点赞的非点亮常态 */
+
+  /* 比较特殊的关注的非点亮常态 */
+  .markButtonNormal{
+    padding: 0;
+    margin: 0;
+    background-color: rgb(45, 183, 245);
+    border: 1px solid rgb(45, 183, 245);
+    color: white;
+  }
+  .markButtonNormal span{
+    color: white;
+    float: left;
+    font-size: 18px;
+  }
+
+  /* 点赞和收藏的非点亮常态 */
   .likeButtonNormal, .collectButtonNormal{
+    margin: 0 10px;
     padding: 10px 20px;
     background-color: white;
     border: 1px solid gray;
@@ -254,7 +298,7 @@
     /*color: rgb(251, 114, 153);*/
   }
 
-  /* 点赞的点亮状态 */
+  /* 点赞，收藏，关注的点亮状态 */
   .likeButtonClick{
     background-color: rgb(251, 114, 153);
     border: 1px solid rgb(251, 114, 153);
@@ -263,10 +307,14 @@
     background-color: rgb(243, 160, 52);
     border: 1px solid rgb(243, 160, 52);
   }
-  .likeButtonClick i, .collectButtonClick i{
+  .markButtonClick{
+    background-color: rgb(71, 203, 137);
+    border: 1px solid rgb(71, 203, 137);
+  }
+  .likeButtonClick i, .collectButtonClick i, .markButtonClick i{
     color: white;
   }
-  .likeButtonClick span, .collectButtonClick span{
+  .likeButtonClick span, .collectButtonClick span, .markButtonClick span{
     color: white;
   }
 
@@ -303,15 +351,16 @@
   }
 
   .article_title{
-    font-size: 35px;
+    font-size: 30px;
     font-weight: bold;
   }
 
   .article_title >>> .ivu-tag{
     font-size: 20px;
     font-family:"Microsoft YaHei UI Light",serif ;
-    line-height: 35px;
-    height: 35px;
+    line-height: 30px;
+    height: auto;
+    /*margin-bottom: 5px;*/
   }
 
   .more-function{
