@@ -59,7 +59,6 @@ const routes = [
   {path:'/write/diary',component:WriteDiary,name:'web_write_diary'},          //用户文章编辑页
 
   {path:'/feedback',component:Web_feedBack, name:'web_feedback'},                           //意见反馈页
-  {path:'/404',component:NotFound,name:'404'},                                          //404
   {path:'/home', component: Home, name:"home"},                                         //个人博客页
 
   {path: '/welcome', component: Welcome,                                                        //登录注册页
@@ -82,6 +81,7 @@ const routes = [
       {path: 'whitePage',component: White, name:"service_white_page"},                          //空白页
     ]},
 
+  {path:'*',component:NotFound,name:'404'},                                          //404
 
 ];
 

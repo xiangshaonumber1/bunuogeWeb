@@ -20,7 +20,7 @@
 
             <!--用户昵称-->
             <div class="userInfo-nickname">
-              <input type="text" v-model="userInfo.nickname" style="bwidth: 100%"></input>
+              <input type="text" v-model="userInfo.nickname" style="width: 100%" readonly="true"></input>
             </div>
 
             <!--用户活跃天数-->
@@ -42,7 +42,7 @@
             <div>
               <span>
                 <Icon type="md-transgender" />
-               <i-select v-model="userInfo.gender" size="large" :value="userInfo.gender"  style="width: auto">
+               <i-select v-model="userInfo.gender" size="large" :value="userInfo.gender"  style="width: auto;">
                  <i-option value="男" label="男"></i-option>
                  <i-option value="女" label="女"></i-option>
                  <i-option value="保密" label="保密"></i-option>
@@ -62,7 +62,7 @@
             <a href="#" slot="extra" @click.prevent="changeLimit">
               编辑
             </a>
-            <textarea class="wish_textarea"  wrap="hard" maxlength="100" v-model="userInfo.wishCard"></textarea>
+            <textarea class="wish_textarea"  wrap="hard" maxlength="100" v-model="userInfo.wishCard" :readonly="false"></textarea>
           </Card>
         </i-col>
 
@@ -93,12 +93,12 @@
 
       <Divider/>
 
-      <!--个人简介部分-->
+      <!--个人描述部分-->
       <Row>
         <i-col span="24">
-          <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人简介</span>
-          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" /><br>
-          <small>注：昵称，心愿墙，个人简介等，<small style="color: red">点击所在区域改</small>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
+          <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人描述</span>
+          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" readonly /><br>
+          <small>注：昵称，心愿墙，个人描述等，<small style="color: red">点击所在区域改</small>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
         </i-col>
       </Row>
 
@@ -352,6 +352,7 @@
     padding: 5px;
     min-height: 200px;
     font-size: 18px;
+    background-color: white;
   }
 
   .personal{
@@ -402,10 +403,9 @@
   }
 
 
-
   .userInfo input{
     border: none;
-    /*border: 1px solid red;*/
+    border-radius: 3px;
     background-color: white;
     margin: 1px 15px;
     width: auto;
@@ -418,9 +418,6 @@
     /*border: 1px solid red;*/
   }
 
-  .userInfo-nickname{
-    line-height: 40px;
-  }
 
   .userInfo-nickname input{
     margin: 1px 0;
