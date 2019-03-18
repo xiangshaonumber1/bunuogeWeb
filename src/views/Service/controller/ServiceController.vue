@@ -143,43 +143,61 @@
           this.$router.push({name:path})
         },
 
+        //获取上次打开后未关闭的和已激活的页面
+        getOpenAndActivePage(){
+          var open = localStorage.getItem("open-names");
+          var active = localStorage.getItem("active-name");
+          if (null != open){
+            // console.log("初始化的 openNames value:"+this.openNames);
+            this.openNames = open.split(",");
+            // console.log("初始化后的 openNames value:"+this.openNames+' openNames 长度：'+this.openNames.length);
+            for (var i=0;i<this.openNames.length;i++){
+              // console.log(" 正在处理： "+this.openNames[i]);
+              for (var j=0;j<this.submenuList.length;j++){
+                for (var k=0;k<this.submenuList[j].childList.length;k++){
+                  //如果储存的openNames中有，则添加到面板上
+                  if (this.submenuList[j].childList[k].child_index === this.openNames[i]){
+                    // console.log("成功找到："+this.submenuList[j].childList[k]);
+                    this.editableTabs.push({
+                      title: this.submenuList[j].childList[k].child_title,//选项卡标题
+                      index: this.submenuList[j].childList[k].child_index, //选项卡的编号
+                      content: this.submenuList[j].childList[k].to_path,//可以是路径
+                    });
+                    //如果该面板同时是正在显示的面板，则跳转到该页面上
+                    if (this.submenuList[j].childList[k].child_index === active){
+                      console.log('mounted '+this.intI++);
+                      this.$router.push({name:this.submenuList[j].childList[k].to_path});
+                      this.activeIndex = active;
+                    }
+                  }
+                }
+              }
+            }
+          }else {//表示没有打开的选项卡，自然也没有正在显示的选项卡，则重新定位到ServiceController主页
+            console.log('mounted '+this.intI++);
+            this.$router.push({name:"ServiceController"})
+          }
+        },
+
+        //admin权限验证
+        async service_login(){
+          const result = await this.$apis.AdminApi.service_login();
+          console.log("输出 result 值",result);
+          if (!result){
+            this.$Notice.warning({
+              title:'拒绝访问提示：',
+              desc:'您的权限不够，无法继续访问！'
+            });
+            this.$router.push({name:'index'})
+          }
+        }
       },
       //**********************  methods end ****************************
 
       //此钩子中函数一般会做一些ajax请求获取数据进行数据初始化，mounted 在整个实例中只执行一次
       mounted() {
-        var open = localStorage.getItem("open-names");
-        var active = localStorage.getItem("active-name");
-        if (null != open){
-          // console.log("初始化的 openNames value:"+this.openNames);
-          this.openNames = open.split(",");
-          // console.log("初始化后的 openNames value:"+this.openNames+' openNames 长度：'+this.openNames.length);
-          for (var i=0;i<this.openNames.length;i++){
-            // console.log(" 正在处理： "+this.openNames[i]);
-            for (var j=0;j<this.submenuList.length;j++){
-              for (var k=0;k<this.submenuList[j].childList.length;k++){
-                //如果储存的openNames中有，则添加到面板上
-                if (this.submenuList[j].childList[k].child_index === this.openNames[i]){
-                  // console.log("成功找到："+this.submenuList[j].childList[k]);
-                  this.editableTabs.push({
-                    title: this.submenuList[j].childList[k].child_title,//选项卡标题
-                    index: this.submenuList[j].childList[k].child_index, //选项卡的编号
-                    content: this.submenuList[j].childList[k].to_path,//可以是路径
-                  });
-                  //如果该面板同时是正在显示的面板，则跳转到该页面上
-                  if (this.submenuList[j].childList[k].child_index === active){
-                    console.log('mounted '+this.intI++);
-                    this.$router.push({name:this.submenuList[j].childList[k].to_path});
-                    this.activeIndex = active;
-                  }
-                }
-              }
-            }
-          }
-        }else {//表示没有打开的选项卡，自然也没有正在显示的选项卡，则重新定位到ServiceController主页
-          console.log('mounted '+this.intI++);
-          this.$router.push({name:"ServiceController"})
-        }
+          this.service_login();
+          this.getOpenAndActivePage();
       },
 
       //实例销毁完成执行的钩子，跳转到其他页面时，清空保存的open-names和active-name
@@ -193,7 +211,6 @@
       updated:function () {
         localStorage.setItem("active-name",this.activeIndex);
         localStorage.setItem("open-names",this.openNames);//然后再保存新的 open-names
-
       }
 
     }
