@@ -2,14 +2,14 @@
     <div>
 
       <Row type="flex" class="code-row-bg"  align="top" justify="center" style="margin-top: 3vh">
-        <!-- 个人中心导航栏 -->
+        <!-- 用户信息导航栏 -->
         <i-col span="4" style="margin-right: 1vw">
           <Card :padding="0" icon="md-options">
             <!--<Icon slot="icon" type="md-options" size="large" />-->
             <h4 slot="title"><strong>个人中心</strong></h4>
-            <CellGroup @on-click="getPersonalData">
-              <Cell name="web_personal_info" :selected="personalCenterType === 'web_personal_info'">
-                <Icon slot="icon" type="md-person" size="20" />&nbsp;<span>个人资料</span>
+            <CellGroup @on-click="getUserInfo">
+              <Cell name="web_userInfo" :selected="personalCenterType === 'web_userInfo'">
+                <Icon slot="icon" type="md-person" size="20" />&nbsp;<span>我的主页</span>
               </Cell>
               <Cell name="web_data_articles" :selected="personalCenterType === 'web_data_articles'">
                 <Icon slot="icon" type="ios-paper" size="20" />&nbsp;<span>我的文章</span>
@@ -36,7 +36,7 @@
 
 <script>
     export default {
-        name: "web_userInfo",
+        name: "web_user",
       data(){
         return {
           personalCenterType:'',
@@ -44,10 +44,10 @@
       },
       methods:{
         //根据选择的不同，切换不同的vue组件，显示相应的类容
-        getPersonalData(name){
+        getUserInfo(name){
           switch (name) {
-            case "web_personal_info":
-              this.$router.push({name:"web_personal_info"});
+            case "web_userInfo":
+              this.$router.push({name:"web_userInfo"});
               break;
             case "web_data_articles":
               this.$router.push({name:"web_data_articles"});
@@ -70,6 +70,9 @@
       },
 
       mounted(){
+          //检测传递过来的open_id
+          console.log("web_user 输出：",this.$route.params.open_id);
+          //检测路由
           this.getRouteName();
       },
 

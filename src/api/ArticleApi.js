@@ -229,23 +229,16 @@ const article = {
   /**
    * 获取当前用户发布的文章
    */
-  get_myArticle(page){
+  get_userArticle(openID,page){
     return request({
-      url:'/article/get_myArticle',
+      url:'/article/get_userArticle',
       method:"get",
       params:{
+        openID:openID,
         page:page,
       }
     }).then( async (res) => {
-      if (res.data.code === '402') {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.get_myArticle(page);
-        }else {
-          console.log("????????????????? get_myArticle: what the fuck ???????????");
-          return null;
-        }
-      } else if (res.data.code === '404') {
+      if (res.data.code === '404') {
         return null;
       } else {
         return res.data.data;
@@ -257,23 +250,16 @@ const article = {
   /**
    * 获取当前用户发布的日记
    */
-  get_myDiary(page) {
+  get_userDiary(openID,page) {
     return request({
-      url:'/article/get_myDiary',
+      url:'/article/get_userDiary',
       method:"get",
       params:{
+        openID:openID,
         page:page,
       }
     }).then( async (res) => {
-      if (res.data.code === '402') {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.get_myDiary(page);
-        }else {
-          console.log("????????????????? get_myArticle: what the fuck ???????????");
-          return null;
-        }
-      } else if (res.data.code === '404') {
+      if (res.data.code === '404') {
         return null;
       } else {
         return res.data.data;

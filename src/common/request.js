@@ -92,7 +92,7 @@ request.interceptors.response.use(response=>{
     title : '网络链接阻塞',
     desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'
   });
-  return Promise.reject(error); // 返回接口返回的错误信息
+  return error; // 返回接口返回的错误信息
 });
 
 //导出模块

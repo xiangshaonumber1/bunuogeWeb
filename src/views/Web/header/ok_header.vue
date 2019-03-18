@@ -12,6 +12,7 @@
             <!-- 导航栏 -->
             <div>
               <Menu mode="horizontal" theme="light" :active-name="menuActive" style="border: none">
+                <MenuItem name="message_wall" @click.native="gomessage_wall"><span>留言墙</span></MenuItem>
                 <MenuItem name="index" @click.native="goIndex"><span>首页</span></MenuItem>
                 <MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>
                 <MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>
@@ -82,6 +83,11 @@
         }
       },
       methods:{
+
+        //前往本站的留言墙
+        gomessage_wall(){
+          this.$router.push({name:'message_wall'})
+        },
           //前往首页
         goIndex(){
           this.$router.push({name:'index'});
@@ -136,9 +142,9 @@
        async to_user_function(item_name){
           switch (item_name) {
             case 'userCenter'://前往个人信息
-              this.$router.push({name:'web_personal_info'});break;
-            case 'userSetting'://前往用户设置
-              this.$router.push({name:'userSetting'});break;
+              this.$router.push({name:'web_userInfo',params:{open_id:this.$store.getters.openID}});break;
+            case 'userSetting'://前往用户设置，默认展示账号信息
+              this.$router.push({name:'account_info',params:{open_id:this.$store.getters.openID}});break;
             case 'userManager'://前往管理中心
               this.$router.push({name:'userManager'});break;
             case 'userFeedback'://前往帮助与反馈
@@ -196,10 +202,6 @@
 </script>
 
 <style scoped>
-
-  #ok-header{
-
-  }
 
   span{
     font-size: 16px;

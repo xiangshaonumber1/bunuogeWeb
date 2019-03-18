@@ -70,8 +70,8 @@
           return result;
         },
 
-       async get_myArticle() {//获取当前用户所创作的文章
-         const result = await this.$apis.ArticleApi.get_myArticle(this.page);
+       async get_userArticle(openID) {//获取当前用户所创作的文章
+         const result = await this.$apis.ArticleApi.get_userArticle(openID,this.page);
           if (result ===null && this.page===1 ) {
             this.isLoading = false; //取消正在加载
             this.isNotFound = true; //显示404
@@ -99,7 +99,7 @@
 
        mounted() {
           //从后台拉取数据
-        this.get_myArticle();
+        this.get_userArticle(this.$route.params.open_id);
       }
     }
 </script>

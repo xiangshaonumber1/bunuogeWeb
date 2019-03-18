@@ -91,7 +91,7 @@
                   <span>点赞量：<Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>{{article.like}}</label></span>&emsp;
                   <span>浏览量：<Icon type="md-eye" size="20" />&nbsp;<label>{{article.watch}}</label></span>&emsp;
                   <span>收藏量：<Icon type="md-star" size="20" style="margin-bottom: 5px" />&nbsp;<label style="margin: 0;padding: 0">{{article.collection}}</label></span>
-                  <span style="float: right;margin-right: 20px"><Icon type="md-time" size="20" /><Time :time="article.time"></Time></span>
+                  <span style="float: right;margin-right: 20px">发布时间：<Icon type="md-time" size="20" /><Time :time="article.time"></Time></span>
                 </div>
               </Card>
               <Divider style="margin-top: 0;" />
@@ -216,8 +216,9 @@
             }
           }else {
             this.$Message.info({
+              top:0,
               content:'已经加载到底了，再往下也没有了！',
-              duration:3
+              duration:3,
             });
             console.log("数据已加载完毕")
           }

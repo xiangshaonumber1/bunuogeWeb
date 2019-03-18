@@ -38,22 +38,15 @@ const user = {
   /**
    * 获取用户信息（不包括密码等重要隐私信息）
    */
-  getMyUserInfo(openID){
+  getUserInfo(openID){
     return request({
-      url: '/user/getMyUserInfo',
+      url: '/user/getUserInfo',
       method: 'get',
       params: {
         openID:openID,
       }
     }).then( async res => {
-      if (res.data.code === '402') {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.getMyUserInfo(openID)
-        }else {
-          return null;
-        }
-      }else if (res.data.code === '404') {
+      if (res.data.code === '404') {
         return null;
       }else{
         return res.data.data;
@@ -64,9 +57,9 @@ const user = {
   /**
    * 保存修改后的我的个人信息
    */
-  updateMyUserInfo(userInfo) {
+  updateUserInfo(userInfo) {
     return request({
-      url:'/user/updateMyUserInfo',
+      url:'/user/updateUserInfo',
       method:'post',
       data:qs.stringify({
         nickname:userInfo.nickname,
@@ -80,7 +73,7 @@ const user = {
       } else if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result)
-          return this.updateMyUserInfo(userInfo);
+          return this.updateUserInfo(userInfo);
         else
           return null;
       } else {

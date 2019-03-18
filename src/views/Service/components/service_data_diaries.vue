@@ -61,8 +61,8 @@
 
       methods:{
 
-        async get_myDiary(){  //获取当前用户的所发布的日记
-          const result = await this.$apis.ArticleApi.get_myDiary(this.page);
+        async get_userDiary(openID){  //获取当前用户的所发布的日记
+          const result = await this.$apis.ArticleApi.get_userDiary(openID,this.page);
           if(result === null && this.page === 1){ //只有当第一次查询的结果为空（page为1时），显示notfound
             this.isNotFound = true;
             this.isLoading = false;
@@ -96,7 +96,8 @@
       },
 
       mounted(){
-        this.get_myDiary();
+        //根据传递过来的openID，获取对应的信息
+        this.get_userDiary(this.$route.params.open_id);
       },
 
 

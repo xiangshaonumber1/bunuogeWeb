@@ -17,7 +17,7 @@ import WriteEmail from '../views/Service/components/service_write_email'
 import White from '../views/Service/components/service_white'
 import DataArticles from '../views/Service/components/service_data_articles'
 import DataDiaries from '../views/Service/components/service_data_diaries'
-import PersonalInfo from '../views/Service/components/service_personal_info'
+import UserInfo from '../views/Service/components/service_user_info'
 import BlogTotal from '../views/Service/components/service_blog_total'
 import Register from '../views/Web/login_register/register'
 import Login from '../views/Web/login_register/login'
@@ -28,24 +28,30 @@ import Web_diaryInfo from '../views/Web/mainContent/web_diaryInfo'
 import Web_feedBack from '../views/Web/mainContent/web_feedback'
 import NotFound from '../views/Web/mainContent/404'
 import Web_search from '../views/Web/mainContent/web_searchInfo'
-import Web_personalCenter from '../views/Web/mainContent/web_personal_center'
-import Web_userInfo from '../views/Web/mainContent/web_userInfo'
+import Web_user from '../views/Web/mainContent/web_user'
+import Web_messageWall from '../views/Web/mainContent/web_messageWall'
+
+import Setting from '../views/Web/mainContent/web_setting'
+import Setting_update_pw from '../views/Web/mainContent/setting/setting_update_pw'
+import Setting_account_info from '../views/Web/mainContent/setting/setting_account_info'
 
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
   {path:'/', component: App,children:[                                                  //
       {path:'',component:Index, name:'index'},                                          //首页
+      {path:'message',component:Web_messageWall, name:'message_wall'},
       {path:'search/:key_word',component:Web_search, name:'web_search'},                    //搜索结果页面
-      {path:'userInfo/:open_id',component:Web_userInfo, name:'web_userInfo',children:[      //用户信息页面(可公开信息)
-          {path: 'articles', component: DataArticles, name:"user_data_articles"},        //用户文章数据页
-          {path: 'diaries', component: DataDiaries, name:"user_data_diaries"},           //用户文章日记页(只显示作者设置为公开的)
-        ]},
-      {path:'setting/personalCenter',component:Web_personalCenter,name:'personal_center',
+      {path:'user/:open_id',component:Web_user,
         children:[
-          {path: 'personalInfo', component: PersonalInfo, name:"web_personal_info"},     //用户个人数据页
+          {path: 'info', component: UserInfo, name:"web_userInfo"},                 //用户信息页面(可公开信息)
           {path: 'articles', component: DataArticles, name:"web_data_articles"},        //用户文章数据页
-          {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页(作者可获取公开和非公开)
+          {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页(只显示作者设置为公开的)
+        ]},
+      {path:'setting/:open_id',component:Setting,                                       //个人设置的导航页
+        children:[
+          {path: 'account_info', component:Setting_account_info, name:"account_info"},   //账户信息
+          {path: 'update_pd', component:Setting_update_pw, name:"update_password"},     //修改密码
         ]},
     ]},
 
@@ -70,7 +76,7 @@ const routes = [
   {path:"/ServiceController", component: Controller, name:"ServiceController",                  //后台管理首页
     children:[
       {path: 'blogState',component: BlogTotal,name:"service_blog_state"},                       //博客统计
-      {path: 'personalInfo', component: PersonalInfo, name:"service_personal_info"},            //个人数据
+      {path: 'personalInfo', component: UserInfo, name:"service_user_info"},            //个人数据
       {path: 'writeArticle', component: WriteArticle, name:"service_write_article"},            //文章编辑
       {path: 'writeDiary', component: WriteDiary, name:"service_write_diary"},                  //日记编辑
       {path: 'dataArticles', component: DataArticles, name:"service_data_articles"},            //文章数据

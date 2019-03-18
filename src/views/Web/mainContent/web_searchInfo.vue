@@ -62,7 +62,7 @@
               <Card :bordered="false">
 
                 <div>
-                  <a @click="goUserInfo" style="color: black;text-decoration: none">
+                  <a @click="goUserInfo(searchUser.openID)" style="color: black;text-decoration: none">
                   <Avatar :src="searchUser.userIcon" size="large" style="padding: 0;"/>
                     &nbsp;<span v-html="searchUser.nickname"></span>
                   </a>
@@ -171,9 +171,9 @@
         },
 
         //前往用户详情页面
-        goUserInfo(){
+        goUserInfo(openID){
           console.log("前往用户信息：");
-          this.$router.push({name:'userInfo',params:{open_id:this.userInfo.openID}})
+          this.$router.push({name:'web_userInfo',params:{open_id:openID}})
         },
 
         // 筛选变色,不过英文好像无法识别大小写

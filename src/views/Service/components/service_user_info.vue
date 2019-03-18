@@ -7,7 +7,8 @@
         <i-col span="5">
           <div class="text-center">
             <img :src="userInfo.userIcon" alt="..." class="img-circle img-thumbnail" style="width: 135px;height: 135px;">
-            <Upload action="upload_url"
+            <Upload v-if="isOneself && isEditing"
+                    action="upload_url"
                     :before-upload="handleUpload">
               <Button style="margin-top: 10px" size="large">上传头像</Button>
             </Upload>
@@ -16,22 +17,23 @@
 
         <!--用户基本信息-->
         <i-col span="9" style="padding:0 5px">
-          <div class="userInfo">
+          <div class="userBaseInfo">
 
             <!--用户昵称-->
-            <div class="userInfo-nickname">
-              <input type="text" v-model="userInfo.nickname" style="width: 100%" readonly="true"></input>
+            <div class="userBaseInfo-nickname">
+              <input v-if="isOneself && isEditing" class="form-control" type="text" v-model="userInfo.nickname" style="width: 100%"></input>
+              <span v-else>{{userInfo.nickname}}</span>
             </div>
 
             <!--用户活跃天数-->
-            <div class="userInfo-activeDay">
-              <button class="btn btn-info" type="button">
-                 当前活跃度天数： <span class="badge">4</span>
-              </button>
-            </div>
+            <!--<div class="userBaseInfo-activeDay">-->
+              <!--<button class="btn btn-info" type="button">-->
+                 <!--当前活跃度天数： <span class="badge">4</span>-->
+              <!--</button>-->
+            <!--</div>-->
 
             <!-- 个人label 标签-->
-            <div>
+            <div class="userBaseInfo-tag">
               <span>
                 <Icon type="ios-pricetags" />
                 <Tag color="blue" v-for="(value,index) in userInfo.label" :key="index">{{value}}</Tag>
@@ -39,14 +41,15 @@
             </div>
 
             <!--用户性别-->
-            <div>
+            <div class="userBaseInfo-gender">
               <span>
-                <Icon type="md-transgender" />
-               <i-select v-model="userInfo.gender" size="large" :value="userInfo.gender"  style="width: auto;">
-                 <i-option value="男" label="男"></i-option>
-                 <i-option value="女" label="女"></i-option>
-                 <i-option value="保密" label="保密"></i-option>
+                <Icon type="md-transgender" />&emsp;
+                <i-select v-if="isOneself && isEditing" v-model="userInfo.gender" size="large" :value="userInfo.gender"  style="width: auto;">
+                  <i-option value="男" label="男"></i-option>
+                  <i-option value="女" label="女"></i-option>
+                  <i-option value="保密" label="保密"></i-option>
                </i-select>
+                <label v-else>{{userInfo.gender}}</label>
               </span>
             </div>
           </div>
@@ -54,7 +57,7 @@
 
         <!--心愿墙部分-->
         <i-col span="10" style="padding: 0 5px;">
-          <Card style="height: 220px;">
+          <Card style="height: 220px;border: 1px solid darkgray">
             <span slot="title" style="font-size: 16px;font-weight: normal;">
               <Icon type="md-clipboard" />
               心愿墙
@@ -62,7 +65,8 @@
             <a href="#" slot="extra" @click.prevent="changeLimit">
               编辑
             </a>
-            <textarea class="wish_textarea"  wrap="hard" maxlength="100" v-model="userInfo.wishCard" :readonly="false"></textarea>
+            <textarea v-if="isOneself && isEditing" class="wish_textarea"  wrap="hard" maxlength="100" v-model="userInfo.wishCard" :readonly="false"></textarea>
+            <span v-else style="font-size: 16px">{{userInfo.wishCard}}</span>
           </Card>
         </i-col>
 
@@ -97,15 +101,22 @@
       <Row>
         <i-col span="24">
           <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人描述</span>
-          <textarea class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe" readonly /><br>
+          <textarea v-if="isOneself && isEditing" class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe"/>
+          <textarea v-else class="form-control personal_textarea" style="border: 2px solid darkgray;" maxlength="300" v-model="userInfo.myDescribe" readonly/>
+          <br>
           <small>注：昵称，心愿墙，个人描述等，<small style="color: red">点击所在区域改</small>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
         </i-col>
       </Row>
 
       <!--保存信息按钮-->
       <Row type="flex" class="code-row-bg" justify="center" style="margin: 20px 0;">
-        <i-col span="5">
-          <Button type="info" size="large" long @click="saveUserInfo" :disabled="saveButtonDisable"><span>保&emsp;存</span></Button>
+        <i-col class="text-center">
+          <Button v-if="isOneself && isEditing===false" type="success" size="large" long @click="startEditor"><span>编&emsp;辑</span></Button>
+          <div v-if="isEditing">
+            <button  type="button" class="btn btn-primary btn-lg" style="margin: 5px 0" @click="saveUserInfo" :disabled="saveButtonDisable"><span>保&emsp;存</span></button>&emsp;
+            <button  type="button" class="btn btn-danger btn-lg" style="margin: 5px 0" @click="cancelEditor" :disabled="saveButtonDisable"><span>取&emsp;消</span></button>
+          </div>
+
         </i-col>
       </Row>
 
@@ -128,8 +139,8 @@
                         :autoCropHeight="option.autoCropHeight"
                         :auto-crop-width="option.autoCropWidth"
                         :center-box="option.centerBox"
-                        :can-move="option.canMove"
-            ></vueCropper>
+                        :can-move="option.canMove">
+            </vueCropper>
           </div>
         </div>
       </Modal>
@@ -140,11 +151,12 @@
 
 <script>
 
-
   export default {
       name: "personal_info",
       data(){
           return {
+            isOneself:false,    //查询目标用户是否是当前已登录用户
+            isEditing:false,    //是否正在编辑
             file:null,
             loadingStatus: true,
             uploadBase64:null,
@@ -162,14 +174,7 @@
               canMove:false,                   // 上传图片是否可以移动
             },
             isShowModal:false,  //是否显示对话框
-            userInfo:{
-              nickname:'',
-              gender:'',
-              userIcon:'',
-              label:[],
-              wishCard:'',
-              myDescribe:''
-            },          //用户信息
+            userInfo:{},          //用户信息
             isLoading:true,
             isNotFound:false,
             genderModel:[
@@ -177,7 +182,7 @@
               {value:'女',label:'女'},
               {value:'保密',label:'保密'}
             ],
-            saveButtonDisable:false,
+            saveButtonDisable:false,    //保存按钮状态
           }
       },
       methods:{
@@ -231,20 +236,25 @@
             param.append("file", file);
             const result = await this.$apis.UserApi.updateUserIcon(param);
             if (result !== null) {
+              //上传成功后，更新当前也你按用户头像
               this.userInfo.userIcon = this.$store.getters.serverPath + result[0];
+              //同时更新本地保存的用户的头像
+              this.$store.dispatch("saveAvatar",this.userInfo.userIcon);
               console.log("上传后，重新给userInfo的userIcon赋值", this.userInfo.userIcon);
-              this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
-            } else {
-              this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
             }
+            this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
           });
 
         },
 
 
         //获取用户信息
-        async getUserInfo(){
-          const result = await this.$apis.UserApi.getMyUserInfo(this.$store.getters.openID);
+        async getUserInfo(openID){
+
+          this.isOneself = (this.$route.params.open_id === this.$store.getters.openID);
+          console.log(" 查询目标，是否是当前用户自己：",this.isOneself)
+
+          const result = await this.$apis.UserApi.getUserInfo(openID);
           console.log("输出获取到的getMyUserInfo信息：",result);
           if (result === null){
             this.isLoading = false;
@@ -256,8 +266,16 @@
             this.userInfo.label = JSON.parse(result.label);
             this.userInfo.userIcon = this.$store.getters.serverPath+JSON.parse(result.userIcon)[0];
             this.userInfo.nickname = this.replaceHtml(result.nickname);
-            this.$store.dispatch("saveAvatar",this.userInfo.userIcon);
           }
+        },
+
+        //确认启动编辑
+        startEditor(){
+          this.isEditing = true;
+        },
+        //确认取消编辑
+        cancelEditor(){
+          this.isEditing = false;
         },
 
         //保存用户信息
@@ -265,7 +283,7 @@
           //昵称长度应不小于位，且不能大于18位
           if (1<this.userInfo.nickname.length && this.userInfo.nickname.length<19){
             this.saveButtonDisable = true;
-            const result = await this.$apis.UserApi.updateMyUserInfo(this.userInfo);
+            const result = await this.$apis.UserApi.updateUserInfo(this.userInfo);
             if (result){
               this.$Notice.success({
                 title:'保存成功：',
@@ -273,6 +291,7 @@
               });
               setTimeout(()=>{ //延时指定时间后，再解冻
                 this.saveButtonDisable = false;
+                this.isEditing = false;
               }, 2000);
             }else {
               console.log("出了点问题 信息如下：",result)
@@ -316,11 +335,18 @@
           top:'0',
           marginTop:'25px'
         }
-      }
+      },
     },
 
     mounted() {
-        this.getUserInfo();
+        console.log("输出 传递过来的值：",this.$route.params.open_id);
+        //获取当前登录用户细信息
+        this.getUserInfo(this.$route.params.open_id);
+    },
+
+    beforeRouteUpdate(to,from,next){
+        next();
+        this.getUserInfo(this.$route.params.open_id);
     }
 
   }
@@ -338,21 +364,24 @@
     padding: 0;
     margin: 0;
   }
-
+  /*  心愿墙文本域部分 */
   .wish_textarea{
     min-height: 150px;
     width: 100%;
     resize: none;
     padding: 5px;
-    border: none;
+    border-radius: 3px;
+    border: 2px solid lightskyblue;
+    /*border: none;*/
   }
-
+  /*  个人描述文本域部分  */
   .personal_textarea{
     resize: none;
     padding: 5px;
     min-height: 200px;
     font-size: 18px;
     background-color: white;
+    border: 2px solid lightskyblue;
   }
 
   .personal{
@@ -373,7 +402,7 @@
     font-size: 18px;
   }
 
-
+  /*  文章统计部分  */
   .article_count div{
     font-size: 15px;
     display: block;
@@ -385,7 +414,6 @@
     font-family: "Microsoft YaHei UI Light",serif ;
     font-weight: normal;
   }
-
   .article_count div span{
     font-size: 16px;
     font-weight: normal;
@@ -393,38 +421,29 @@
     color: #000;
   }
 
+  /* 用户头像裁剪部分 */
   .cropper-content{
     width: 100%;
     height: 100%;
   }
-
   .cropper{
     width: 100%;
   }
 
-
-  .userInfo input{
-    border: none;
-    border-radius: 3px;
-    background-color: white;
-    margin: 1px 15px;
-    width: auto;
+  /*用户基本信息部分*/
+  .userBaseInfo input{
+    border: 2px solid lightskyblue;
   }
-
-  .userInfo div{
+  .userBaseInfo div{
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 5px;
     /*border: 1px solid red;*/
   }
-
-
-  .userInfo-nickname input{
-    margin: 1px 0;
-    font-size: 20px;
-    line-height: 40px;
+  /*用户昵称输入框*/
+  .userBaseInfo-nickname span, .userBaseInfo-nickname input{
+    font-size: 25px;
     font-weight: bold;
   }
-
 
 </style>
