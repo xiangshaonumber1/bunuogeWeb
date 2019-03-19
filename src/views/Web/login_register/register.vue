@@ -130,11 +130,6 @@
               { validator: validateCheckPassword, trigger: 'blur' }
             ]
           },
-          formLeft: {
-            input1: '',
-            input2: '',
-            input3: ''
-          },
         }
       },
       methods:{
