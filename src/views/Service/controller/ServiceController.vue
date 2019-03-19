@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
 
-    <Row type="flex">
+    <Row v-if="isAdmin" type="flex">
       <!-- 左侧，导航栏 -->
       <Col span="4" class="layout-menu-left">
         <Menu :theme="theme" width="auto" style="height: 100%">
@@ -43,13 +43,13 @@
         name: "ServiceController",
       data(){
           return{
-            animal: '爪哇犀牛',
+            isAdmin:false,    //判断当前用户是否是管理员
             submenuList:[
               //每一个父菜单和其子菜单的所有设置
               {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
                 childList:[
                   {child_title:'统计详情',child_index:'1-1',to_path:'service_blog_state'},
-                  {child_title:'个人详情',child_index:'1-2',to_path:'service_personal_info'},
+                  {child_title:'个人详情',child_index:'1-2',to_path:'service_user_info'},
                 ]},
               {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
                 childList:[
@@ -87,11 +87,12 @@
 
       //**********************  methods star ****************************
       methods: {
+
+        //前往首页
         goHome:function(){
           console.log("跳转到首页");
           this.$router.push({name:'home'})
         },
-
 
         //实现点击面板，传递子菜单
         TabClick:function(){
@@ -145,6 +146,7 @@
 
         //获取上次打开后未关闭的和已激活的页面
         getOpenAndActivePage(){
+          console.log("getOpenAndActivePage 我正在执行");
           var open = localStorage.getItem("open-names");
           var active = localStorage.getItem("active-name");
           if (null != open){
@@ -184,20 +186,17 @@
           const result = await this.$apis.AdminApi.service_login();
           console.log("输出 result 值",result);
           if (!result){
-            this.$Notice.warning({
-              title:'拒绝访问提示：',
-              desc:'您的权限不够，无法继续访问！'
-            });
-            this.$router.push({name:'index'})
+            return this.$router.push({name:'index'})
           }
+          this.isAdmin = result;
+          this.getOpenAndActivePage();
         }
       },
       //**********************  methods end ****************************
 
       //此钩子中函数一般会做一些ajax请求获取数据进行数据初始化，mounted 在整个实例中只执行一次
       mounted() {
-          this.service_login();
-          this.getOpenAndActivePage();
+        this.service_login();
       },
 
       //实例销毁完成执行的钩子，跳转到其他页面时，清空保存的open-names和active-name

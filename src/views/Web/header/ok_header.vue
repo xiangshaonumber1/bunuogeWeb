@@ -144,7 +144,7 @@
             case 'userCenter'://前往个人信息
               this.$router.push({name:'web_userInfo',params:{open_id:this.$store.getters.openID}});break;
             case 'userSetting'://前往用户设置，默认展示账号信息
-              this.$router.push({name:'account_info',params:{open_id:this.$store.getters.openID}});break;
+              this.$router.push({name:'update_password',params:{open_id:this.$store.getters.openID}});break;
             case 'userManager'://前往管理中心
               this.$router.push({name:'userManager'});break;
             case 'userFeedback'://前往帮助与反馈

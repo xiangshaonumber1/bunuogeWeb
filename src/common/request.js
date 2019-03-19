@@ -71,7 +71,7 @@ request.interceptors.response.use(response=>{
       });
       break;
 
-    case '407': //表示没有足够酒店 权限 或者 身份
+    case '407': //表示没有足够的 权限 或者 身份
       Notice.warning({
         title:'无权访问提示：',
         desc:response.data.msg,

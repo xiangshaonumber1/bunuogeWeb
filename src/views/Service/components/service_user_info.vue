@@ -7,7 +7,7 @@
         <i-col span="5">
           <div class="text-center">
             <img :src="userInfo.userIcon" alt="..." class="img-circle img-thumbnail" style="width: 135px;height: 135px;">
-            <Upload v-if="isOneself && isEditing"
+            <Upload v-if="isOneself"
                     action="upload_url"
                     :before-upload="handleUpload">
               <Button style="margin-top: 10px" size="large">上传头像</Button>
@@ -252,7 +252,7 @@
         async getUserInfo(openID){
 
           this.isOneself = (this.$route.params.open_id === this.$store.getters.openID);
-          console.log(" 查询目标，是否是当前用户自己：",this.isOneself)
+          console.log(" 查询目标，是否是当前用户自己：",this.isOneself);
 
           const result = await this.$apis.UserApi.getUserInfo(openID);
           console.log("输出获取到的getMyUserInfo信息：",result);

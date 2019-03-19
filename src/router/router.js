@@ -33,24 +33,26 @@ import Web_messageWall from '../views/Web/mainContent/web_messageWall'
 
 import Setting from '../views/Web/mainContent/web_setting'
 import Setting_update_pw from '../views/Web/mainContent/setting/setting_update_pw'
-import Setting_account_info from '../views/Web/mainContent/setting/setting_account_info'
 
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
-  {path:'/', component: App,children:[                                                  //
+
+  {path:'/', component: App,children:[
       {path:'',component:Index, name:'index'},                                          //首页
       {path:'message',component:Web_messageWall, name:'message_wall'},
       {path:'search/:key_word',component:Web_search, name:'web_search'},                    //搜索结果页面
+      //用户信息相关
       {path:'user/:open_id',component:Web_user,
         children:[
           {path: 'info', component: UserInfo, name:"web_userInfo"},                 //用户信息页面(可公开信息)
           {path: 'articles', component: DataArticles, name:"web_data_articles"},        //用户文章数据页
           {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页(只显示作者设置为公开的)
         ]},
+
+      //用户设置相关
       {path:'setting/:open_id',component:Setting,                                       //个人设置的导航页
         children:[
-          {path: 'account_info', component:Setting_account_info, name:"account_info"},   //账户信息
           {path: 'update_pd', component:Setting_update_pw, name:"update_password"},     //修改密码
         ]},
     ]},
@@ -67,12 +69,14 @@ const routes = [
   {path:'/feedback',component:Web_feedBack, name:'web_feedback'},                           //意见反馈页
   {path:'/home', component: Home, name:"home"},                                         //个人博客页
 
-  {path: '/welcome', component: Welcome,                                                        //登录注册页
+  //登录页面
+  {path: '/', component: Welcome,                                                        //登录注册页
     children:[
       {path:'login',component:Login, name:"login"},                                             //登录页
       {path:'register' , component: Register , name:"register"}                                 //注册页
     ]},
 
+  //后台管理相关
   {path:"/ServiceController", component: Controller, name:"ServiceController",                  //后台管理首页
     children:[
       {path: 'blogState',component: BlogTotal,name:"service_blog_state"},                       //博客统计
@@ -86,7 +90,7 @@ const routes = [
       {path: 'identityLink',component: LinkEdit, name:"service_identity_link"},                 //链接管理
       {path: 'whitePage',component: White, name:"service_white_page"},                          //空白页
     ]},
-
+  //404页面配置
   {path:'*',component:NotFound,name:'404'},                                          //404
 
 ];
