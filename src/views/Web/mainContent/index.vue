@@ -368,13 +368,17 @@
   }
 
   .articles-content{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 3;
-    /*autoprefixer: off;*/
-    -webkit-box-orient: vertical;
-    /*autoprefixer: on;*/
-    display:-webkit-box;
+    overflow: hidden;   /* 超出容器隐藏，不然会撑破容器。 */
+
+    text-overflow: ellipsis;    /* 可以用来多行文本的情况下，用省略号“...”隐藏超出范围的文本 。 */
+    display:-webkit-box;    /* 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示 。 */
+    /*! autoprefixer: off */
+    -webkit-line-clamp: 3;      /* -webkit-box-orient: vertical;这行样式上下需要加上上文中的注释，否则用webpack后-webkit-box-orient样式会丢失  需要显示的文本行数 */
+    /* autoprefixer: on */
+    -webkit-box-orient: vertical;   /* 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 。 */
+
+    word-wrap:break-word;
+    white-space: pre-wrap;
   }
 
   .articles-info{

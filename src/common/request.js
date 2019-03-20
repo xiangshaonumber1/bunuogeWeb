@@ -5,10 +5,11 @@
 import axios from 'axios';
 import {Message,Notice} from 'iview'
 import router from '../router/router'
+import store from '../blog_vuex/store'
 
 //axios默认设置
 const request = axios.create({
-  baseURL:'http://localhost:8888',
+  baseURL: store.getters.serverPath,
   timeout:'10000',
   // retry:4,
   // retryDelay:1000,
@@ -34,6 +35,7 @@ request.interceptors.request.use(config=>{
 
 //响应拦截器,http请求后，后台返回的一些状态码，包括我们自己的服务器返回的错误码进行一个逻辑处理
 request.interceptors.response.use(response=>{
+  console.log("响应拦截器中输出：",response);
   /*
   * 不拦截的有 200，402
   * 200 变成正常，不用拦截，
