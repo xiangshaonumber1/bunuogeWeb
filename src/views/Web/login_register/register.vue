@@ -66,31 +66,22 @@
         name: "register",
       data() {
           //邮箱验证
-          const validateEmail = (rule,value,callback)=>{
-            //邮箱验证正则表达式
-            var emailRule = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-
-            if (value === null ){//判断用户是否有输入
+          const validateEmail = async (rule, value, callback) => {
+            var emailRule = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/; //邮箱验证正则表达式
+            if (value === null) {//判断用户是否有输入
               return callback(new Error("邮箱作为您的登录凭证，必须输入！"));
             }
-
-            console.log("正则表达式结果：",emailRule.test(value));
-
-            if (!emailRule.test(value)){//判断用户输入的邮箱，是否符合规范
-              return callback(new Error("邮箱格式有误，请检查"))
+            if (!emailRule.test(value)) {//判断用户输入的邮箱，是否符合规范
+              return callback(new Error("邮箱格式有误，请检查"));
             }
-
-            const result = this.$apis.AuthenticationApi.isExist(this.registerInfo.email);
-            console.log(" register result : ",result);
-            if (result){
-              this.ok_email = true;
-              return callback();
-            } else {
+            const result = await this.$apis.AuthenticationApi.isExist(this.registerInfo.email);
+            if (!result) {
               return callback(new Error("该邮箱已被注册，请换一个邮箱再继续"))
             }
-
-
+            this.ok_email = true;
+            return callback();
           };
+
           //密码格式验证
           const validatePassword = (rule,value,callback)=>{
             if (value === null || value.length <6 || value.length >18 ){

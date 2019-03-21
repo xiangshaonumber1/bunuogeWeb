@@ -19,10 +19,7 @@ export const clearLoginInfo = (state)=>{
     console.log("mutations: 用户退出登录，执行清除用户登录信息");
     localStorage.clear();
     sessionStorage.clear();
-    state.openID = null;
-    state.nickname = null;
-    state.avatar = null;
-    state.isLogin = 'false';
+    new state();
 };
 
 /**

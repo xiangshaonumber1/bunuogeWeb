@@ -126,6 +126,7 @@
     import Loading from "../loading/loading";
     import NotFound from "./404";
     import BlogFooter from "../footer/footer";
+    import store from '../../../blog_vuex/store'
 
     export default {
         name: "index",
@@ -249,7 +250,7 @@
           const result = await this.$apis.CommonApi.getPostList();
           if (result){
             for (let i=0;i<result.length;i++){ //为获取到的图片路径，添加服务器地址
-              result[i] = this.$store.getters.serverPath+result[i];
+              result[i] = store.getters.serverPath+result[i];
             }
             this.posterList = result;
           }else{

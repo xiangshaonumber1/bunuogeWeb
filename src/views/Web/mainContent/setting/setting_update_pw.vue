@@ -33,14 +33,12 @@
               <Input type="password" v-model="updateInfo.email_confirm_pw" placeholder="请输入再次输入您的新密码" size="large"/>
             </form-item>
             <!--iview 的方法有问题，同样的代码，第一个 append 不能加上去，第二个append 能加上去, what the fuck -->
-
             <form-item label="邮箱验证码" prop="email_code">
               <div class="input-group">
                 <input type="text" v-model="updateInfo.email_code" class="form-control" placeholder="请输入我们发送到您邮箱的验证码"></input>
-                <span class="input-group-btn"><button class="btn btn-default" type="button">发送验证码</button></span>
+                <span class="input-group-btn"><button class="btn btn-default" type="button" @click="request_mailCode" >发送验证码</button></span>
               </div>
             </form-item>
-
             <form-item>
               <Button type="info"><span style="font-size: 16px">&emsp;确&nbsp;认&nbsp;修&nbsp;改&emsp;</span></Button>&emsp;
               <a style="font-size: 16px" @click="change_update_way('email')">记得密码，通过旧密码修改 >></a>
@@ -90,6 +88,8 @@
             return callback(new Error("两次输入的密码不一致，请检查后继续"))
           }
         };
+
+
         return{
             update_way:'password',  //密码的修改方式
             updateInfo:{  //所有修改信息
@@ -115,16 +115,21 @@
       },
 
       methods:{
-
-          //切换修改密码的方式
-          change_update_way(name){
-            this.$refs[name].resetFields();
-            if (this.update_way === 'password'){
-              this.update_way = 'email';
-            }else {
-              this.update_way = 'password';
-            }
+        //切换修改密码的方式
+        change_update_way(name){
+          this.$refs[name].resetFields();
+          if (this.update_way === 'password'){
+            this.update_way = 'email';
+          }else {
+            this.update_way = 'password';
           }
+        },
+
+        //获取邮箱验证码请求
+        request_mailCode(){
+          //请求发送验证码
+          this.$apis.UserApi.mailCode(this.$store.getters.openID,"update_encrypt");
+        },
       }
     }
 </script>

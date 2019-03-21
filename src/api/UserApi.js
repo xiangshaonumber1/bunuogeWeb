@@ -16,19 +16,15 @@ const user = {
       url:'/user/request_mail',
       method:'get',
       params:{
-        userMail:email,
+        value:email,
         type:type
       }
     }).then(res=>{
-      if (res.status === 200){
+      console.log("发送邮件输出:",res);
+      if (res.data.data){
         Notice.success({
           title:'邮件发送成功',
           desc:'邮件已成功发送，请注意查收'
-        })
-      }else {
-        Notice.error({
-          title:'邮箱验证码发送失败',
-          desc:'网络连接异常，请检查后再继续',
         })
       }
     })

@@ -103,7 +103,6 @@ const authentication = {
     });
    },
 
-
   //判断邮箱是否可用（已注册）
   isExist(email){
     return request({
@@ -113,7 +112,6 @@ const authentication = {
         username:email,
       }
     }).then( res =>{
-      console.log("isExist : ",res);
       return res.data.code === '200';
     })
   },

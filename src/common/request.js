@@ -35,7 +35,6 @@ request.interceptors.request.use(config=>{
 
 //响应拦截器,http请求后，后台返回的一些状态码，包括我们自己的服务器返回的错误码进行一个逻辑处理
 request.interceptors.response.use(response=>{
-  console.log("响应拦截器中输出：",response);
   /*
   * 不拦截的有 200，402
   * 200 变成正常，不用拦截，
@@ -76,6 +75,13 @@ request.interceptors.response.use(response=>{
     case '407': //表示没有足够的 权限 或者 身份
       Notice.warning({
         title:'无权访问提示：',
+        desc:response.data.msg,
+      });
+      break;
+
+    case '408': //邮件发送失败
+      Notice.warning({
+        title:'请求验证码失败提示：',
         desc:response.data.msg,
       });
       break;
