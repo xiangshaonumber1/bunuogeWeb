@@ -5,6 +5,7 @@ import request from '../common/request'
 import {Notice} from  'iview'
 import AuthenticationApi from './AuthenticationApi'
 import qs from  'qs'
+import router from '../router/router'
 
 const user = {
 
@@ -130,6 +131,41 @@ const user = {
       return res.data.data;
     });
   },
+
+  /**
+   * @param new_pw 新密码
+   * @param old_pw 旧密码
+   * @param mail_code 邮箱验证码
+   * @param type 修改方式(password,email)
+   */
+  update_pw(new_pw,old_pw,mail_code,type){
+    return request({
+      url:'/user/update_pw',
+      method:'post',
+      data:qs.stringify({
+        new_password:new_pw,
+        old_password:old_pw,
+        mail_code:mail_code,
+        type:type
+      })
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result)
+          return this.update_pw(new_pw,old_pw,mail_code,type);
+        else
+          return null;
+      }else if(res.data.code === '200') {
+        Notice.success({
+          title:'密码修改成功：',
+          desc: res.data.msg,
+        });
+        return router.push({name:'login'})
+      }else {
+        return res.data;
+      }
+    })
+  }
 
 };
 
