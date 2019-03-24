@@ -15,7 +15,7 @@
               <Input type="password" v-model="updateInfo.password_confirm_pw" placeholder="请输入再次输入您的新密码" size="large"/>
             </form-item>
             <form-item>
-              <Button type="info" @click="update_pw()"><span style="font-size: 16px">&emsp;确&nbsp;认&nbsp;修&nbsp;改&emsp;</span></Button>&emsp;
+              <Button type="info" @click="update_pw('password')"><span style="font-size: 16px">&emsp;确&nbsp;认&nbsp;修&nbsp;改&emsp;</span></Button>&emsp;
               <a style="font-size: 16px" @click="change_update_way('password')">忘记密码？邮箱修改密码 >></a>
             </form-item>
           </i-form>
@@ -41,7 +41,7 @@
               </div>
             </form-item>
             <form-item>
-              <Button type="info" @click="update_pw"><span style="font-size: 16px">&emsp;确&nbsp;认&nbsp;修&nbsp;改&emsp;</span></Button>&emsp;
+              <Button type="info" @click="update_pw('email')"><span style="font-size: 16px">&emsp;确&nbsp;认&nbsp;修&nbsp;改&emsp;</span></Button>&emsp;
               <a style="font-size: 16px" @click="change_update_way('email')">记得密码，通过旧密码修改 >></a>
             </form-item>
           </i-form>
@@ -69,8 +69,6 @@
 
         //新密码检验
         const new_pw = (rule,value,callback)=>{
-          console.log(" new_pw 输出 value：",value);
-          console.log(" new_pw 输出 value：",value.length);
           if (value.length<6 || value.length>18){
             return callback(new Error("密码的有效长度应不低于6位，且不大于18位"))
           }
@@ -79,16 +77,14 @@
 
         //确认密码检验
         const confirm_pw = (rule,value,callback)=>{
-          console.log(" confirm_pw 输出 value：",value);
-          console.log(" confirm_pw 输出 this.updateInfo.password_new_pw：",this.updateInfo.password_new_pw);
-          if (this.update_way === 'password' && this.updateInfo.password_new_pw ===  value ){
-            console.log(" update_way password");
+          if (this.update_way === 'password' && this.updateInfo.password_new_pw ===  value && value.length>0){
             return callback();
-          } else if (this.update_way === 'email' && this.updateInfo.email_new_pw === value) {
-            console.log(" update_way email");
+          } else if (this.update_way === 'email' && this.updateInfo.email_new_pw === value && value.length>0) {
             return callback();
+          }else if (value.length === 0) {
+            return callback(new Error("确认密码不能为空！"));
           }else {
-            return callback(new Error("两次输入的密码不一致，请检查后继续"))
+            return callback(new Error("两次输入的密码不一致，请检查后继续"));
           }
         };
 
@@ -135,17 +131,22 @@
         },
 
         //修改密码的请求
-        async update_pw() {
-          // return console.log("6666");
-          let new_pw = null;
-          let old_pw = null;
-          if (this.update_way === 'password'){
-            new_pw = this.updateInfo.password_new_pw;
-            old_pw = this.updateInfo.password_old_pw;
-          }else if (this.update_way === 'email'){
-            new_pw = this.updateInfo.email_new_pw;
-          }
-          await this.$apis.UserApi.update_pw(new_pw,old_pw,this.updateInfo.email_code,this.update_way);
+        update_pw(name) {
+         return this.$refs[name].validate(async (valid) => { //判断所有的验证是否通过
+           if (valid) {
+             //如果通过，则继续执行
+             let new_pw = null;
+             let old_pw = null;
+             if (this.update_way === 'password') {
+               new_pw = this.updateInfo.password_new_pw;
+               old_pw = this.updateInfo.password_old_pw;
+             } else if (this.update_way === 'email') {
+               new_pw = this.updateInfo.email_new_pw;
+             }
+             return await this.$apis.UserApi.update_pw(new_pw, old_pw, this.updateInfo.email_code, this.update_way);
+           }
+           //如果没有通过，则什么也不做
+         });
         },
 
       }

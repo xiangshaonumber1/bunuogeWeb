@@ -51,7 +51,7 @@ request.interceptors.response.use(response=>{
       break;
 
     case '403': // 服务器请求成功，但有，比如注册失败，登录失败，等等失败操作
-      Notice.info({
+      Notice.error({
         title: "验证失败：",
         desc: response.data.msg,
       });
