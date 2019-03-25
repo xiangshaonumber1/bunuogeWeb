@@ -23,8 +23,11 @@ import Register from '../views/Web/login_register/register'
 import Login from '../views/Web/login_register/login'
 import Identity from '../views/Service/components/service_identity_user'
 import LinkEdit from '../views/Service/components/service_link_edit'
-import Web_articleInfo from '../views/Web/mainContent/web_articleInfo'
-import Web_diaryInfo from '../views/Web/mainContent/web_diaryInfo'
+
+import Web_articleInfo from '../views/Web/mainContent/ArticleInfo/web_articleInfo'
+import Web_diaryInfo from '../views/Web/mainContent/ArticleInfo/web_diaryInfo'
+import CommentAndReply from '../views/Web/mainContent/ArticleInfo/commentAndReply'
+
 import Web_feedBack from '../views/Web/mainContent/web_feedback'
 import NotFound from '../views/Web/mainContent/404'
 import Web_search from '../views/Web/mainContent/web_searchInfo'
@@ -38,10 +41,14 @@ import Setting_update_pw from '../views/Web/mainContent/setting/setting_update_p
 //  每个路由应该映射一个组件
 const routes = [
 
+  //首页
   {path:'/', component: App,children:[
-      {path:'',component:Index, name:'index'},                                          //首页
+      //首页详情
+      {path:'',component:Index, name:'index'},
+      //留言墙
       {path:'message',component:Web_messageWall, name:'message_wall'},
-      {path:'search/:key_word',component:Web_search, name:'web_search'},                    //搜索结果页面
+      //搜索详情
+      {path:'search/:key_word',component:Web_search, name:'web_search'},
       //用户信息相关
       {path:'user/:open_id',component:Web_user,
         children:[
@@ -57,30 +64,48 @@ const routes = [
         ]},
     ]},
 
-  {path:"/article/:article_id",component:Web_articleInfo, name:'web_articleInfo'},     //文章详情
-  {path:"/diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo'},     //日记详情页面
 
-  {path:'/article/update/:article_id',component:WriteArticle,name:'article_update'},          //用户文章修改页
-  {path:'/diary/update/:diary_id',component:WriteDiary, name:'diary_update'},    //用户修改日记页面
 
-  {path:'/write/article',component:WriteArticle,name:'web_write_article'},          //用户文章编辑页
-  {path:'/write/diary',component:WriteDiary,name:'web_write_diary'},          //用户文章编辑页
+  //文章详情
+  {path:"/article/:article_id",component:Web_articleInfo, name:'web_articleInfo',
+    children:[
+      {path:'',component:CommentAndReply}
+    ]},
+  //日记详情页面
+  {path:"/diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo',children:[
+      {path:'',component:CommentAndReply}
+    ]},
 
-  {path:'/feedback',component:Web_feedBack, name:'web_feedback'},                           //意见反馈页
-  {path:'/home', component: Home, name:"home"},                                         //个人博客页
+
+  //用户文章修改页
+  {path:'/article/update/:article_id',component:WriteArticle,name:'article_update'},
+  //用户修改日记页面
+  {path:'/diary/update/:diary_id',component:WriteDiary, name:'diary_update'},
+
+  //用户文章编辑页
+  {path:'/write/article',component:WriteArticle,name:'web_write_article'},
+  //用户文章编辑页
+  {path:'/write/diary',component:WriteDiary,name:'web_write_diary'},
+
+  //意见反馈页
+  {path:'/feedback',component:Web_feedBack, name:'web_feedback'},
+  //个人博客页
+  {path:'/home', component: Home, name:"home"},
 
   //登录页面
-  {path: '/', component: Welcome,                                                        //登录注册页
+  {path: '/', component: Welcome,
     children:[
-      {path:'login',component:Login, name:"login"},                                             //登录页
-      {path:'register' , component: Register , name:"register"}                                 //注册页
+      //登录页
+      {path:'login',component:Login, name:"login"},
+      //注册页
+      {path:'register' , component: Register , name:"register"}
     ]},
 
   //后台管理相关
   {path:"/ServiceController", component: Controller, name:"ServiceController",                  //后台管理首页
     children:[
       {path: 'blogState',component: BlogTotal,name:"service_blog_state"},                       //博客统计
-      {path: 'personalInfo', component: UserInfo, name:"service_user_info"},            //个人数据
+      {path: 'personalInfo', component: UserInfo, name:"service_user_info"},                    //个人数据
       {path: 'writeArticle', component: WriteArticle, name:"service_write_article"},            //文章编辑
       {path: 'writeDiary', component: WriteDiary, name:"service_write_diary"},                  //日记编辑
       {path: 'dataArticles', component: DataArticles, name:"service_data_articles"},            //文章数据

@@ -100,6 +100,13 @@
 
           </i-col>
         </Row>
+
+        <!--评论和回复-->
+        <Row type="flex" justify="center" class="code-row-bg row-commentAndReply">
+          <i-col span="12">
+            <router-view></router-view>
+          </i-col>
+        </Row>
       </div>
 
       <Divider />
@@ -121,9 +128,9 @@
 
 <script>
 
-    import NotFound from "./404";
-    import OkHeader from "../header/ok_header";
-    import Loading from "../loading/loading";
+    import NotFound from "../404";
+    import OkHeader from "../../header/ok_header";
+    import Loading from "../../loading/loading";
 
     export default {
       name: "articleInfo",
@@ -323,8 +330,6 @@
 
 
 
-
-
   span{
     font-size: 16px;
   }
@@ -338,23 +343,35 @@
     padding: 0;
     margin: 0;
   }
-
+  /* 标题行 */
   .row-title{
     padding: 30px 0;
   }
 
+  /* 主要内容行 */
   .row-content{
     padding: 20px 0;
   }
 
+  /* 文章态度行 收藏，喜欢 */
   .row-likeButton{
     padding: 30px 0;
   }
 
+  /* 评论和回复信息行 */
+  .row-commentAndReply{
+    margin-top: 150px;
+    /*margin-bottom: 120px;*/
+    border: 1px solid red;
+  }
+
+  /* 文章标题 */
   .article_title{
     font-size: 30px;
     font-weight: bold;
   }
+
+
 
   .article_title >>> .ivu-tag{
     font-size: 20px;

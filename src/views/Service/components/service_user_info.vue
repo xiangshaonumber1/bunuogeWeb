@@ -22,7 +22,7 @@
             <!--用户昵称-->
             <div class="userBaseInfo-nickname">
               <input v-if="isOneself && isEditing" class="form-control" type="text" v-model="userInfo.nickname" style="width: 100%"></input>
-              <span v-else>{{userInfo.nickname}}</span>
+              <span v-else v-html="userInfo.nickname"></span>
             </div>
 
             <!--用户活跃天数-->
@@ -265,7 +265,7 @@
             this.userInfo = result;
             this.userInfo.label = JSON.parse(result.label);
             this.userInfo.userIcon = this.$store.getters.serverPath+JSON.parse(result.userIcon)[0];
-            this.userInfo.nickname = this.replaceHtml(result.nickname);
+            this.userInfo.nickname = result.nickname;
           }
         },
 

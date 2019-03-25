@@ -358,8 +358,34 @@ const article = {
     }).then( res =>{
       return res.data.data;
     })
-  }
+  },
 
+  /**
+   * 获取指定ID的文章的评论和评论下的回复信息
+   */
+  getCommentAndReplyInfo(articleID,page){
+    return request({
+      url:'/article/getCommentAndReplyInfo',
+      method:'get',
+      params:{
+        articleID:articleID,
+        page:page
+      }
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.getCommentAndReplyInfo(articleID,page);
+        }else {
+          return null;
+        }
+      }else if (res.data.code === '404'){
+        return null;
+      }else {
+        return res.data.data;
+      }
+    })
+  }
 };
 
 export default article

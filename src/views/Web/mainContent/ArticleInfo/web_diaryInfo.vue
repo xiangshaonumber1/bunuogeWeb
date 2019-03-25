@@ -93,9 +93,9 @@
 </template>
 
 <script>
-    import Loading from "../loading/loading";
-    import NotFound from "./404";
-    import OkHeader from "../header/ok_header";
+    import Loading from "../../loading/loading";
+    import NotFound from "../404";
+    import OkHeader from "../../header/ok_header";
     export default {
         name: "web_diaryInfo",
       components: {OkHeader, NotFound, Loading},
