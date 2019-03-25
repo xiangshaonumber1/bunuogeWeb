@@ -1,6 +1,8 @@
 <template>
     <div class="commentAndReply">
-      <Row type="flex" class="code-row-bg" aligen="middle" justify="start">
+
+      <!--个人评论编辑区-->
+      <Row type="flex" class="code-row-bg" align="middle" justify="start">
         <i-col style="line-height: 40px" span="24">
           <img :src="this.$store.getters.avatar" alt="..." class="img-circle" width="40px">
           <span style="font-size: 18px" v-html="this.$store.getters.userInfo.nickname"></span><br>
@@ -11,10 +13,24 @@
 
       <div>
         <!--文章的评论信息-->
-        <div>
+        <div v-for="(commentAndReplyInfo,index) in commentAndReplyInfoList">
+          <Row type="flex" class="code-row-bg" justify="start">
+            <i-col span="24">
+              <img :src="commentAndReplyInfo.from_userIcon" alt="..." class="img-circle" width="40px">
+              <span style="font-size: 16px;line-height: 20px" v-html="commentAndReplyInfo.from_nickname"></span>
+              <span style="font-size: 16px;line-height: 20px" v-html="commentAndReplyInfo.comment_time"></span>
 
+              <br>
+              <div>
+                <p v-html="commentAndReplyInfo.comment_content"></p>
+              </div>
+
+            </i-col>
+          </Row>
           <!--文章评论下的回复信息-->
-          <div></div>
+          <div v-if="comment">
+
+          </div>`
 
         </div>
 
@@ -48,6 +64,9 @@
         async getCommentAndReplyInfo(articleID){
           const result = await this.$apis.ArticleApi.getCommentAndReplyInfo(articleID,1);
           if (result){
+            for (let info of result){
+              info.from_userIcon = this.$store.getters.serverPath+JSON.parse(info.from_userIcon)[0];
+            }
             this.commentAndReplyInfoList = result;
             console.log("输出信息看看：",this.commentAndReplyInfoList);
           }else {

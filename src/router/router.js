@@ -67,9 +67,9 @@ const routes = [
 
 
   //文章详情
-  {path:"/article/:article_id",component:Web_articleInfo, name:'web_articleInfo',
+  {path:"/article/:article_id",component:Web_articleInfo,
     children:[
-      {path:'',component:CommentAndReply}
+      {path:'/',component:CommentAndReply,name:'web_articleInfo',}
     ]},
   //日记详情页面
   {path:"/diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo',children:[

@@ -372,6 +372,7 @@ const article = {
         page:page
       }
     }).then( async res => {
+      console.log("请求评论和回复结果：",res.data);
       if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result){

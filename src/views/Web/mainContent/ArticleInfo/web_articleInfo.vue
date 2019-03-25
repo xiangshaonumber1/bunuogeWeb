@@ -102,11 +102,12 @@
         </Row>
 
         <!--评论和回复-->
-        <Row type="flex" justify="center" class="code-row-bg row-commentAndReply">
+        <Row type="flex" align="middle" justify="center" class="code-row-bg row-commentAndReply">
           <i-col span="12">
             <router-view></router-view>
           </i-col>
         </Row>
+
       </div>
 
       <Divider />
@@ -360,7 +361,7 @@
 
   /* 评论和回复信息行 */
   .row-commentAndReply{
-    margin-top: 150px;
+    margin-top: 50px;
     /*margin-bottom: 120px;*/
     border: 1px solid red;
   }

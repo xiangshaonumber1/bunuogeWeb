@@ -190,14 +190,12 @@
                * 情况三：如果下一页没有数据（上一页正好加载完）,则 return 允许加载下一页数据为false,不做处理
                */
               if (result === null){
-                console.log("情况三：上一页正好加载完数据");
                 return this.loadMore = false;
               }
               /**
                * 情况四：如果本页数据不足5条，则本页是最后一页，设置允许加载下一页为false,并继续执行，把现有的数据添加的数组元素中
                */
               if (result.length < 5){
-                console.log("情况四");
                 this.loadMore = false;
               }
               //只有在loadMore为true的情况下，才允许page+1
@@ -213,7 +211,6 @@
               }
               //数据加载完毕，启用滚动加载开关，可滚动加载数据
               this.scrollLoadSwitch = true;
-              console.log("push 后 输出 this.articleList 长度：",this.articleList.length);
             }
           }else {
             this.$Message.info({
