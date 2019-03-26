@@ -43,7 +43,7 @@ const routes = [
 
   //首页
   {path:'/', component: App,children:[
-      //首页详情
+      //首页详情，默认子组件
       {path:'',component:Index, name:'index'},
       //留言墙
       {path:'message',component:Web_messageWall, name:'message_wall'},
@@ -68,12 +68,13 @@ const routes = [
 
   //文章详情
   {path:"/article/:article_id",component:Web_articleInfo,
-    children:[
-      {path:'/',component:CommentAndReply,name:'web_articleInfo',}
+    children:[  //默认子组件，父组件不需要name
+      {path:'',component:CommentAndReply,name:'web_articleInfo',}
     ]},
   //日记详情页面
-  {path:"/diary/:diary_id",component:Web_diaryInfo, name:'web_diaryInfo',children:[
-      {path:'',component:CommentAndReply}
+  {path:"/diary/:diary_id",component:Web_diaryInfo,
+    children:[  //默认子组件，父组件不需要name
+      {path:'',component:CommentAndReply,name:'web_diaryInfo'}
     ]},
 
 

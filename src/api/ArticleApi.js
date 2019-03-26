@@ -386,7 +386,49 @@ const article = {
         return res.data.data;
       }
     })
-  }
+  },
+
+
+  /**
+   * 评论一篇文章
+   * @param articleID 文章ID
+   * @param from_openID 评论者ID
+   * @param comment_content 评论内容
+   */
+  write_comment(articleID,from_openID,comment_content) {
+    return request({
+      url:'',
+      method:'post',
+      data:qs.stringify({
+        articleID:articleID,
+        from_openID:from_openID,
+        comment_content:comment_content
+      })
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result) {
+          return this.write_comment(articleID,from_openID,comment_content);
+        }else {
+          return null;
+        }
+      }else {
+        return res.data.data;
+      }
+    })
+  },
+
+  /**
+   * 给评论或者评论下回复，添加一条新的回复
+   * @param replyInfo
+   * replyInfo.commentID : 该条回复属于哪条评论下
+   *
+   */
+  write_reply(replyInfo) {
+
+  },
+
 };
+
 
 export default article

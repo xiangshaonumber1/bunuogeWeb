@@ -104,13 +104,13 @@
         <!--评论和回复-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-commentAndReply">
           <i-col span="12">
+            <Divider />
             <router-view></router-view>
           </i-col>
         </Row>
 
+        <Divider style="margin-top: 100px"/>
       </div>
-
-      <Divider />
 
       <!--返回顶部-->
       <BackTop></BackTop>
@@ -253,7 +253,6 @@
 
         //前往用户详情页面
         goUserInfo(){
-          console.log("前往用户信息：");
           this.$router.push({name:'web_userInfo',params:{open_id:this.ArticleInfo.openID}})
         },
       },
@@ -363,7 +362,7 @@
   .row-commentAndReply{
     margin-top: 50px;
     /*margin-bottom: 120px;*/
-    border: 1px solid red;
+    /*border: 1px solid red;*/
   }
 
   /* 文章标题 */
