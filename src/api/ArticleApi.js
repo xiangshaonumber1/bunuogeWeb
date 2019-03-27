@@ -397,7 +397,7 @@ const article = {
    */
   write_comment(articleID,from_openID,comment_content) {
     return request({
-      url:'',
+      url:'/article/write_comment',
       method:'post',
       data:qs.stringify({
         articleID:articleID,
@@ -425,7 +425,28 @@ const article = {
    *
    */
   write_reply(replyInfo) {
-
+    return request({
+      url:'/article/write_reply',
+      method:'post',
+      data:qs.stringify({
+        articleID:replyInfo.articleID,
+        commentID:replyInfo.commentID,
+        from_openID:replyInfo.from_openID,
+        reply_content:replyInfo.reply_content,
+        to_openID:replyInfo.to_openID
+      })
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result){
+          return this.write_reply(replyInfo);
+        }else{
+          return null
+        }
+      }else {
+        return res.data.data;
+      }
+    })
   },
 
 };

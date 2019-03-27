@@ -38,7 +38,7 @@
             </div>
 
             <!--文章评论下的回复信息，有则加载，无则不加载-->
-            <div class="div-replyInfo">
+            <div v-if="commentAndReplyInfo.replyInfoList.length >0" class="div-replyInfo">
               <div >
                 <Timeline>
                   <TimelineItem color="rgb(45, 140, 240)" v-for="(replyInfo,reply_index) in commentAndReplyInfo.replyInfoList" :key="reply_index">
@@ -95,8 +95,15 @@
               top: 200
             })
           }
-          //参数未加
-          const result = await this.$apis.ArticleApi.write_comment();
+          console.log("输出 articleID:", this.$route.params.article_id,);
+          //参数未加 我为自己刚发布的一篇文章新增一条评论
+          const result = await this.$apis.ArticleApi.write_comment(this.$route.params.article_id, this.$store.getters.openID, value);
+          if (result) {
+            this.$Message.success({
+              content:"新增评论成功！",
+            });
+            return this.getCommentAndReplyInfo(this.$route.params.article_id);
+          }
         },
 
         //获取指定ID的文章的评论和评论下的回复信息
@@ -115,7 +122,7 @@
             this.commentAndReplyInfoList = result;
             // console.log("输出信息看看：",this.commentAndReplyInfoList);
           }else {
-            console.log("数据为空哦！！！！！！！！！！！！！！！！！！！！！！")
+            console.log("数据为空哦！！！！！！！！！！！！！！！！！！！！！！");
           }
         },
 
@@ -135,14 +142,21 @@
         },
 
         //给该篇的某个评论信息留下一条回复
-        write_reply(aim_openID,reply_content,commentID){
-          console.log("当前articleID：",this.$route.params.article_id);
-          console.log("当前commentID：",commentID);
-          console.log("当前from_openID：",this.$store.getters.openID);
-          console.log("当前reply_content：",reply_content);
-          console.log("当前aim_openID：",aim_openID);
-          console.log("reply_reply_content，所有信息：",this.reply_reply_content);
-          console.log("reply_comment_content，所有信息：",this.reply_comment_content);
+        async write_reply(aim_openID, reply_content, commentID) {
+          let replyInfo = {
+            articleID: this.$route.params.article_id,
+            commentID: commentID,
+            from_openID: this.$store.getters.openID,
+            reply_content: reply_content,
+            to_openID: aim_openID,
+          };
+          const result = await this.$apis.ArticleApi.write_reply(replyInfo);
+          if (result){
+            this.$Message.success({
+              content:'回复成功'
+            });
+            return this.getCommentAndReplyInfo(this.$route.params.article_id);
+          }
         },
 
         //去掉html标签
