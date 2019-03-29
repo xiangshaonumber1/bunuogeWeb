@@ -7,7 +7,7 @@ export const saveLoginInfo = (state,user) =>{
     state.openID = user.openID;
     state.nickname = user.nickname;
     state.avatar = user.avatar;
-    state.isLogin = 'true';
+    state.isLogin = true;
     localStorage.setItem("token",user.token)
   }
 };
@@ -19,7 +19,11 @@ export const clearLoginInfo = (state)=>{
     console.log("mutations: 用户退出登录，执行清除用户登录信息");
     localStorage.clear();
     sessionStorage.clear();
-    // new state();
+    state.openID = null;//用户ID
+    state.nickname = null;//用户昵称
+    state.avatar = null;//用户头像地址
+    state.isLogin = false;//判断当前用户是否已经登录
+    state.serverPath = 'http://localhost:8089';
 };
 
 /**

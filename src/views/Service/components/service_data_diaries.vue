@@ -16,9 +16,7 @@
 
       <not-found v-else-if="isNotFound"></not-found>
 
-
       <div class="myDiaryInfo" v-else v-for="myDiary in myDiaryInfoList">
-
         <Card :bordered="false">
           <!--文章标题-->
           <div class="myDiaryTitle">
@@ -37,8 +35,10 @@
         </Card>
 
         <Divider style="margin-top: 0" />
-
       </div>
+
+      <!--分页显示器 pagesize默认为10-->
+      <Page class="text-center" :total="100" show-total :current="1" />
 
 
     </div>
@@ -55,7 +55,8 @@
           myDiaryInfoList:[],
           isLoading:true,
           isNotFound:false,
-          page:1,
+          page:1, //当前页号
+          pageTotal:0, //总查询结果量
         }
       },
 
@@ -63,16 +64,16 @@
 
         async get_userDiary(openID){  //获取当前用户的所发布的日记
           const result = await this.$apis.ArticleApi.get_userDiary(openID,this.page);
-          if(result === null && this.page === 1){ //只有当第一次查询的结果为空（page为1时），显示notfound
+          if(result.total === 0 && this.page === 1){ //只有当第一次查询的结果为空（page为1时），显示notfound
             this.isNotFound = true;
             this.isLoading = false;
           }else {
+            //赋值
+            this.myDiaryInfoList = result.diaryInfoList;
             this.isNotFound = false;
             this.isLoading = false;
-            this.myDiaryInfoList = result;
-            console.log("vue中得到的结果：",result);
+
           }
-          console.log("我应该在后面输出")
         },
 
         replaceHtml(value){ //去掉html标签

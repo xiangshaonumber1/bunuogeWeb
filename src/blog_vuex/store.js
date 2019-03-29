@@ -12,7 +12,7 @@ const state = {
   openID:null,//用户ID
   nickname:null,//用户昵称
   avatar:null,//用户头像地址
-  isLogin:'false',//判断当前用户是否已经登录
+  isLogin:false,//判断当前用户是否已经登录
   serverPath:'http://localhost:8089'
 };
 

@@ -104,16 +104,15 @@
         <!--评论和回复-->
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-commentAndReply">
           <i-col span="12">
-            <Divider />
             <router-view></router-view>
           </i-col>
         </Row>
 
-        <Divider style="margin-top: 100px"/>
+        <Divider style="margin: 50px 0" />
       </div>
 
       <!--返回顶部-->
-      <BackTop></BackTop>
+      <BackTop style="margin-right: 10vw"></BackTop>
 
 
       <!-- ***********************************  其他调用显示类容 **************************************** -->

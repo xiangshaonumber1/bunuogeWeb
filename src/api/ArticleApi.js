@@ -363,13 +363,14 @@ const article = {
   /**
    * 获取指定ID的文章的评论和评论下的回复信息
    */
-  getCommentAndReplyInfo(articleID,page){
+  getCommentAndReplyInfo(articleID,page,pageCount){
     return request({
       url:'/article/getCommentAndReplyInfo',
       method:'get',
       params:{
         articleID:articleID,
-        page:page
+        page:page,
+        pageCount:pageCount
       }
     }).then( async res => {
       console.log("请求评论和回复结果：",res.data);

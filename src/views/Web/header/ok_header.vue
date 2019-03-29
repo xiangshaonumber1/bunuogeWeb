@@ -1,67 +1,59 @@
 <template>
     <div id="ok-header">
       <Affix>
-        <Row style="height: 60px;background-color: white;"  align="middle" class="code-row-bg index-top-affix" >
+        <nav class="navbar navbar-default" style="background-color: white;border: none;border-radius:0;border-bottom: 1px solid lightgrey">
+          <!--品牌图标-->
+          <div class="navbar-header navbar-left">
+            <!--Logo-->
+            <a class=" navbar-left" href="#">
+              <img src="/static/picture/getok-2.png" alt="Brand" style="height: 60px">
+            </a>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+              <Icon type="md-menu" />
+            </button>
+          </div>
 
-          <i-col span="24" class="top-info">
-            <!-- logo -->
-            <div>
-              <img src="/static/picture/getok-2.png" style="height: 59px;" alt="img_none">
+          <!-- 导航栏快捷菜单内容 -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <!--快捷导航菜单-->
+            <Menu class="navbar-left" mode="horizontal" theme="light" :active-name="menuActive" >
+              <MenuItem name="message_wall" @click.native="gomessage_wall"><span>留言墙</span></MenuItem>
+              <MenuItem name="index" @click.native="goIndex" ><span>首页</span></MenuItem>
+              <MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>
+              <MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>
+            </Menu>
+
+            <!--搜索框-->
+            <div class="navbar-left container-fluid" style="height: 60px;padding-top: 3px">
+              <Input class="navbar-btn" search enter-button="搜 索" v-model.trim="search_key_word" size="large" @on-search="goSearchResult(search_key_word)"></Input>
             </div>
 
-            <!-- 导航栏 -->
-            <div>
-              <Menu mode="horizontal" theme="light" :active-name="menuActive" style="border: none">
-                <MenuItem name="message_wall" @click.native="gomessage_wall"><span>留言墙</span></MenuItem>
-                <MenuItem name="index" @click.native="goIndex"><span>首页</span></MenuItem>
-                <MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>
-                <MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>
-              </Menu>
-            </div>
-
-            <!-- 搜索框 -->
-            <div class="searchInput">
-              <Input search enter-button="搜 索" v-model.trim="search_key_word"  size="large" style="margin-top: 11px" @on-search="goSearchResult(search_key_word)"></Input>
-            </div>
-
-
-
-            <!-- 个人信息 -->
-            <div style="line-height: 60px;float: right;padding: 0 10px;" v-if="isLogin === 'true' ">
-
-              <Dropdown placement="bottom" @on-click="to_user_function">
-                <a style="text-decoration: none;line-height: 60px;">
-                  <img :src="userInfo.avatar"  alt="none" class="img-circle" width="40px" height="40px"/>
-                  <Icon type="ios-arrow-down"></Icon>
-                </a>
-                <DropdownMenu slot="list">
-                  <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
-                  <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
-                  <DropdownItem name="userManager"><Icon type="ios-cloudy" size="20" /><span>&emsp;管理中心&emsp;</span></DropdownItem>
-                  <DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>
-                  <DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-
-              <div style="line-height: 60px;margin-left: 15px">
-                <Button type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>
+            <!-- 1.靠右的用户信息和写作快捷导航 / 2.靠右的登录注册提示-->
+            <div class="navbar-right" style="margin-right: 10px; height:60px;padding-top: 3px;">
+              <!-- 个人信息 -->
+              <div v-if="$store.getters.isLogin">
+                <Dropdown placement="bottom" @on-click="to_user_function">
+                  <a><img :src="userInfo.avatar"  alt="none" class="img-circle" width="40px" height="40px"/>&nbsp;<Icon type="ios-arrow-down"></Icon></a>&emsp;
+                  <DropdownMenu slot="list">
+                    <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
+                    <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
+                    <DropdownItem name="userManager"><Icon type="ios-cloudy" size="20" /><span>&emsp;管理中心&emsp;</span></DropdownItem>
+                    <DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>
+                    <DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+                <Button class="navbar-btn" type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>
+                <Button class="navbar-btn" type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>
               </div>
-
-              <div style="line-height: 60px;margin-left: 15px">
-                <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>
+              <!-- 没有登录时显示 立即登录和 免费注册的按钮 -->
+              <div v-else>
+                <Button class="navbar-btn" type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>&emsp;
+                <Button class="navbar-btn" type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;" @click="to_sign_up"><span>免 费 注 册</span></Button>
               </div>
-
             </div>
+          </div>
 
-            <!-- 没有登录时显示 立即登录和 免费注册的按钮 -->
-            <div style="line-height: 60px;float: right;padding: 0 10px;" v-else>
-              <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bold">立即登录</span></Button>&emsp;
-              <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bold;" @click="to_sign_up"><span>免费注册</span></Button>
-            </div>
-
-          </i-col>
-
-        </Row>
+        </nav>
       </Affix>
     </div>
 </template>
@@ -72,7 +64,6 @@
       data(){
         return {
           menuActive:"",
-          isLogin:"false",//判断当前用户是否已经登录
           search_key_word:null,//搜索框关键字
           userInfo:{
             openID:'',//用户ID
@@ -152,7 +143,6 @@
             case 'userExit': // 注销当前登录
               const result = await this.$apis.AuthenticationApi.logout();
               if (result === 'success'){
-                this.isLogin = 'false';
                 this.$store.dispatch("clearLoginInfo");
                 this.$router.push({name:"index"});
               }
@@ -203,18 +193,12 @@
 
 <style scoped>
 
+  a{
+    text-decoration: none;
+  }
+
   span{
     font-size: 16px;
   }
-
-  .top-info div{
-    float: left;
-    /*border: 1px solid red;*/
-  }
-
-  .index-top-affix{
-    border-bottom: 1px solid rgb(220, 222, 226);
-  }
-
 
 </style>

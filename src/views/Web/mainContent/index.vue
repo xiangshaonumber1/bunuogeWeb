@@ -9,7 +9,9 @@
           <i-col span="15">
             <Carousel autoplay v-model="CarouselOrder" loop :autoplay-speed="autoplaySpeed">
               <CarouselItem v-for="(poster,index) in posterList" :key="index">
-                <div class="my-carousel"><img :src="poster" alt=""></div>
+                <div class="my-carousel">
+                  <img :src="poster" alt="">
+                </div>
               </CarouselItem>
             </Carousel>
           </i-col>
@@ -102,7 +104,7 @@
           <!--加载更多Button,当自动加载次数超过三次时，需要手动加载更多-->
           <i-col span="12">
             <div class="loadMoreButton">
-              <Button v-if="page > 3" type="info" size="large" @click="get_article_list(page)" long >
+              <Button v-if="this.loadMore && this.page>3" type="info" size="large" @click="get_article_list(page)" long >
                 <span>加&nbsp;载&nbsp;更&nbsp;多&nbsp;<<<</span>
               </Button>
             </div>
@@ -182,33 +184,25 @@
           //只有允许加载下一页的情况下，才去请求数据
           if (this.loadMore){
             const result = await this.$apis.ArticleApi.get_article_list(articlePage);
-            if (result === null && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
+            if (result.total === 0 && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
               this.notFound = true;
               this.isLoading = false;
             }else {                                                         //情况二：有具体的返回数据
-              /**
-               * 情况三：如果下一页没有数据（上一页正好加载完）,则 return 允许加载下一页数据为false,不做处理
-               */
-              if (result === null){
-                return this.loadMore = false;
+              //循环向现有的文章数组中添加元素
+              for (let value of result.newest_article){
+                this.articleList.push(value)
               }
-              /**
-               * 情况四：如果本页数据不足5条，则本页是最后一页，设置允许加载下一页为false,并继续执行，把现有的数据添加的数组元素中
-               */
-              if (result.length < 5){
+              //只有当当前显示的文章信息数小于总数时，才允许加载下一页
+              if (result.total > this.articleList.length){
+                this.loadMore = true;
+                this.page++;
+              }else {
                 this.loadMore = false;
               }
-              //只有在loadMore为true的情况下，才允许page+1
-              if (this.loadMore){
-                this.page++;
-              }
+
               //防止意料之外的情况，设置 notFound 和 isLoading 为 false
               this.notFound = false;  //不显示404
               this.isLoading = false; //不显示第一次的正在加载
-              //循环向现有的文章数组中添加元素
-              for (let value of result){
-                this.articleList.push(value)
-              }
               //数据加载完毕，启用滚动加载开关，可滚动加载数据
               this.scrollLoadSwitch = true;
             }
@@ -279,7 +273,6 @@
 </script>
 
 <style scoped>
-
   a{
     color: black;
   }
@@ -312,7 +305,9 @@
   }
 
   .my-carousel{
-    height: 450px;
+    height: 400px;
+    overflow: hidden;
+    position: relative;
     color: white;
     background: rgb(217, 237, 247);
     border-radius: 5px;
@@ -321,10 +316,12 @@
   }
 
   .my-carousel img{
-    margin: 0;
+    margin: auto;
     padding: 0;
     border-radius: 5px;
+    position: absolute;
     width: 100%;
+    max-width: 100%;
     height: 100%;
   }
 
