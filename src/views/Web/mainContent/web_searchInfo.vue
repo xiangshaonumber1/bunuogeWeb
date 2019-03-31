@@ -30,6 +30,7 @@
 
           <!--显示文章搜索结果-->
           <div v-if="searchType === 'article' ">
+            <!--文章数据列表展示部分-->
             <div class="searchInfo" v-for="searchArticle in searchInfoList">
               <Card :bordered="false">
 
@@ -58,6 +59,7 @@
 
           <!--显示用户搜索结果-->
           <div v-else-if="searchType === 'user'">
+            <!--用户结果数据列表展示部分-->
             <div class="searchInfo" v-for="(searchUser,index) in searchInfoList">
               <Card :bordered="false">
 
@@ -89,6 +91,9 @@
             </div>
           </div>
 
+          <!--分页部分-->
+          <Page v-if="listTotal>0" class="text-center" @on-change="getSearchInfo(searchType,$event)" show-total :total="listTotal"/>
+
         </div>
 
       </i-col>
@@ -115,136 +120,134 @@
           notFound:false,       //请求结果是否有有效的返回值
           searchType:'article', //首选搜索类型
           key_word_list:[],//分词器拆分后的结果
+          listTotal:0,  //数据总条数
         }
       },
 
-      methods:{
+    methods:{
 
-        //修改搜索类型，并重新发送请求
-        updateSearchInfo(type){
-          this.searchType = type;//修改当前的搜索类型
-          this.getSearchInfo(this.$route.params.key_word);//带上搜索类型，重新发起请求
-        },
+      //修改搜索类型，并重新发送请求
+      updateSearchInfo(type) {
+        /**
+         * 不能在这里直接 this.searchType = type， 不然的话，会先显示用户数据列表，而这时，请求还没有返回，会出现红色警告；
+         * 而且因为返回的数据都是在searchInfoList上，所以不能先请求数据，再返回；
+         * 所以最好的方法是把type带到请求中，等数据获取完毕后，再设置 this.searchType,这样就不会出现页面已显示，数据还没有返回的错误
+         */
+        this.getSearchInfo(type, 1);//带上搜索类型，重新发起请求
+      },
 
-        //获取相应的搜索结果
-       async getSearchInfo(key_word){
-         const result = await this.$apis.ArticleApi.get_search(key_word,this.search_page,this.searchType);
-         if (result === null && this.search_page === 1){
-           this.isLoading = false; //取消正在加载
-           this.notFound = true; //显示404
-         }else {
-           this.isLoading = false; //取消正在加载
-           this.notFound = false; //取消显示404
-           console.log("输出返回的信息：",result);
-           var TempSearchInfoList = result.result; //赋值获取到的文章数据
-           if (this.searchType === "user"){
-             for (var searchInfo of TempSearchInfoList){
-               console.log("搜索类型为user，为搜索结果做一些调整");
-               searchInfo.userIcon =  this.$store.getters.serverPath+ JSON.parse(searchInfo.userIcon)[0];
-               searchInfo.isClickMark = await this.getMarkStatus(this.$store.getters.openID,searchInfo.openID);
-               console.log("调整后的结果：",searchInfo)
-             }
-           }
-           this.searchInfoList = TempSearchInfoList;
-           console.log("赋值完后的 searchInfoList = ",this.searchInfoList);
-           this.key_word_list = result.key_word_list;  //赋值获取到的分词器
-         }
-        },
+      //获取相应的搜索结果
+      async getSearchInfo(searchType,search_page){
+        const result = await this.$apis.ArticleApi.get_search(this.$route.params.key_word,search_page,searchType);
+        if (result.total === 0 && search_page === 1){
+          this.isLoading = false; //取消正在加载
+          this.notFound = true; //显示404
+        }else {
+          this.isLoading = false; //取消正在加载
+          this.notFound = false; //取消显示404
+          var TempSearchInfoList = result.result; //赋值获取到的文章数据
+          if (searchType === "user"){
+            for (var searchInfo of TempSearchInfoList){
+              searchInfo.userIcon =  this.$store.getters.serverPath+ JSON.parse(searchInfo.userIcon)[0];
+              searchInfo.isClickMark = await this.getMarkStatus(this.$store.getters.openID,searchInfo.openID);
+            }
+          }
+          this.searchInfoList = TempSearchInfoList;
+          this.listTotal = result.total;
+          this.key_word_list = result.key_word_list;  //赋值获取到的分词器
+          //应该最后输出
+          this.searchType = searchType;
+        }
+      },
 
-        //去掉html标签
-        replaceHtml(value){
+      //去掉html标签
+      replaceHtml(value){
+        if (value){
           var result = value.replace(/<\/?.+?>/g,"");
           result = result.replace(/ /g,"");
           return result;
-        },
-
-        //前往文章详情页面
-        goArticleInfo(id){
-          //新建窗口跳转
-          let ArticleInfo = this.$router.resolve({
-            name:'web_articleInfo',
-            params:{
-              article_id:id
-            }
-          });
-          window.open(ArticleInfo.href,'_blank')
-        },
-
-        //前往用户详情页面
-        goUserInfo(openID){
-          console.log("前往用户信息：");
-          this.$router.push({name:'web_userInfo',params:{open_id:openID}})
-        },
-
-        // 筛选变色,不过英文好像无法识别大小写
-        // brightenKeyword(val, keyword) {
-        //   val = val + '';
-        //   if (val.indexOf(keyword) !== -1 && keyword !== '') {
-        //     return val.replace(keyword, '<font color="#409EFF">' + keyword + '</font>')
-        //   } else {
-        //     return val
-        //   }
-        // },
-
-        // 或者用正则表达式，能识别大小写，但是会根据搜索关键字的大小写而覆盖原本内容的大小写
-        brightenKeyword(content, key_word_list) {
-          for (var key_word of key_word_list){
-            // console.log("需要加红的字：",key_word);
-            const Reg = new RegExp(key_word, 'i');
-            if (content) {
-              content = content.replace(Reg, `<span style="color: red;">${key_word}</span>`);
-            }
-          }
-          return content;
-        },
-
-
-        //改变当前关注状态
-        async changeMarkStatus(index,aim_openID,executeType){
-          console.log("传进来的值 index：",index);
-          if (this.$store.getters.openID === null){
-            return this.$Message.info({
-              content:"温馨提示：该功能需要登录后才能实现！",
-            })
-          }
-          this.searchInfoList[index].isClickMark = await this.$apis.UserApi.clickMark(this.$store.getters.openID, aim_openID, executeType);
-        },
-
-        //获取当前搜索用户对搜索结果的用户的关注情况
-        async getMarkStatus(openID,aim_openID){
-          if (this.$store.getters.openID === null || openID===aim_openID){
-            return; //如果是游客或者尚未登录的用户,或者是作者本人，则不用进行检查
-          }
-          const result = await this.$apis.UserApi.getMarkStatus(openID,aim_openID);
-          console.log("用户【",openID,"】对作者【",aim_openID,"】的关注情况：",result);
-          return result;
-        },
+        }
       },
 
-      async mounted(){
-        console.log("mounted 执行",this.$route.params.key_word);
-        //获取搜索信息
-        await this.getSearchInfo(this.$route.params.key_word);
-        console.log("输出 store 信息2：",this.$store.getters.openID)
+      //前往文章详情页面
+      goArticleInfo(id){
+        //新建窗口跳转
+        let ArticleInfo = this.$router.resolve({
+          name:'web_articleInfo',
+          params:{
+            article_id:id
+          }
+        });
+        window.open(ArticleInfo.href,'_blank')
+      },
 
+      //前往用户详情页面
+      goUserInfo(openID){
+        console.log("前往用户信息：");
+        this.$router.push({name:'web_userInfo',params:{open_id:openID}})
+      },
+
+      // 筛选变色,不过英文好像无法识别大小写
+      // brightenKeyword(val, keyword) {
+      //   val = val + '';
+      //   if (val.indexOf(keyword) !== -1 && keyword !== '') {
+      //     return val.replace(keyword, '<font color="#409EFF">' + keyword + '</font>')
+      //   } else {
+      //     return val
+      //   }
+      // },
+
+      // 或者用正则表达式，能识别大小写，但是会根据搜索关键字的大小写而覆盖原本内容的大小写
+      brightenKeyword(content, key_word_list) {
+        for (var key_word of key_word_list){
+          // console.log("需要加红的字：",key_word);
+          const Reg = new RegExp(key_word, 'i');
+          if (content) {
+            content = content.replace(Reg, `<span style="color: red;">${key_word}</span>`);
+          }
+        }
+        return content;
       },
 
 
-      //在当前路由改变，但是该组件被复用时调用
-      //对于一个带有动态参数的路径 /good/:id，在 /good/1 和 /good/2 之间跳转的时候，
-      // 由于会渲染同样的good组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
-      // 可以访问组件实例 `this`
-      beforeRouteUpdate(to,from,next){
-        console.log('beforeRouteUpdate Update Update'); //当前组件实例
-        console.log("web_searchInfo",this.searchType);
-        next();
-        this.getSearchInfo(this.$route.params.key_word);
+      //改变当前关注状态
+      async changeMarkStatus(index,aim_openID,executeType){
+        if (this.$store.getters.openID === null){
+          return this.$Message.info({
+            content:"温馨提示：该功能需要登录后才能实现！",
+          })
+        }
+        this.searchInfoList[index].isClickMark = await this.$apis.UserApi.clickMark(this.$store.getters.openID, aim_openID, executeType);
       },
 
+      //获取当前搜索用户对搜索结果的用户的关注情况
+      async getMarkStatus(openID,aim_openID){
+        if (this.$store.getters.openID === null || openID===aim_openID){
+          return; //如果是游客或者尚未登录的用户,或者是作者本人，则不用进行检查
+        }
+        const result = await this.$apis.UserApi.getMarkStatus(openID,aim_openID);
+        console.log("用户【",openID,"】对作者【",aim_openID,"】的关注情况：",result);
+        return result;
+      },
+    },
 
+    mounted(){
+      //获取搜索信息,适用于：刷新，第一次加载的情况
+      this.getSearchInfo(this.searchType,1);
+    },
 
+    // 搜索关键字在当前页面改变
+    // 在当前路由改变，但是该组件被复用时调用
+    // 对于一个带有动态参数的路径 /good/:id，在 /good/1 和 /good/2 之间跳转的时候，
+    // 由于会渲染同样的good组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+    // 可以访问组件实例 `this`
+    beforeRouteUpdate(to,from,next){
+      console.log("web_searchInfo",this.searchType);
+      next();
+      this.getSearchInfo(this.searchType,1);
+    },
 
-    }
+  }
 </script>
 
 <style scoped>

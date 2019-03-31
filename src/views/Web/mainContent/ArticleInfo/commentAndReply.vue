@@ -125,9 +125,9 @@
         //获取指定ID的文章的评论和评论下的回复信息
         async getCommentAndReplyInfo(articleID,pageCount){
           const result = await this.$apis.ArticleApi.getCommentAndReplyInfo(articleID,1,pageCount);
-          console.log("文章评论条数：",result.commentAndReplyInfoList.length);
-          console.log("总条数:",result.total);
           if (result){
+            console.log("文章评论条数：",result.commentAndReplyInfoList.length);
+            console.log("总条数:",result.total);
             const commentAndReplyInfoList = result.commentAndReplyInfoList;
             for (let info of commentAndReplyInfoList){
               info.from_userIcon = this.$store.getters.serverPath+JSON.parse(info.from_userIcon)[0];

@@ -39,11 +39,12 @@
             <span style="float: right;margin-right: 20px">发表时间：<Icon type="md-time" size="16" />&nbsp;<Time :time="myArticle.time"/></span>
           </div>
         </Card>
-
+        <!--底部分割线样式-->
         <Divider style="margin-top: 0"/>
-
       </div>
 
+      <!--分页部分 pagesize默认为10-->
+      <Page class="text-center" @on-change="get_userArticle" show-total :total="listTotal" />
 
     </div>
 </template>
@@ -59,32 +60,34 @@
             myArticleInfoList:[],
             isLoading:true,
             isNotFound:false,
-            page:1,
+            listTotal:0,
           }
       },
       methods:{
 
-        replaceHtml(value){//去掉html标签
+        //去掉html标签
+        replaceHtml(value){
           var result = value.replace(/<\/?.+?>/g,"");
           result = result.replace(/ /g,"");
           return result;
         },
 
-       async get_userArticle(openID) {//获取当前用户所创作的文章
-         const result = await this.$apis.ArticleApi.get_userArticle(openID,this.page);
-          if (result ===null && this.page===1 ) {
+        //获取当前用户所创作的文章
+       async get_userArticle(page) {
+         const result = await this.$apis.ArticleApi.get_userArticle(this.$route.params.open_id,page);
+          if (result.total === 0 && page === 1 ) {
             this.isLoading = false; //取消正在加载
             this.isNotFound = true; //显示404
           }else {
-            console.log("此时，应该获取到结果了,输出看看是什么东西:",result);
-            this.myArticleInfoList = result;
+            this.listTotal = result.total;
+            this.myArticleInfoList = result.articleInfoList;
             this.isLoading = false;
             this.isNotFound = false;
           }
-          console.log("我应该在后面输出");
         },
 
-        goArticleInfo(id){ //前往文章详情页面
+        //前往文章详情页面
+        goArticleInfo(id){
           //新建窗口跳转
           let ArticleInfo = this.$router.resolve({
             name:'web_articleInfo',
@@ -92,14 +95,14 @@
               article_id:id
             }
           });
-          window.open(ArticleInfo.href,'_blank')
+          window.open(ArticleInfo.href,'_blank');
         },
 
       },
 
        mounted() {
           //从后台拉取数据
-        this.get_userArticle(this.$route.params.open_id);
+        this.get_userArticle(1);
       }
     }
 </script>

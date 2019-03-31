@@ -105,7 +105,7 @@
           <i-col span="12">
             <div class="loadMoreButton">
               <Button v-if="this.loadMore && this.page>3" type="info" size="large" @click="get_article_list(page)" long >
-                <span>加&nbsp;载&nbsp;更&nbsp;多&nbsp;<<<</span>
+                <span>加 载 更 多 > > > </span>
               </Button>
             </div>
           </i-col>

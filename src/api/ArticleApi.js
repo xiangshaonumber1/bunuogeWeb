@@ -217,7 +217,6 @@ const article = {
         type:type,
       }
     }).then( res =>{
-      console.log("get_search 输出:",res);
       if (res.data.code === '404'){
         return null;
       }else {

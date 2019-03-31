@@ -1,4 +1,5 @@
 <template>
+
     <div class="my-diaries">
 
       <!-- Title 部分 -->
@@ -38,10 +39,10 @@
       </div>
 
       <!--分页显示器 pagesize默认为10-->
-      <Page class="text-center" :total="100" show-total :current="1" />
-
+      <Page class="text-center" @on-change="get_userDiary" :total="listTotal" show-total />
 
     </div>
+
 </template>
 
 <script>
@@ -55,24 +56,23 @@
           myDiaryInfoList:[],
           isLoading:true,
           isNotFound:false,
-          page:1, //当前页号
-          pageTotal:0, //总查询结果量
+          listTotal:0, //总查询结果量
         }
       },
 
       methods:{
 
-        async get_userDiary(openID){  //获取当前用户的所发布的日记
-          const result = await this.$apis.ArticleApi.get_userDiary(openID,this.page);
-          if(result.total === 0 && this.page === 1){ //只有当第一次查询的结果为空（page为1时），显示notfound
+        async get_userDiary(page){  //获取当前用户的所发布的日记
+          const result = await this.$apis.ArticleApi.get_userDiary(this.$route.params.open_id,page);
+          if(result.total === 0 && page === 1){ //只有当第一次查询的结果为空（page为1时），显示notfound
             this.isNotFound = true;
             this.isLoading = false;
           }else {
             //赋值
+            this.listTotal = result.total;
             this.myDiaryInfoList = result.diaryInfoList;
             this.isNotFound = false;
             this.isLoading = false;
-
           }
         },
 
@@ -98,7 +98,7 @@
 
       mounted(){
         //根据传递过来的openID，获取对应的信息
-        this.get_userDiary(this.$route.params.open_id);
+        this.get_userDiary();
       },
 
 

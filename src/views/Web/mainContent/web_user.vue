@@ -29,6 +29,8 @@
         <i-col span="11">
           <router-view></router-view>
         </i-col>
+
+        <Divider/>
       </Row>
 
     </div>
