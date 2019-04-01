@@ -1,5 +1,5 @@
 <template>
-    <div ref="update_pw" style="border: 1px solid red">
+    <div ref="update_pw">
 
       <!--验证旧密码实现修改密码-->
       <Row v-if="update_way === 'password'" type="flex" class="code-row-bg" justify="center">

@@ -7,7 +7,6 @@ import router from '../router/router'
 import {Notice} from 'iview'
 import qs from 'qs'
 
-
 const common = {
 
   //获取首页海报图片
@@ -21,10 +20,19 @@ const common = {
     })
   },
 
-  uploadPicture(){
+  //提交反馈意见
+  writeFeedBackMessage(feedBackInfo) {
     return request({
-      url:'/common/uploadPicture',
-      method: "post",
+      url:'/common/writeFeedBackMessage',
+      method: 'post',
+      data:qs.stringify({
+        openID:feedBackInfo.openID,
+        content:feedBackInfo.content,
+        contactType:feedBackInfo.contactType,
+        contactInfo:feedBackInfo.contactInfo
+      })
+    }).then( res =>{
+      return res.date.date;
     })
   }
 

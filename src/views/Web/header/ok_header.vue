@@ -17,7 +17,8 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <!--快捷导航菜单-->
             <Menu class="navbar-left" mode="horizontal" theme="light" :active-name="menuActive" >
-              <MenuItem name="message_wall" @click.native="gomessage_wall"><span>留言墙</span></MenuItem>
+              <MenuItem name="message_wall" @click.native="goFeedBackMessage"><span>意见反馈</span></MenuItem>
+              <MenuItem name="message_wall" @click.native="goMessage_wall"><span>留言墙</span></MenuItem>
               <MenuItem name="index" @click.native="goIndex" ><span>首页</span></MenuItem>
               <MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>
               <MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>
@@ -37,7 +38,7 @@
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
                     <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
-                    <DropdownItem name="userManager"><Icon type="ios-cloudy" size="20" /><span>&emsp;管理中心&emsp;</span></DropdownItem>
+                    <!--<DropdownItem name="userManager"><Icon type="ios-cloudy" size="20" /><span>&emsp;管理中心&emsp;</span></DropdownItem>-->
                     <DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>
                     <DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>
                   </DropdownMenu>
@@ -75,8 +76,11 @@
       },
       methods:{
 
+        goFeedBackMessage(){
+          this.$router.push({name:'web_feedback'});
+        },
         //前往本站的留言墙
-        gomessage_wall(){
+        goMessage_wall(){
           this.$router.push({name:'message_wall'})
         },
           //前往首页
@@ -136,8 +140,8 @@
               this.$router.push({name:'web_userInfo',params:{open_id:this.$store.getters.openID}});break;
             case 'userSetting'://前往用户设置，默认展示账号信息
               this.$router.push({name:'update_password',params:{open_id:this.$store.getters.openID}});break;
-            case 'userManager'://前往管理中心
-              this.$router.push({name:'userManager'});break;
+            // case 'userManager'://前往管理中心
+            //   this.$router.push({name:'userManager'});break;
             case 'userFeedback'://前往帮助与反馈
               this.$router.push({name:'web_feedback'});break;
             case 'userExit': // 注销当前登录

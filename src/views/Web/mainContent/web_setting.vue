@@ -13,8 +13,10 @@
         </i-col>
 
         <!--调用组件化部分-->
-        <i-col offset="1" span="10" style="border: 1px solid black">
-          <router-view></router-view>
+        <i-col offset="1" span="10">
+          <Card>
+            <router-view></router-view>
+          </Card>
         </i-col>
       </Row>
 

@@ -1,9 +1,19 @@
 <template>
   <div class="moreChoose">
     <ButtonGroup>
-      <Tooltip content="返回首页" placement="left" ><Button @click="goIndex"><Icon type="md-arrow-back" size="30" /></Button></Tooltip><br><hr>
-      <Tooltip content="前往个人中心" placement="left" ><Button @click="goPersonalCenter"><Icon type="md-person" size="30"/></Button></Tooltip><br><hr>
-      <Tooltip content="反馈信息" placement="left" ><Button @click="goFeedback"><Icon type="md-chatboxes" size="30" /></Button></Tooltip><br><hr>
+
+      <Tooltip content="返回首页" placement="left">
+        <Button @click="goIndex"><Icon type="md-arrow-back" size="30" /></Button>
+      </Tooltip><hr>
+
+      <Tooltip v-if="$store.getters.openID !==null " content="前往个人中心" placement="left">
+        <Button @click="goPersonalCenter"><Icon type="md-person" size="30"/></Button>
+      </Tooltip><hr>
+
+      <Tooltip content="反馈信息" placement="left">
+        <Button @click="goFeedback"><Icon type="md-chatboxes" size="30" /></Button>
+      </Tooltip><hr>
+
     </ButtonGroup>
   </div>
 </template>
@@ -12,16 +22,16 @@
     export default {
         name: "quickRouter",
       methods:{
-
-        goIndex(){//前往首页
+        //前往首页
+        goIndex(){
           this.$router.push({name:'index'})
         },
-
-        goPersonalCenter(){//前往个人中心
-          this.$router.push({name:'web_personal_info'})
+        //前往个人中心
+        goPersonalCenter(){
+          this.$router.push({name:'web_userInfo',params:{open_id:this.$store.getters.openID}})
         },
-
-        goFeedback(){//前往反馈中心
+        //前往反馈中心
+        goFeedback(){
           this.$router.push({name:'web_feedback'})
         },
       }
