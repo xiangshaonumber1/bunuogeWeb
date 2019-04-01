@@ -29,10 +29,11 @@ const common = {
         openID:feedBackInfo.openID,
         content:feedBackInfo.content,
         contactType:feedBackInfo.contactType,
-        contactInfo:feedBackInfo.contactInfo
+        contactInfo:feedBackInfo.contactInfo,
+        feedbackType:feedBackInfo.feedbackType
       })
     }).then( res =>{
-      return res.date.date;
+      return res.data.data === true;
     })
   }
 

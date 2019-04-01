@@ -52,6 +52,7 @@
         </i-col>
       </Row>
 
+      <!--快速链接-->
       <quick-router></quick-router>
 
     </div>
@@ -60,16 +61,17 @@
 <script>
     import QuickRouter from "../../Common/quickRouter";
     export default {
-        name: "feedback",
+      name: "feedback",
       components: {QuickRouter},
       data(){
           return {
             form_input:{
-              openID:null,
-              content:null,
-              contactType:null,
-              contactInfo:null,
-            }
+              openID:'',
+              content:'',
+              contactType:'',
+              contactInfo:'',
+              feedbackType:'',
+            },
           }
       },
 
@@ -77,21 +79,44 @@
 
         //提交一条意见反馈
         async writeFeedBackMessage() {
+
           if (this.$store.getters.openID === null) {
-            //是游客反馈
+            //是游客提交反馈
             this.form_input.openID = new Date().getTime();
+            this.form_input.feedbackType = "游客";
           } else {
-            //是用户反馈
+            //是用户提交反馈
             this.form_input.openID = this.$store.getters.openID;
+            this.form_input.contactType = "其他";
+            this.form_input.contactInfo = this.$store.getters.openID; //因为本地没有存储邮箱(因为注册用户的账号是邮箱，避免暴露)，所以这里填用户的openID
+            this.form_input.feedbackType = "用户"
           }
-          const result = await this.$apis.CommonApi.writeFeedBackMessage(this.form_input);
-          if (result){
-            this.$Notice({
-              title:'提交成功',
-              desc:'非常感谢您提供的宝贵意见，本站能越来越好，离不开你的一份帮助！'
+
+          let openID = this.form_input.openID.length;
+          let content = this.form_input.content.length;
+          let contactType = this.form_input.contactType.length;
+          let contactInfo = this.form_input.contactInfo.length;
+          //如果信息填写不规范
+          if (openID <=0 || content<=0 || contactType<=0 || contactInfo<=0){
+            return this.$Notice.error({
+              title:'有尚未填写的地方：',
+              desc:'信息填写不完整，请注意检查，填写完毕后再继续!',
             })
           }
-        }
+
+          const result = await this.$apis.CommonApi.writeFeedBackMessage(this.form_input);
+          if (result){
+            this.$Notice.success({
+              title:'提交成功',
+              desc:'非常感谢您提供的宝贵意见，本站能越来越好，离不开你的一份帮助! 3秒后即将为你跳转到首页'
+            });
+            //三秒后跳转到首页
+            setTimeout(()=>{
+              return this.$router.push({name:'index'});
+            },3000);
+          }
+        },
+
       }
     }
 </script>
