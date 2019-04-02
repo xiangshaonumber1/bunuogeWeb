@@ -16,29 +16,25 @@
 
         <!--表单数据展示-->
         <i-col span="24">
-          <Table ref="userDataTable" :columns="tabHead" :data="userData" border>
-
+          <Table ref="userDataTable" :columns="tabHead" :data="userDataList" border>
             <template slot-scope="{ row, index }" slot="id">
-              <span>{{ row.id }}</span>
+              <span>{{ row.openID }}</span>
             </template>
-
             <template slot-scope="{ row, index }" slot="nickname">
-              <span>{{ row.nickname }}</span>
+              <span v-html="row.nickname"></span>
             </template>
-
             <template slot-scope="{ row, index }" slot="email">
               <span>{{ row.email }}</span>
             </template>
-
             <template slot-scope="{ row, index }" slot="role">
               <Button @click="ready_update_role(row,index)">身份详情</Button>
             </template>
-
             <template slot-scope="{ row, index }" slot="permission">
               <Button @click="ready_update_permission(row,index)">权限详情</Button>
             </template>
-
           </Table>
+          <!-- 分页模块 -->
+          <Page style="margin-top: 30px" class="text-center" show-total :total="userDataTotal" @on-change="getUserRoleAndPermissionList" />
         </i-col>
 
         <!-- 点击管理(用户身份),出现的对话框 -->
@@ -86,14 +82,20 @@
             {title:'用户身份',slot:'role',ellipsis:true,align:'center',minWidth:100},
             {title:'用户权限',slot:'permission',align:'center',minWidth:100}
           ],
-          userData:[
-            {id:1,nickname:'丿丶祥灬少',email:'821940979@qq.com',role:'["admin","root","user"]',permission:'["add","update","delete"]'},
-            {id:2,nickname:'丿丶祥',email:'1051308182@qq.com',role:'["root","user"]',permission:'["update","delete"]'},
-            {id:3,nickname:'丿丶少',email:'18482033263@sina.com',role:'["user"]',permission:'["add","update"]'}
-          ],
+          userDataList:[],
+          userDataTotal:0,
         }
       },
       methods:{
+
+          async getUserRoleAndPermissionList(page) {
+            const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page);
+            if (result.total>0){
+              this.userDataList = result.userRoleAndPermissionList;
+              this.userDataTotal = result.total;
+            }
+          },
+
           // 回车，点击搜索图标，或点击搜索按钮 时 执行
           doSearch(){
             this.$Message.error("对方不想执行，并向你抛出了一个异(bai)常(yan)")
@@ -220,11 +222,12 @@
       },
 
       mounted() {
+          this.getUserRoleAndPermissionList(1);
         //  全局配置
-        this.$Message.config({
-          top: 50,
-          duration: 3
-        });
+        // this.$Message.config({
+        //   top: 50,
+        //   duration: 3
+        // });
       },
 
       beforeDestroy(){

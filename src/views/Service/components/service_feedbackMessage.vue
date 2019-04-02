@@ -75,7 +75,12 @@
       methods:{
         //获取用户的反馈信息
         async getFeedBackInfo(page) {
-          this.feedbackData = await this.$apis.AdminApi.getFeedBackInfo(page);
+          const result = await this.$apis.AdminApi.getFeedBackInfo(page);
+          if (result.total>0){
+            this.feedbackData = result.feedBackMessageList;
+            this.feedbackTotal = result.total;
+          }
+
         },
 
         //修改反馈处理状态

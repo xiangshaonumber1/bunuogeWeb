@@ -74,12 +74,61 @@ const admin = {
           return false;
         }
       } else {
-        console.log("执行操作的结果：",res.data.data);
+        return res.data.data;
+      }
+    })
+  },
+
+
+  /**
+   * 通过管理员身份，查看并修改权限
+   */
+  getUserRoleAndPermissionList(page,pageCount){
+    return request({
+      url:'/admin/getUserRoleAndPermissionList',
+      method:'get',
+      params: {
+        page:page,
+        pageCount:pageCount
+      }
+    }).then( async res => {
+      console.log("返回的是啥？",res.data);
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result) {
+          return this.getUserRoleAndPermissionList(page,pageCount)
+        } else {
+          return null;
+        }
+      } else {
+        return res.data.data;
+      }
+    })
+  },
+
+  /**
+   * 修改指定用户的权限或角色
+   */
+  updateRoleOrPermission(){
+    return request({
+      url:'',
+      method:'post',
+      data: qs.stringify({
+
+      })
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result) {
+          return this.updateRoleOrPermission()
+        } else {
+          return null;
+        }
+      } else {
         return res.data.data;
       }
     })
   }
-
 
 
 

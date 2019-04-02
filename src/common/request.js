@@ -36,7 +36,7 @@ request.interceptors.request.use(config=>{
 //响应拦截器,http请求后，后台返回的一些状态码，包括我们自己的服务器返回的错误码进行一个逻辑处理
 request.interceptors.response.use(response=>{
   /*
-  * 不拦截的有 200，402
+  * 不拦截的有
   * 200 变成正常，不用拦截，
   * 402(只有带需要token的请求才判断) 因为涉及到重新发送请求，不方便在拦截器里设置
   * 404(查询信息类根据需要是否判断) 因为404页面是组件化到其他组件中，所以也不方便统一拦截
@@ -52,7 +52,7 @@ request.interceptors.response.use(response=>{
 
     case '403': // 服务器请求成功，但有，比如注册失败，登录失败，等等失败操作
       Notice.error({
-        title: "验证失败：",
+        title: "无法继续提示：",
         desc: response.data.msg,
       });
       break;
