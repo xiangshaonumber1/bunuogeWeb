@@ -51,7 +51,7 @@
                     @on-change="change_role"/>
         </Modal>
 
-        <!-- 点击详情(用户权限) 时， -->
+        <!-- 点击详情(用户权限) 时，出现的对话框 -->
         <Modal title="用户权限管理" v-model="showModal_permission" :mask-closable="false" @on-ok="save_permission" @on-cancel="cancel_permission">
           <Transfer :data="data_permission"
                     :target-keys="data_permission_key"
@@ -99,7 +99,7 @@
             this.$Message.error("对方不想执行，并向你抛出了一个异(bai)常(yan)")
           },
 
-        //点击 弹出对话框，可修改role
+        //role 修改：点击 弹出对话框，可修改 role
         ready_update_role(row,index){
             //data_role  目前拥有的身份数据
             const data_role = JSON.parse(row.role);
@@ -131,7 +131,7 @@
             this.data_role_key = temp_role_key.sort();
         },
 
-        //点击 弹出对话框，可修改 permission
+        //permission 修改：点击 弹出对话框，可修改 permission
         ready_update_permission(row,index){
             //data_permission 目前拥有的 权限
             const data_permission = JSON.parse(row.permission);
@@ -172,7 +172,7 @@
           this.data_permission_key = newTargetKeys;
         },
 
-        // role 对话框，点击确认后执行
+        // role 修改 对话框，点击确认后执行
         save_role(){
             // this.showModal_role = false;
           const data_role = localStorage.getItem("data_role").split(",");
@@ -183,12 +183,13 @@
           }
             console.log("save_role 完成")
         },
-        // role 对话框，取消时 执行
+
+        // role 修改 对话框，取消时 执行
         cancel_role(){
             console.log("role 对话框关闭");
           localStorage.removeItem("data_role");
-          this.data_role =[]
-          this.data_role_key=[]
+          this.data_role =[];
+          this.data_role_key=[];
         },
 
         //permission 对话框，点击确认后执行
@@ -205,16 +206,19 @@
 
         //permission 对话框，取消后执行
         cancel_permission(){
-          console.log("permission 对话框关闭")
-          localStorage.removeItem("data_permission")
-          this.data_permission = []
-          this.data_permission_key=[]
+          console.log("permission 对话框关闭");
+          localStorage.removeItem("data_permission");
+          this.data_permission = [];
+          this.data_permission_key=[];
         },
 
+        //每行数据显示的格式函数，默认优先显示 label 值，没有时显示 key 值，可以自己组合出需要的数据格式。
         render_role_permission (item) {
           return item.label;
         },
+
       },
+
       mounted() {
         //  全局配置
         this.$Message.config({
@@ -222,12 +226,14 @@
           duration: 3
         });
       },
+
       beforeDestroy(){
           console.log("identity_user 页面关闭，开始清楚localStorage 数据");
           localStorage.removeItem("data_role");
           localStorage.removeItem("data_permission");
           console.log("data_role,data_permission 已清除完毕");
       }
+
     }
 </script>
 

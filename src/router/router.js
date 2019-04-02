@@ -23,6 +23,7 @@ import Register from '../views/Web/login_register/register'
 import Login from '../views/Web/login_register/login'
 import Identity from '../views/Service/components/service_identity_user'
 import LinkEdit from '../views/Service/components/service_link_edit'
+import service_feedbackMessage from '../views/Service/components/service_feedbackMessage'
 
 import Web_articleInfo from '../views/Web/mainContent/ArticleInfo/web_articleInfo'
 import Web_diaryInfo from '../views/Web/mainContent/ArticleInfo/web_diaryInfo'
@@ -56,7 +57,6 @@ const routes = [
           {path: 'articles', component: DataArticles, name:"web_data_articles"},        //用户文章数据页
           {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页(只显示作者设置为公开的)
         ]},
-
       //用户设置相关
       {path:'setting/:open_id',component:Setting,                                       //个人设置的导航页
         children:[
@@ -105,6 +105,7 @@ const routes = [
   //后台管理相关
   {path:"/ServiceController", component: Controller, name:"ServiceController",                  //后台管理首页
     children:[
+      {path: 'feedbackInfo',component: service_feedbackMessage,name:"service_feedback_message"},                       //博客统计
       {path: 'blogState',component: BlogTotal,name:"service_blog_state"},                       //博客统计
       {path: 'personalInfo', component: UserInfo, name:"service_user_info"},                    //个人数据
       {path: 'writeArticle', component: WriteArticle, name:"service_write_article"},            //文章编辑

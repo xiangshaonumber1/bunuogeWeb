@@ -26,10 +26,11 @@
             :name="item.index"
           >
             <div class="tabpane-content">
-              <router-view></router-view>
+              <router-view v-if="activeIndex === item.index"></router-view>
             </div>
           </TabPane>
         </Tabs>
+
       </Col>
     </Row>
 
@@ -49,26 +50,29 @@
               {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
                 childList:[
                   {child_title:'统计详情',child_index:'1-1',to_path:'service_blog_state'},
-                  {child_title:'个人详情',child_index:'1-2',to_path:'service_user_info'},
+                  // {child_title:'个人详情',child_index:'1-2',to_path:'service_user_info'},
                 ]},
-              {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
-                childList:[
-                  {child_title:'写文章',child_index:'2-1',to_path:'service_write_article'},
-                  {child_title:'写日记',child_index:'2-2',to_path:'service_write_diary'},
-                  {child_title:'提问题',child_index:'2-3',to_path:'service_white_page'},
-              ]},
-              {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',icon:'ios-copy',is_child:true,
-                childList:[
-                  {child_title:'我的文章',child_index:'3-1',to_path:'service_data_articles'},
-                  {child_title:'我的日记',child_index:'3-2',to_path:'service_data_diaries'},
-                  {child_title:'收藏文章',child_index:'3-3',to_path:'service_white_page'},
-                  {child_title:'我的评论',child_index:'3-4',to_path:'service_white_page'},
-                ]},
+
+              // {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
+              //   childList:[
+              //     {child_title:'写文章',child_index:'2-1',to_path:'service_write_article'},
+              //     {child_title:'写日记',child_index:'2-2',to_path:'service_write_diary'},
+              //     {child_title:'提问题',child_index:'2-3',to_path:'service_white_page'},
+              // ]},
+              // {parent_index:'3',parent_icon:'el-icon-location',parent_title:'文章管理',icon:'ios-copy',is_child:true,
+              //   childList:[
+              //     {child_title:'我的文章',child_index:'3-1',to_path:'service_data_articles'},
+              //     {child_title:'我的日记',child_index:'3-2',to_path:'service_data_diaries'},
+              //     {child_title:'收藏文章',child_index:'3-3',to_path:'service_white_page'},
+              //     {child_title:'我的评论',child_index:'3-4',to_path:'service_white_page'},
+              //   ]},
+
               {parent_index:'4',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
-                  {child_title:'用户管理',child_index:'4-1',to_path:'service_identity_user'},
-                  {child_title:'发送邮件',child_index:'4-2',to_path:'service_write_email'},
-                  {child_title:'链接编辑',child_index:'4-3',to_path:'service_identity_link'},
+                  {child_title:'反馈信息',child_index:'4-1',to_path:'service_feedback_message'},
+                  {child_title:'用户管理',child_index:'4-2',to_path:'service_identity_user'},
+                  {child_title:'发送邮件',child_index:'4-3',to_path:'service_write_email'},
+                  {child_title:'链接编辑',child_index:'4-4',to_path:'service_identity_link'},
                 ]
               },
             ],
@@ -89,13 +93,13 @@
       methods: {
 
         //前往首页
-        goHome:function(){
+        goHome(){
           console.log("跳转到首页");
           this.$router.push({name:'home'})
         },
 
         //实现点击面板，传递子菜单
-        TabClick:function(){
+        TabClick(){
           var path = '/404';
           for (var i = 0 ;i<this.submenuList.length;i++){
             for (var j = 0;j<this.submenuList[i].childList.length;j++){
@@ -109,7 +113,7 @@
         },
 
         //添加Tab标签内容
-        addTab: function (childIndex,childTitle,to_path) {
+        addTab(childIndex,childTitle,to_path) {
           let result = this.openNames.indexOf(childIndex);
           if (result === -1){
             //刷新全局的值
@@ -147,8 +151,8 @@
         //获取上次打开后未关闭的和已激活的页面
         getOpenAndActivePage(){
           console.log("getOpenAndActivePage 我正在执行");
-          var open = localStorage.getItem("open-names");
-          var active = localStorage.getItem("active-name");
+          let open = localStorage.getItem("open-names");
+          let active = localStorage.getItem("active-name");
           if (null != open){
             // console.log("初始化的 openNames value:"+this.openNames);
             this.openNames = open.split(",");
@@ -200,14 +204,14 @@
       },
 
       //实例销毁完成执行的钩子，跳转到其他页面时，清空保存的open-names和active-name
-      beforeDestroy:function() {//不过没起作用，也不知道是为什么，先留个问题在这
+      beforeDestroy() {//不过没起作用，也不知道是为什么，先留个问题在这
           console.log("ServiceController destoryed");
           localStorage.removeItem("open-names");
           localStorage.removeItem("active-name");
       },
 
       //实时监控数据变化并随之更新DOM，updated是更新之后的钩子，beforeUpdate是更新之前的钩子
-      updated:function () {
+      updated() {
         localStorage.setItem("active-name",this.activeIndex);
         localStorage.setItem("open-names",this.openNames);//然后再保存新的 open-names
       }
