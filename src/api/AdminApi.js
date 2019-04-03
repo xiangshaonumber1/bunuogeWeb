@@ -16,7 +16,7 @@ const admin = {
       method:'post'
     }).then( async res => {
       console.log("service_login 输出返回信息：", res);
-      if (res.data.code === '402') {
+      if (res.data.code === "402") {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.service_login();
