@@ -109,12 +109,14 @@ const admin = {
   /**
    * 修改指定用户的权限或角色
    */
-  updateRoleOrPermission(){
+  updateRoleOrPermission(aim_openID,new_value,type){
     return request({
       url:'',
       method:'post',
       data: qs.stringify({
-
+        aim_openID:aim_openID,
+        new_value:new_value,
+        type:type,
       })
     }).then( async res => {
       if (res.data.code === '402') {
@@ -128,7 +130,8 @@ const admin = {
         return res.data.data;
       }
     })
-  }
+  },
+
 
 
 

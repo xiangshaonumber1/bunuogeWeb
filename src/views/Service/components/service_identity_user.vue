@@ -27,7 +27,15 @@
               <span>{{ row.email }}</span>
             </template>
             <template slot-scope="{ row, index }" slot="role">
-              <Button @click="ready_update_role(row,index)">身份详情</Button>
+              <!--超级管理员无法被更改，删除，新增-->
+              <div v-if="row.role === 'admin'">
+                <span class="center-block" style="color: red;font-size: 14px">超级管理员</span>
+              </div>
+              <i-select v-else v-model="row.role" @on-change="updateRole(row.openID,$event)"
+                        v-bind:class="{rootColor : row.role === 'root',userColor : row.role === 'user'}">
+                <i-option value="root" label="管理员" style="color: rgb(65, 184, 131)"></i-option>
+                <i-option value="user" label="普通用户" style="color:deepskyblue"></i-option>
+              </i-select>
             </template>
             <template slot-scope="{ row, index }" slot="permission">
               <Button @click="ready_update_permission(row,index)">权限详情</Button>
@@ -38,17 +46,17 @@
         </i-col>
 
         <!-- 点击管理(用户身份),出现的对话框 -->
-        <Modal title="用户身份管理" v-model="showModal_role" :mask-closable="false" @on-ok="save_role" @on-cancel="cancel_role">
-          <Transfer :data="data_role"
-                    :target-keys="data_role_key"
-                    :render-format="render_role_permission"
-                    :titles="title_role"
-                    style="border: 1px solid gold;"
-                    @on-change="change_role"/>
-        </Modal>
+        <!--<Modal title="用户身份管理" v-model="showModal_role" :mask-closable="false" @on-ok="save_role" @on-cancel="cancel_role">-->
+          <!--<Transfer :data="data_role"-->
+                    <!--:target-keys="data_role_key"-->
+                    <!--:render-format="render_role_permission"-->
+                    <!--:titles="title_role"-->
+                    <!--style="border: 1px solid gold;"-->
+                    <!--@on-change="change_role"/>-->
+        <!--</Modal>-->
 
         <!-- 点击详情(用户权限) 时，出现的对话框 -->
-        <Modal title="用户权限管理" v-model="showModal_permission" :mask-closable="false" @on-ok="save_permission" @on-cancel="cancel_permission">
+        <Modal title="用户权限管理" v-model="showModal_permission" :mask-closable="false" @on-ok="updatePermission" @on-cancel="cancel_permission">
           <Transfer :data="data_permission"
                     :target-keys="data_permission_key"
                     :render-format="render_role_permission"
@@ -67,13 +75,10 @@
       data(){
         return {
           searchKey:null,//搜索关键字
-          showModal_role:false,
-          showModal_permission:false,
-          data_role:[],
-          data_role_key:[],
-          title_role:["可分配身份","当前身份"],
-          data_permission:[],
-          data_permission_key:[],
+          showModal_role:false, //是否显示修改角色身份对话框
+          showModal_permission:false, //是否显示修改角色权限对话框
+          data_permission:[], //权限字典
+          data_permission_key:[], //拥有的权限的对应的key
           title_permission:["未拥有权限","已拥有权限"],
           tabHead:[
             {title:'ID', slot:'id',ellipsis:true,align:'center',minWidth:100},
@@ -88,6 +93,31 @@
       },
       methods:{
 
+        //  修改用户角色,默认返回的是value，显示label
+        async updateRole(aim_openID, new_role) {
+          await this.$apis.AdminApi.updateRoleOrPermission(aim_openID, new_role, "role");
+        },
+
+        //修改用户权限
+        async updatePermission(aim_openID) {
+          console.log("输出 localStorage.getItem(\"data_permission\")：",localStorage.getItem("data_permission"));
+          const data_permission = localStorage.getItem("data_permission").split(",");
+          console.log("输出 data_permission：",data_permission);
+          console.log("输出 this.data_permission_key：",this.data_permission_key);
+          if (data_permission.toString() === this.data_permission_key.toString()){
+            console.log(" permission 改变前 和 改变后 数据一致，不用保存")
+          }else {
+            console.log(" permission 改变前 和 改变后 数据不一致，需要保存")
+          }
+          this.showModal_permission = false;
+          console.log("save_permission 完成")
+
+          // await this.$apis.AdminApi.updateRoleOrPermission(aim_openID, new_permission, "permission");
+        },
+
+        /**
+         * 获取用户部分信息、权限和身份
+         */
           async getUserRoleAndPermissionList(page) {
             const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page);
             if (result.total>0){
@@ -101,44 +131,12 @@
             this.$Message.error("对方不想执行，并向你抛出了一个异(bai)常(yan)")
           },
 
-        //role 修改：点击 弹出对话框，可修改 role
-        ready_update_role(row,index){
-            //data_role  目前拥有的身份数据
-            const data_role = JSON.parse(row.role);
-            /*
-            同时保存到localStorage中，以便点击确认保存后，判断改变身份前的身份和改变后的身份是否一致，
-            如果一致：点击保存，则不做任何处理
-            如果不一致：点击保存，实现数据持久化
-             */
-            localStorage.setItem("data_role",data_role);
-            // role_template 目前允许的，全部身份类型模板
-            const role_template = ["admin","root","user"];
-            this.showModal_role = true;
-            let temp_role = [];
-            for (let i = 0;i<role_template.length;i++){
-              temp_role.push({
-                key:role_template[i],
-                label: role_template[i],
-                disable: false,
-              })
-            }
-            this.data_role = temp_role.sort();
-
-            //根据 身份名，转为为对应的 key数组集合
-            let temp_role_key = [];
-            for (let j=0;j<data_role.length;j++){
-              temp_role_key.push(data_role[j])
-            }
-
-            this.data_role_key = temp_role_key.sort();
-        },
 
         //permission 修改：点击 弹出对话框，可修改 permission
         ready_update_permission(row,index){
-            //data_permission 目前拥有的 权限
-            const data_permission = JSON.parse(row.permission);
-            localStorage.setItem("data_permission",data_permission);
+            //显示修改权限对话框
             this.showModal_permission = true;
+            //权限字典,生成对饮的key和label,必须要
             const permission_template = ["add","delete","update"];
             let temp_permission=[];
             for (let k=0;k<permission_template.length;k++){
@@ -148,63 +146,33 @@
                   disable:false,
                 })
             }
+            //将字典排序后赋给 data_permission
             this.data_permission = temp_permission.sort();
 
-            //将从数据库中获取的json数组字符串 转化为json数组
-            let temp_permission_key = [];
-            for (let l=0;l<data_permission.length;l++){
-              temp_permission_key.push(data_permission[l])
-            }
-            this.data_permission_key = temp_permission_key.sort();
+
+          //data_permission 用户目前拥有的 权限
+          const data_permission = JSON.parse(row.permission);
+          //保存现有的权限到session中
+          localStorage.setItem("data_permission",data_permission);
+          let temp_permission_key = [];
+          //根据现有的权限，转换成对应的key
+          for (let l=0;l<data_permission.length;l++){
+            temp_permission_key.push(data_permission[l])
+          }
+          this.data_permission_key = temp_permission_key.sort();
         },
 
-        //role 穿梭框，有数据移动时 执行
-        change_role(newTargetKeys,direction,moveKeys){
-          console.log("change_role newTargetKeys:",newTargetKeys);
-          console.log("change_role direction:",direction);
-          console.log("change_role moveKeys:",moveKeys);
-          this.data_role_key = newTargetKeys;
-        },
 
-        //permission 穿梭框， 有数据移动时，执行
+        /**
+         * permission 穿梭框， 有数据移动时，执行
+         * @param newTargetKeys 改变后的值
+         * @param direction 移动方向
+         * @param moveKeys 被移动的值
+         */
         change_permission(newTargetKeys,direction,moveKeys){
-          console.log("change_permission newTargetKeys:",newTargetKeys);
-          console.log("change_permission direction:",direction);
-          console.log("change_permission moveKeys:",moveKeys);
           this.data_permission_key = newTargetKeys;
         },
 
-        // role 修改 对话框，点击确认后执行
-        save_role(){
-            // this.showModal_role = false;
-          const data_role = localStorage.getItem("data_role").split(",");
-          if (data_role.toString() === this.data_role_key.toString()){
-            console.log(" role 改变前 和 改变后 数据一致，不用保存")
-          }else {
-            console.log(" role 改变前 和 改变后 数据不一致，需要保存")
-          }
-            console.log("save_role 完成")
-        },
-
-        // role 修改 对话框，取消时 执行
-        cancel_role(){
-            console.log("role 对话框关闭");
-          localStorage.removeItem("data_role");
-          this.data_role =[];
-          this.data_role_key=[];
-        },
-
-        //permission 对话框，点击确认后执行
-        save_permission(){
-            const  data_permission = localStorage.getItem("data_permission").split(",");
-            if (data_permission.toString() === this.data_permission_key.toString()){
-              console.log(" permission 改变前 和 改变后 数据一致，不用保存")
-            }else {
-              console.log(" permission 改变前 和 改变后 数据不一致，需要保存")
-            }
-            this.showModal_permission = false;
-          console.log("save_permission 完成")
-        },
 
         //permission 对话框，取消后执行
         cancel_permission(){
@@ -250,4 +218,13 @@
     margin: 20px 50px;
   }
 
+  .adminColor{
+    color: red;
+  }
+  .rootColor{
+    color: rgb(65, 184, 131);
+  }
+  .userColor{
+    color: deepskyblue;
+  }
 </style>

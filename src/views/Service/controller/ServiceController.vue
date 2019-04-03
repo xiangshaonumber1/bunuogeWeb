@@ -136,7 +136,7 @@
           /** 勿删 **/
           let tabs = this.editableTabs;
           this.editableTabs = tabs.filter(tab => tab.index !== childIndex);
-
+``
           for (var i = 0 ;i<this.submenuList.length;i++){
             for (var j = 0;j<this.submenuList[i].childList.length;j++){
               if (this.submenuList[i].childList[j].child_index === this.activeIndex){
