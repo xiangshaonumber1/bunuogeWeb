@@ -1,7 +1,7 @@
 <template>
     <div id="management_user">
 
-      <Row type="flex" class="code-row-bg" align="middle" justify="space-around" style="border: 1px solid red">
+      <Row type="flex" class="code-row-bg" align="middle" justify="space-around">
 
         <i-col span="24">
           <Divider horization orientation="left"><span>用户权限管理</span></Divider>
@@ -9,8 +9,8 @@
 
         <i-col span="24">
           <div class="identity_header">
-            <Input search v-model="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch()" placeholder="用户openID / 昵称 / 邮箱" size="large"></Input>
-            <Button type="info" size="large" @click="doSearch">搜&emsp;索</Button>
+            <Input search v-model.trim="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch(searchKey)" placeholder="请输入 用户openID / 昵称 / 邮箱 进行搜索" size="large"></Input>
+            <Button type="info" size="large" @click="doSearch(searchKey)">搜&emsp;索</Button>
           </div>
         </i-col>
 
@@ -26,22 +26,30 @@
             <template slot-scope="{ row, index }" slot="email">
               <span>{{ row.email }}</span>
             </template>
+
+            <!--用户角色身份-->
             <template slot-scope="{ row, index }" slot="role">
-              <!--超级管理员无法被更改，删除，新增-->
-              <div v-if="row.role === 'admin'">
-                <span class="center-block" style="color: red;font-size: 14px">超级管理员</span>
+              <!--当前管理员和超级管理员无法被更改，删除，新增-->
+              <div v-if="row.openID === '0' || row.openID === $store.getters.openID">
+                <span style="font-size: 14px" class="center-block" v-bind:class="{adminColor : row.role === '超级管理员',rootColor : row.role === '管理员',userColor : row.role === '普通用户'}">{{row.role}}</span>
               </div>
-              <i-select v-else v-model="row.role" @on-change="updateRole(row.openID,$event)"
-                        v-bind:class="{rootColor : row.role === 'root',userColor : row.role === 'user'}">
-                <i-option value="root" label="管理员" style="color: rgb(65, 184, 131)"></i-option>
-                <i-option value="user" label="普通用户" style="color:deepskyblue"></i-option>
+              <i-select v-else v-model="row.role" @on-change="updateRole(row.openID,$event)" v-bind:class="{adminColor : row.role === '超级管理员',rootColor : row.role === '管理员',userColor : row.role === '普通用户'}">
+                <i-option v-for="(role,index) in dictionary_role" v-if="!(role === '超级管理员')" :value="role" :label="role" :key="index" v-bind:class="{adminColor : role === '超级管理员',rootColor : role === '管理员',userColor : role === '普通用户'}"></i-option>
               </i-select>
             </template>
+
+            <!--用户权限部分-->
             <template slot-scope="{ row, index }" slot="permission">
-              <i-select v-model="row.permission" multiple>
-                <i-option></i-option>
+              <div v-if="row.openID === '0' || row.openID === $store.getters.openID">
+                <Tag  v-for="(permission,index) in row.permission" :key="index">{{permission}}</Tag>
+              </div>
+
+              <i-select v-else v-model="row.permission" @on-open-change="allowedChange" @on-change="updatePermission(row.openID,$event)" multiple>
+                <i-option v-for="permission in dictionary_permission" :value="permission" :label="permission" :key="permission" ></i-option>
               </i-select>
+
             </template>
+
           </Table>
           <!-- 分页模块 -->
           <Page style="margin-top: 30px" class="text-center" show-total :total="userDataTotal" @on-change="getUserRoleAndPermissionList" />
@@ -58,17 +66,25 @@
         return {
           searchKey:null,//搜索关键字
           tabHead:[
-            {title:'openID', slot:'openID',ellipsis:true,align:'center',minWidth:100},
-            {title:'用户昵称', slot:'nickname',ellipsis:true,align:'center',minWidth:300},
-            {title:'用户邮箱',slot:'email',ellipsis:true,align:'center',minWidth:300},
-            {title:'用户身份',slot:'role',ellipsis:true,align:'center',minWidth:100},
+            {title:'openID', slot:'openID',ellipsis:true,align:'center',width:100},
+            {title:'用户昵称', slot:'nickname',ellipsis:true,align:'center'},
+            {title:'用户邮箱',slot:'email',ellipsis:true,align:'center'},
+            {title:'用户身份',slot:'role',ellipsis:true,align:'center'},
             {title:'用户权限',slot:'permission',align:'center',minWidth:100}
           ],
-          userDataList:[],
-          userDataTotal:0,
+          userDataList:[],  //用户数据
+          userDataTotal:0,  //数据总量
+          dictionary_role:[], //用户身份字典
+          dictionary_permission :[], //用户权限字典
+          could_update : false,   //是否允许修改用户权限问题
         }
       },
       methods:{
+
+        allowedChange(value){
+          console.log("是否允许修改 ： ",value);
+          this.could_update = value;
+        },
 
         //  修改用户角色,默认返回的是value，显示label
         async updateRole(aim_openID, new_role) {
@@ -76,27 +92,33 @@
         },
 
         //修改用户权限
-        async updatePermission() {
-          const result = await this.$apis.AdminApi.updateRoleOrPermission(this.selected_update_openID,this.data_permission_key,"permission");
-          if (result){
-            //关闭对话框，并初始化选择openID
-            this.showModal_permission = false;
-            this.selected_update_openID = '';
+        async updatePermission(aim_openID,new_permission) {
+          if (this.could_update){
+            console.log("正在修改");
+            await this.$apis.AdminApi.updateRoleOrPermission(aim_openID,JSON.stringify(new_permission),"permission");
           }
         },
 
         /**
-         * 获取用户部分信息、权限和身份
+         * 获取用户部分信息、权限和身份value
          */
-          async getUserRoleAndPermissionList(page) {
-            const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page);
+          async getUserRoleAndPermissionList(page,key_word) {
+            const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page,key_word);
+            console.log("输出 返回的新信息 ：",result);
             if (result.total>0){
-              this.userDataList = result.userRoleAndPermissionList;
+              let temp = result.userRoleAndPermission.userPartInfoList;
+              for (let userPart of temp) {
+                userPart.permission = JSON.parse(userPart.permission);
+              }
+              this.userDataList = temp;
               this.userDataTotal = result.total;
+              this.dictionary_permission = JSON.parse(result.userRoleAndPermission.dictionary_permission);
+              this.dictionary_role = JSON.parse(result.userRoleAndPermission.dictionary_role);
             }
           },
           // 回车，点击搜索图标，或点击搜索按钮 时 执行
-          doSearch(){
+          doSearch(key_word){
+            this.getUserRoleAndPermissionList(1,key_word);
             this.$Message.error("对方不想执行，并向你抛出了一个异(bai)常(yan)")
           },
 
@@ -135,7 +157,6 @@
   .identity_header{
     margin: 20px 50px;
   }
-
   .adminColor{
     color: red;
   }

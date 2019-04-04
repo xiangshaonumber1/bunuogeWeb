@@ -83,20 +83,20 @@ const admin = {
   /**
    * 通过管理员身份，查看并修改权限
    */
-  getUserRoleAndPermissionList(page,pageCount){
+  getUserRoleAndPermissionList(page,key_word){
     return request({
       url:'/admin/getUserRoleAndPermissionList',
       method:'get',
       params: {
         page:page,
-        pageCount:pageCount
+        key_word:key_word
       }
     }).then( async res => {
       console.log("返回的是啥？",res.data);
       if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result) {
-          return this.getUserRoleAndPermissionList(page,pageCount)
+          return this.getUserRoleAndPermissionList(page,key_word)
         } else {
           return null;
         }
@@ -111,7 +111,7 @@ const admin = {
    */
   updateRoleOrPermission(aim_openID,new_value,type){
     return request({
-      url:'',
+      url:'/admin/update_role_or_permission',
       method:'post',
       data: qs.stringify({
         aim_openID:aim_openID,
@@ -122,7 +122,7 @@ const admin = {
       if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result) {
-          return this.updateRoleOrPermission()
+          return this.updateRoleOrPermission(aim_openID,new_value,type)
         } else {
           return null;
         }
