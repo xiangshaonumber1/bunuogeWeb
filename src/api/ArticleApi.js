@@ -258,6 +258,7 @@ const article = {
         page:page,
       }
     }).then( async (res) => {
+      console.log("get_userDiary 返回的所有信息：",res)
       if (res.data.code === '404') {
         return null;
       } else {

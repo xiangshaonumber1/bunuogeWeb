@@ -24,6 +24,9 @@ import Login from '../views/Web/login_register/login'
 import Identity from '../views/Service/components/service_identity_user'
 import LinkEdit from '../views/Service/components/service_link_edit'
 import service_feedbackMessage from '../views/Service/components/service_feedbackMessage'
+import Management_article from '../views/Service/components/service_management_article'
+import Management_comments from '../views/Service/components/service_management_comments'
+
 
 import Web_articleInfo from '../views/Web/mainContent/ArticleInfo/web_articleInfo'
 import Web_diaryInfo from '../views/Web/mainContent/ArticleInfo/web_diaryInfo'
@@ -115,6 +118,8 @@ const routes = [
       {path: 'identityUser',component: Identity, name:"service_identity_user"},                 //用户管理
       {path: 'writeEmail',component: WriteEmail,name:"service_write_email"},                    //发送邮件
       {path: 'identityLink',component: LinkEdit, name:"service_identity_link"},                 //链接管理
+      {path: 'articleManagement',component: Management_article, name:"articleManagement"},                          //空白页
+      {path: 'commentsManagement',component: Management_comments, name:"commentsManagement"},                          //空白页
       {path: 'whitePage',component: White, name:"service_white_page"},                          //空白页
     ]},
   //404页面配置

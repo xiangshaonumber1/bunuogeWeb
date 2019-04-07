@@ -3,20 +3,19 @@
 
     <Row v-if="isAdmin" type="flex">
       <!-- 左侧，导航栏 -->
-      <Col span="4" class="layout-menu-left">
-        <Menu :theme="theme" width="auto" style="height: 100%">
+      <i-col span="4" class="layout-menu-left">
+        <Menu :theme="theme" width="auto" style="height: 100%" :active-name="activeIndex">
           <div class="layout-logo-left" v-on:click="goHome">GetOk<span>管理中心</span></div>
-          <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_title">
+          <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_index">
             <template slot="title"><Icon :type="submenu.icon" size="25"></Icon>{{submenu.parent_title}}</template>
-            <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_title" @click.native="addTab(child.child_index,child.child_title,child.to_path)">
+            <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_index" @click.native="addTab(child.child_index,child.child_title,child.to_path)">
               {{child.child_title}}
             </MenuItem>
           </Submenu>
         </Menu>
-      </Col>
+      </i-col>
 
-      <Col  span="20" class="layout_main_right">
-
+      <i-col  span="20" class="layout_main_right">
         <Tabs class="style-tab" type="card" v-model="activeIndex" :animated="false" closable @on-tab-remove="removeTab" @on-click="TabClick">
           <TabPane class="style-tabpane"
             v-for="item in editableTabs"
@@ -30,8 +29,8 @@
             </div>
           </TabPane>
         </Tabs>
+      </i-col>
 
-      </Col>
     </Row>
 
   </div>
@@ -69,10 +68,12 @@
 
               {parent_index:'4',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
-                  {child_title:'反馈信息',child_index:'4-1',to_path:'service_feedback_message'},
-                  {child_title:'用户管理',child_index:'4-2',to_path:'service_identity_user'},
-                  {child_title:'发送邮件',child_index:'4-3',to_path:'service_write_email'},
-                  {child_title:'链接编辑',child_index:'4-4',to_path:'service_identity_link'},
+                  {child_title:'文章管理',child_index:'4-1',to_path:'articleManagement'},
+                  {child_title:'评论管理',child_index:'4-2',to_path:'commentsManagement'},
+                  {child_title:'反馈信息',child_index:'4-3',to_path:'service_feedback_message'},
+                  {child_title:'用户管理',child_index:'4-4',to_path:'service_identity_user'},
+                  {child_title:'发送邮件',child_index:'4-5',to_path:'service_write_email'},
+                  {child_title:'链接编辑',child_index:'4-6',to_path:'service_identity_link'},
                 ]
               },
             ],
@@ -85,7 +86,6 @@
             }],
             openNames:[],
             theme: 'light',
-            intI:0
           }
       },
 
@@ -171,7 +171,6 @@
                     });
                     //如果该面板同时是正在显示的面板，则跳转到该页面上
                     if (this.submenuList[j].childList[k].child_index === active){
-                      console.log('mounted '+this.intI++);
                       this.$router.push({name:this.submenuList[j].childList[k].to_path});
                       this.activeIndex = active;
                     }
@@ -180,7 +179,6 @@
               }
             }
           }else {//表示没有打开的选项卡，自然也没有正在显示的选项卡，则重新定位到ServiceController主页
-            console.log('mounted '+this.intI++);
             this.$router.push({name:"ServiceController"})
           }
         },

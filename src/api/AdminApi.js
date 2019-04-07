@@ -57,9 +57,9 @@ const admin = {
   /**
    * 修改反馈信息状态
    */
-  updateStatus(feedID,status){
+  updateFeedBackStatus(feedID,status){
     return request({
-      url:'/admin/updateStatus',
+      url:'/admin/updateFeedBackStatus',
       method:'post',
       data:qs.stringify({
         feedID:feedID,
@@ -83,13 +83,14 @@ const admin = {
   /**
    * 通过管理员身份，查看并修改权限
    */
-  getUserRoleAndPermissionList(page,key_word){
+  getUserRoleAndPermissionList(page,key_word,pageCount){
     return request({
       url:'/admin/getUserRoleAndPermissionList',
       method:'get',
       params: {
         page:page,
-        key_word:key_word
+        key_word:key_word,
+        pageCount:pageCount
       }
     }).then( async res => {
       console.log("返回的是啥？",res.data);
@@ -132,6 +133,57 @@ const admin = {
     })
   },
 
+
+  /**
+   * 修改文章审核状态
+   */
+  updateArticleStatus(aim_articleID,new_status){
+    return request({
+      url:"/admin/updateArticleStatus",
+      method:"post",
+      data:qs.stringify({
+        articleID:aim_articleID,
+        new_status:new_status
+      })
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result) {
+          return this.updateArticleStatus(aim_articleID, new_status);
+        } else {
+          return null;
+        }
+      } else {
+        return res.data.data;
+      }
+    })
+  },
+
+  /**
+   * 管理员后台获取审核文章信息
+   */
+  getAdminArticleInfo(page, key_word, pageCount){
+    return request({
+      url:"/admin/getAdminArticleInfo",
+      method:"get",
+      params:{
+        page:page,
+        key_word:key_word,
+        pageCount:pageCount
+      }
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result) {
+          return this.getAdminArticleInfo(page, key_word, pageCount);
+        } else {
+          return null;
+        }
+      } else {
+        return res.data.data;
+      }
+    })
+  },
 
 
 

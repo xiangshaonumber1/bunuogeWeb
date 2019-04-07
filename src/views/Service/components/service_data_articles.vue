@@ -75,7 +75,7 @@
         //获取当前用户所创作的文章
        async get_userArticle(page) {
          const result = await this.$apis.ArticleApi.get_userArticle(this.$route.params.open_id,page);
-          if (result.total === 0 && page === 1 ) {
+          if (result === null && page === 1 ) {
             this.isLoading = false; //取消正在加载
             this.isNotFound = true; //显示404
           }else {

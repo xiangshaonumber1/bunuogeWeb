@@ -26,7 +26,7 @@
         </template>
         <template slot-scope="{ row, index }" slot="status">
 
-          <i-select v-model="row.status" @on-change="updateStatus(row.feedID,$event)"
+          <i-select v-model="row.status" @on-change="updateFeedBackStatus(row.feedID,$event)"
                     v-bind:class="{ status_pending : row.status === '待处理',
                     status_dealing : row.status === '处理中',
                     status_complete : row.status === '已处理',
@@ -85,9 +85,9 @@
         },
 
         //修改反馈处理状态
-        async updateStatus(feedID,status){
+        async updateFeedBackStatus(feedID,status){
           console.log("输出当前ID：",feedID,"——输出状态：",status);
-          await this.$apis.AdminApi.updateStatus(feedID,status);
+          await this.$apis.AdminApi.updateFeedBackStatus(feedID,status);
         },
 
         //查看回馈信息详情

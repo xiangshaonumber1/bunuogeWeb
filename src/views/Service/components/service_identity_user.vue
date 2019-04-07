@@ -10,7 +10,8 @@
         <i-col span="24">
           <div class="identity_header">
             <Input search v-model.trim="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch(searchKey)" placeholder="请输入 用户openID / 昵称 / 邮箱 进行搜索" size="large"></Input>
-            <Button type="info" size="large" @click="doSearch(searchKey)">搜&emsp;索</Button>
+            <Button type="info" size="large" @click="doSearch">搜&emsp;索</Button>
+            <Button type="success" size="large" style="float: right;" @click="loadAll">加 载 全 部</Button>
           </div>
         </i-col>
 
@@ -52,7 +53,7 @@
 
           </Table>
           <!-- 分页模块 -->
-          <Page style="margin-top: 30px" class="text-center" show-total :total="userDataTotal" @on-change="getUserRoleAndPermissionList" />
+          <Page style="margin-top: 30px" class="text-center" show-total :total="userDataTotal" @on-change="getUserRoleAndPermissionList($event,searchKey)" />
         </i-col>
 
       </Row>
@@ -102,8 +103,8 @@
         /**
          * 获取用户部分信息、权限和身份value
          */
-          async getUserRoleAndPermissionList(page,key_word) {
-            const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page,key_word);
+          async getUserRoleAndPermissionList(page,key_word,pageCount) {
+            const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page,key_word,pageCount);
             console.log("输出 返回的新信息 ：",result);
             if (result.total>0){
               let temp = result.userRoleAndPermission.userPartInfoList;
@@ -117,20 +118,22 @@
             }
           },
           // 回车，点击搜索图标，或点击搜索按钮 时 执行
-          doSearch(key_word){
-            this.getUserRoleAndPermissionList(1,key_word);
-            this.$Message.error("对方不想执行，并向你抛出了一个异(bai)常(yan)")
+          doSearch(){
+            this.getUserRoleAndPermissionList(1,this.searchKey);
           },
 
-
-
-
+        //加载全部
+        loadAll(){
+            //初始化搜索关键字
+            this.searchKey = null;
+            this.getUserRoleAndPermissionList(1,null,0)
+        }
 
 
       },
 
       mounted() {
-          this.getUserRoleAndPermissionList(1);
+          this.getUserRoleAndPermissionList(1,this.searchKey);
         //  全局配置
         // this.$Message.config({
         //   top: 50,
@@ -155,7 +158,10 @@
   }
 
   .identity_header{
-    margin: 20px 50px;
+    /*border: 1px solid red;*/
+    margin: 20px 0;
+    padding-left: 20px;
+    padding-right: 20px;
   }
   .adminColor{
     color: red;
