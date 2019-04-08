@@ -58,11 +58,13 @@ request.interceptors.response.use(response=>{
       break;
 
     case '405': // 仅仅用于表示token拒绝刷新等处理
-      Notice.info({
-        title:'身份过期提示：',
-        desc:response.data.msg,
-      });
-      router.push({name:'login'});
+      //注销存储在本地的用户信息
+      store.dispatch("clearLoginInfo");
+      // Notice.info({
+      //   title:'身份过期提示：',
+      //   desc:response.data.msg,
+      // });
+      // router.push({name:'login'});
       break;
 
     case '406': //用于修改，删除等需要对数据进行变动，但变动无效的，类似无效的修改，或者删除已删除的信息

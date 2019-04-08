@@ -6,9 +6,9 @@ export const saveLoginInfo = ({commit},user) => {
 };
 
 //用于注销，清除信息
-export const clearLoginInfo = ({commit},user)=>{
+export const clearLoginInfo = ({commit})=>{
   console.log("正在执行 清理用户信息");
-  commit("clearLoginInfo",user)
+  commit("clearLoginInfo")
 };
 
 export const saveAvatar = ({commit},newAvatar)=>{

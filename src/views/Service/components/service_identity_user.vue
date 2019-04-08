@@ -9,9 +9,9 @@
 
         <i-col span="24">
           <div class="identity_header">
-            <Input search v-model.trim="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch(searchKey)" placeholder="请输入 用户openID / 昵称 / 邮箱 进行搜索" size="large"></Input>
+            <Input search v-model.trim="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch" placeholder="请输入 用户openID / 昵称 / 邮箱 进行搜索" size="large"></Input>
             <Button type="info" size="large" @click="doSearch">搜&emsp;索</Button>
-            <Button type="success" size="large" style="float: right;" @click="loadAll">加 载 全 部</Button>
+            <Button type="success" size="large" style="float: right;" @click="refreshAll">刷 新 全 部</Button>
           </div>
         </i-col>
 
@@ -53,7 +53,7 @@
 
           </Table>
           <!-- 分页模块 -->
-          <Page style="margin-top: 30px" class="text-center" show-total :total="userDataTotal" @on-change="getUserRoleAndPermissionList($event,searchKey)" />
+          <Page style="margin-top: 30px" class="text-center" show-total :current="page" :total="userDataTotal" @on-change="getUserRoleAndPermissionList($event,searchKey)" />
         </i-col>
 
       </Row>
@@ -78,6 +78,7 @@
           dictionary_role:[], //用户身份字典
           dictionary_permission :[], //用户权限字典
           could_update : false,   //是否允许修改用户权限问题
+          page:0,
         }
       },
       methods:{
@@ -115,6 +116,7 @@
               this.userDataTotal = result.total;
               this.dictionary_permission = JSON.parse(result.userRoleAndPermission.dictionary_permission);
               this.dictionary_role = JSON.parse(result.userRoleAndPermission.dictionary_role);
+              this.page = page;
             }
           },
           // 回车，点击搜索图标，或点击搜索按钮 时 执行
@@ -123,10 +125,10 @@
           },
 
         //加载全部
-        loadAll(){
+        refreshAll(){
             //初始化搜索关键字
             this.searchKey = null;
-            this.getUserRoleAndPermissionList(1,null,0)
+            this.getUserRoleAndPermissionList(1,null)
         }
 
 

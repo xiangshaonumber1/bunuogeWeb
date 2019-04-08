@@ -253,12 +253,27 @@
         //获取近三日热门推荐文章
         async getTop(){
             const result = await this.$apis.ArticleApi.getTop();
+        },
+
+        //判断是否有必要刷新token
+        async refreshToken() {
+          const token = localStorage.getItem("token");
+          if (token){
+            const result = await this.$apis.AuthenticationApi.getToken();
+            console.log("输出：",result);
+          }else {
+            console.log("token 获取为空，不用刷新");
+          }
         }
 
       },
 
       //首页数据获取
       mounted(){
+
+        //首页刷新token，(如果有必要)
+        this.refreshToken();
+
         //获取首页基本文章信息
         this.get_article_list(this.page);
 

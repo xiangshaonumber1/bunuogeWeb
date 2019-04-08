@@ -185,14 +185,22 @@
 
         //admin权限验证
         async service_login(){
-          const result = await this.$apis.AdminApi.service_login();
-          console.log("输出 result 值",result);
-          if (!result){
+          const token = localStorage.getItem("token");
+          if (token){
+            const result = await this.$apis.AuthenticationApi.getToken();
+            if (result){
+              //刷新成功
+              this.isAdmin = result;
+              this.getOpenAndActivePage();
+            }else {
+              //刷新失败
+              return this.$router.push({name:'index'})
+            }
+          }else {
             return this.$router.push({name:'index'})
           }
-          this.isAdmin = result;
-          this.getOpenAndActivePage();
         }
+
       },
       //**********************  methods end ****************************
 

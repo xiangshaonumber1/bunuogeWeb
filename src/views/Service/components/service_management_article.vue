@@ -6,7 +6,13 @@
 
       <!-- 搜索部分 -->
       <Row type="flex" class="code-row-bg" justify="center" align="middle">
-
+        <i-col span="24">
+          <div class="identity_header">
+            <Input search v-model.trim="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch" placeholder="请输入 文章标题 / 用户昵称 / 用户邮箱 进行搜索" size="large"></Input>
+            <Button type="info" size="large" @click="doSearch">搜&emsp;索</Button>
+            <Button type="success" size="large" style="float: right;" @click="refreshAll">刷 新 全 部</Button>
+          </div>
+        </i-col>
       </Row>
 
       <!--表单数据部分-->
@@ -49,7 +55,7 @@
 
       <!--分页部分-->
       <Row>
-        <Page show-total :total="articleTableDataTotal" class="text-center" style="margin-top: 30px" @on-change="getAdminArticleInfo($event,searchKey)"></Page>
+        <Page show-total :total="articleTableDataTotal" class="text-center" :current="page" style="margin-top: 30px" @on-change="getAdminArticleInfo($event,searchKey)"></Page>
         <Divider/>
       </Row>
 
@@ -81,10 +87,23 @@
             //表格具体数据
             articleTableData:[],
             articleTableDataTotal:0,
+            page:0,
           }
       },
 
       methods:{
+
+
+        //  根据关键字，进行搜索查询
+        doSearch(){
+          this.getAdminArticleInfo(1,this.searchKey);
+        },
+
+        //  刷新全部
+        refreshAll(){
+          this.searchKey = null;
+          this.getAdminArticleInfo(1,null)
+        },
 
           //修改文审核状态
           async updateArticleStatus(articleID, status) {
@@ -109,6 +128,7 @@
               this.articleTableData = result.adminArticleInfo.adminArticleList;
               this.dictionary_articleStatus = JSON.parse(result.adminArticleInfo.dictionary_articleStatus.toString());
               this.articleTableDataTotal = result.total;
+              this.page = page;
             }
           },
 
@@ -130,6 +150,13 @@
 </script>
 
 <style scoped>
+
+  .identity_header{
+    /*border: 1px solid red;*/
+    margin: 20px 0;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 
   .passColor{
     color: rgb(65, 184, 131);

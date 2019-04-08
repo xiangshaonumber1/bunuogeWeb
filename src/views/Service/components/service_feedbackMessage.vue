@@ -42,7 +42,7 @@
       <Page style="margin-top: 30px" class="text-center" show-total :total="feedbackTotal" @on-change="getFeedBackInfo" />
 
       <!--反馈建议内容详情-->
-      <Modal v-model="showFeedBackContent" title="反馈内容详情" :mask-closable="false" :footer-hide="true">
+      <Modal v-model="showFeedBackContent" title="反馈内容详情" :current="page" :mask-closable="false" :footer-hide="true">
         <p>
           {{this.feedbackContent}}
         </p>
@@ -70,6 +70,7 @@
           feedbackTotal:0,
           showFeedBackContent:false,  //是否显示反馈内容详情
           feedbackContent:'',   //反馈内容详情
+          page:0,
         };
       },
 
@@ -80,6 +81,7 @@
           if (result.total>0){
             this.feedbackData = result.feedBackMessageList;
             this.feedbackTotal = result.total;
+            this.page = page;
           }
 
         },
