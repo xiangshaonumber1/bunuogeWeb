@@ -11,13 +11,15 @@
           <div class="identity_header">
             <Input search v-model.trim="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch" placeholder="请输入 用户openID / 昵称 / 邮箱 进行搜索" size="large"></Input>
             <Button type="info" size="large" @click="doSearch">搜&emsp;索</Button>
-            <Button type="success" size="large" style="float: right;" @click="refreshAll">刷 新 全 部</Button>
+            <Button type="error" size="large" style="float: right;margin: 0 10px" @click="resetPassword" :disabled="tableSelectedRow<0">重 置 密 码</Button>
+            <Button type="success" size="large" style="float: right;margin: 0 10px" @click="refreshAll">刷 新 全 部</Button>
+
           </div>
         </i-col>
 
         <!--表单数据展示-->
         <i-col span="24">
-          <Table ref="userDataTable" :columns="tabHead" :data="userDataList" border>
+          <Table ref="userDataTable" :columns="tabHead" :data="userDataList" border @on-row-click="selectedRow" highlight-row>
             <template slot-scope="{ row, index }" slot="openID">
               <span>{{ row.openID }}</span>
             </template>
@@ -39,16 +41,14 @@
               </i-select>
             </template>
 
-            <!--用户权限部分-->
+            <!--用户权限部分。超级管理员或者是用户自己，都不能编辑-->
             <template slot-scope="{ row, index }" slot="permission">
               <div v-if="row.openID === '0' || row.openID === $store.getters.openID">
                 <Tag  v-for="(permission,index) in row.permission" :key="index">{{permission}}</Tag>
               </div>
-
-              <i-select v-else v-model="row.permission" @on-open-change="allowedChange" @on-change="updatePermission(row.openID,$event)" multiple>
+              <i-select v-else v-model="row.permission" @on-open-change="allowedChangePermission" @on-change="updatePermission(row.openID,$event)" multiple>
                 <i-option v-for="permission in dictionary_permission" :value="permission" :label="permission" :key="permission" ></i-option>
               </i-select>
-
             </template>
 
           </Table>
@@ -71,20 +71,35 @@
             {title:'用户昵称', slot:'nickname',ellipsis:true,align:'center'},
             {title:'用户邮箱',slot:'email',ellipsis:true,align:'center'},
             {title:'用户身份',slot:'role',ellipsis:true,align:'center'},
-            {title:'用户权限',slot:'permission',align:'center',minWidth:100}
+            {title:'用户权限',slot:'permission',align:'center',minWidth:100},
           ],
           userDataList:[],  //用户数据
           userDataTotal:0,  //数据总量
           dictionary_role:[], //用户身份字典
           dictionary_permission :[], //用户权限字典
           could_update : false,   //是否允许修改用户权限问题
+          tableSelectedRow:-1,
           page:0,
         }
       },
       methods:{
 
-        allowedChange(value){
-          console.log("是否允许修改 ： ",value);
+        //表格选中某一行
+        selectedRow(row,index){
+          console.log("输出当前 index:",index);
+          if (index){
+            this.tableSelectedRow = index;
+          }
+        },
+
+        //重置密码
+        resetPassword(){
+           let openID = this.userDataList[this.tableSelectedRow].openID;
+           console.log("需要重置的目标ID",openID);
+        },
+
+        //是否允许修改用户权限问题
+        allowedChangePermission(value){
           this.could_update = value;
         },
 
@@ -116,7 +131,8 @@
               this.userDataTotal = result.total;
               this.dictionary_permission = JSON.parse(result.userRoleAndPermission.dictionary_permission);
               this.dictionary_role = JSON.parse(result.userRoleAndPermission.dictionary_role);
-              this.page = page;
+              this.page = page; //设置当前显示页号
+              this.tableSelectedRow = -1; //重置当前选中行
             }
           },
           // 回车，点击搜索图标，或点击搜索按钮 时 执行
