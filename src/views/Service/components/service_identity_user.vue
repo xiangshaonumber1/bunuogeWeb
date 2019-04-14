@@ -11,7 +11,7 @@
           <div class="identity_header">
             <Input search v-model.trim="searchKey" :maxlength="20" style="width: 400px;" @on-search="doSearch" placeholder="请输入 用户openID / 昵称 / 邮箱 进行搜索" size="large"></Input>
             <Button type="info" size="large" @click="doSearch">搜&emsp;索</Button>
-            <Button type="error" size="large" style="float: right;margin: 0 10px" @click="resetPassword" :disabled="tableSelectedRow<0">重 置 密 码</Button>
+            <Button type="error" size="large" style="float: right;margin: 0 10px" @click="resetPasswordButton" :disabled="tableSelectedRow < 0">重 置 密 码</Button>
             <Button type="success" size="large" style="float: right;margin: 0 10px" @click="refreshAll">刷 新 全 部</Button>
 
           </div>
@@ -57,6 +57,27 @@
         </i-col>
 
       </Row>
+
+      <!-- 重置密码确认 对话框-->
+      <Modal v-model="restConfirm" :mask-closable="false" :loading="reset_loading_status">
+        <p slot="header" style="color:red;text-align: center" >
+          <Icon type="ios-information-circle"></Icon>
+          <span>重置用户密码确认</span>
+        </p>
+        <p v-if="restConfirm" style="font-size: 16px;text-align: center">
+          请问你是否确认要重置<br>
+          昵称为：<span v-html="this.userDataList[this.tableSelectedRow].nickname"></span><br>
+          openID为：{{this.userDataList[this.tableSelectedRow].openID}}<br>
+          邮箱为：{{this.userDataList[this.tableSelectedRow].email}}<br>
+          的用户的密码？
+        </p>
+        <p slot="footer">
+          <Button type="error" @click="doResetPassword" long size="large"><span style="font-size: 16px">确 认 并 重 置 密 码</span></Button>
+        </p>
+
+        <Spin fix v-if="reset_loading_status"></Spin>
+
+      </Modal>
     </div>
 </template>
 
@@ -78,24 +99,57 @@
           dictionary_role:[], //用户身份字典
           dictionary_permission :[], //用户权限字典
           could_update : false,   //是否允许修改用户权限问题
-          tableSelectedRow:-1,
+          tableSelectedRow:-1, //表格默认选中行
           page:0,
+          restConfirm:false, //重置密码确认
+          reset_loading_status:false,
         }
       },
       methods:{
 
+        // 取消重置密码
+        // cancelResetPassword(){
+        //   console.log("取消重置密码");
+        //   this.restConfirm = false;
+        //   console.log("输出当前 modal 显示情况：",this.restConfirm)
+        // },
+
+        //去掉html标签
+        replaceHtml(value){
+          var result = value.replace(/<\/?.+?>/g,"");
+          result = result.replace(/ /g,"");
+          return result;
+        },
+
+          //执行重置密码操作
+          doResetPassword(){
+          this.reset_loading_status = true;
+            let openID = this.userDataList[this.tableSelectedRow].openID;
+            console.log("即将发起 重置密码的请求......");
+            const result = this.$apis.AdminApi.adminResetPassword(openID);
+            if (result){
+              this.restConfirm = false;
+            }else {
+              this.$Message.error({
+                content:'重置密码失败，请注意处理！'
+              })
+            }
+            this.reset_loading_status = false;
+            console.log("我应该是最后输出，result:",result)
+          },
+
         //表格选中某一行
         selectedRow(row,index){
           console.log("输出当前 index:",index);
-          if (index){
+          if (index >= 0){
             this.tableSelectedRow = index;
+            console.log("输出 tableSelectedRow：",this.tableSelectedRow)
           }
         },
 
-        //重置密码
-        resetPassword(){
-           let openID = this.userDataList[this.tableSelectedRow].openID;
-           console.log("需要重置的目标ID",openID);
+        //确认显示重置密码对话框
+        resetPasswordButton(){
+          this.restConfirm = true;
         },
 
         //是否允许修改用户权限问题
@@ -133,7 +187,9 @@
               this.dictionary_role = JSON.parse(result.userRoleAndPermission.dictionary_role);
               this.page = page; //设置当前显示页号
               this.tableSelectedRow = -1; //重置当前选中行
+              console.log("数据已全部加载完毕")
             }
+
           },
           // 回车，点击搜索图标，或点击搜索按钮 时 执行
           doSearch(){
@@ -150,13 +206,14 @@
 
       },
 
-      mounted() {
-          this.getUserRoleAndPermissionList(1,this.searchKey);
+      async mounted() {
+        await this.getUserRoleAndPermissionList(1, this.searchKey);
         //  全局配置
         // this.$Message.config({
         //   top: 50,
         //   duration: 3
         // });
+        console.log("我应该在数据全部加载完毕后再执行")
       },
 
       beforeDestroy(){

@@ -46,11 +46,11 @@
             isAdmin:false,    //判断当前用户是否是管理员
             submenuList:[
               //每一个父菜单和其子菜单的所有设置
-              {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
-                childList:[
-                  {child_title:'统计详情',child_index:'1-1',to_path:'service_blog_state'},
-                  // {child_title:'个人详情',child_index:'1-2',to_path:'service_user_info'},
-                ]},
+              // {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
+              //   childList:[
+              //     {child_title:'统计详情',child_index:'1-1',to_path:'service_blog_state'},
+              //     // {child_title:'个人详情',child_index:'1-2',to_path:'service_user_info'},
+              //   ]},
 
               // {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
               //   childList:[
@@ -69,11 +69,11 @@
               {parent_index:'4',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
                   {child_title:'文章管理',child_index:'4-1',to_path:'articleManagement'},
-                  {child_title:'评论管理',child_index:'4-2',to_path:'commentsManagement'},
+                  // {child_title:'评论管理',child_index:'4-2',to_path:'commentsManagement'},
                   {child_title:'反馈信息',child_index:'4-3',to_path:'service_feedback_message'},
                   {child_title:'用户管理',child_index:'4-4',to_path:'service_identity_user'},
-                  {child_title:'发送邮件',child_index:'4-5',to_path:'service_write_email'},
-                  {child_title:'链接编辑',child_index:'4-6',to_path:'service_identity_link'},
+                  // {child_title:'发送邮件',child_index:'4-5',to_path:'service_write_email'},
+                  // {child_title:'链接编辑',child_index:'4-6',to_path:'service_identity_link'},
                 ]
               },
             ],

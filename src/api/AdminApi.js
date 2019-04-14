@@ -185,6 +185,30 @@ const admin = {
     })
   },
 
+  /**
+   * 管理员重置指定用户密码
+   */
+  adminResetPassword(aim_openID){
+    return request({
+      url:'/admin/adminResetPassword',
+      method:'post',
+      data:qs.stringify({
+        aim_openID:aim_openID
+      })
+    }).then( async res => {
+      if (res.data.code === '402') {
+        const result = await AuthenticationApi.getToken();
+        if (result) {
+          return this.adminResetPassword(aim_openID);
+        } else {
+          return false;
+        }
+      } else {
+        return res.data.data;
+      }
+    })
+  }
+
 
 
 };
