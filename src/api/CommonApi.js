@@ -40,15 +40,17 @@ const common = {
   /**
    * 重置密码
    */
-  resetPassword(email,emailCode){
+  resetPassword(username,email,emailCode){
     return request({
       url:'/common/resetPassword',
       method:'post',
       data:qs.stringify({
+        username:username,
         email:email,
         emailCode:emailCode,
       })
     }).then( res =>{
+      console.log("重置密码返回结果：",res);
       return res.data.data;
     })
 

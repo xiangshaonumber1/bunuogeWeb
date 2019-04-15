@@ -52,10 +52,10 @@
               </form-item>
               <form-item label="邮箱验证码">
                 <Input type="text" v-model="resetPasswordInfo.emailCode" placeholder="请输入验证码......">
-                  <Button slot="append" type="info" @click="getEmailCode(resetPasswordInfo.email)">获取验证码</Button>
+                  <Button slot="append" type="primary" style="background-color: lightskyblue" @click="getEmailCode(resetPasswordInfo.email)">获取验证码</Button>
                 </Input>
               </form-item>
-              <Button class="center-block" type="info" size="large" @click="resetPassword">确认并验证</Button>
+              <Button class="center-block" type="primary" size="large" @click="resetPassword">确认并验证</Button>
             </Form>
           <spin v-if="loading_reset" fix></spin>
         </Modal>
@@ -99,8 +99,12 @@
            */
 
           this.loading_reset = true;  //设置spin加载中
-          const result = await this.$apis.CommonApi.resetPassword(this.resetPasswordInfo.email,this.resetPasswordInfo.emailCode);
+          const result = await this.$apis.CommonApi.resetPassword(this.resetPasswordInfo.username,this.resetPasswordInfo.email,this.resetPasswordInfo.emailCode);
           if (result){
+            this.$Message.success({
+              content:"恭喜你，密码重置成功，重置后的密码为123456789，建议登录后立即修改密码",
+              duration:10
+            });
             this.forgotPasswordModal = false;
           }else {
             this.$Message.error({
