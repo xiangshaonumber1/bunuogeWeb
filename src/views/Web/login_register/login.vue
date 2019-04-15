@@ -23,7 +23,7 @@
               </form-item>
 
               <form-item>
-                <span><a style="color: white;font-size: 16px;float: right">忘记密码？</a></span>
+                <span><a style="color: white;font-size: 16px;float: right" @click="forgotPasswordClick">忘记密码？</a></span>
                 <Button type="info" size="large" @click="request_login" long style="margin:10px 0;">
                   <span  style="color: white;font-size: 22px">登&emsp;录</span>
                 </Button>
@@ -38,21 +38,83 @@
 
       </div>
       <!-- 用户登录模块（默认模块） end -->
+
+      <!--点击忘记密码对话框-->
+
+        <Modal v-model="forgotPasswordModal"  footer-hide :mask-closable="false" title="申请重置密码">
+
+            <Form :model="resetPasswordInfo" label-position="left" :label-width="100">
+              <form-item label="重置账号">
+                <Input type="text" v-model="resetPasswordInfo.username" placeholder="请输入您的账号"></Input>
+              </form-item>
+              <form-item label="绑定邮箱">
+                <Input type="text" v-model="resetPasswordInfo.email" placeholder="请输入您的绑定邮箱......"></Input>
+              </form-item>
+              <form-item label="邮箱验证码">
+                <Input type="text" v-model="resetPasswordInfo.emailCode" placeholder="请输入验证码......">
+                  <Button slot="append" type="info" @click="getEmailCode(resetPasswordInfo.email)">获取验证码</Button>
+                </Input>
+              </form-item>
+              <Button class="center-block" type="info" size="large" @click="resetPassword">确认并验证</Button>
+            </Form>
+          <spin v-if="loading_reset" fix></spin>
+        </Modal>
+
+
     </div>
 </template>
 
 <script>
     export default {
         name: "login",
-      data(){
+      data: function () {
         return {
-          loginInfo:{
-            username:'',
-            password:''
+          loginInfo: {
+            username: '',
+            password: ''
           },
+          forgotPasswordModal: false, //忘记密码对话框
+          loading_reset: false, //重置等待
+          resetPasswordInfo: {  //重置密码确认信息
+            username: '', //用户名（账号）
+            email: '',  //用户绑定邮箱
+            emailCode: '',  //邮箱验证码
+          }
         };
       },
       methods:{
+
+        //请求获取新的验证码到指定邮箱
+        getEmailCode(email){
+          console.log("目标邮箱：",email);
+          this.$apis.UserApi.mailCode(email,"emailReset")
+        },
+
+          //通过验证，重置密码
+        async resetPassword() {
+          //这里还要对表单元素做检查
+
+          /**
+           * 待完成...............................
+           */
+
+          this.loading_reset = true;  //设置spin加载中
+          const result = await this.$apis.CommonApi.resetPassword(this.resetPasswordInfo.email,this.resetPasswordInfo.emailCode);
+          if (result){
+            this.forgotPasswordModal = false;
+          }else {
+            this.$Message.error({
+              content:'修改密码时遇到错误，请稍后再试，或联系管理员'
+            })
+          }
+          this.loading_reset = false;
+        },
+
+        //忘记密码操作
+        forgotPasswordClick(){
+          console.log("忘记密码了？我来帮你......")
+          this.forgotPasswordModal = true;
+        },
         //返回首页
         goIndex:function(){
           this.$router.push({name:'index'})

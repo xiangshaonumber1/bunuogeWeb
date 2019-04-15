@@ -165,7 +165,7 @@ const user = {
         return res.data;
       }
     })
-  }
+  },
 
 };
 

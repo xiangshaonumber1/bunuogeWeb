@@ -35,6 +35,23 @@ const common = {
     }).then( res =>{
       return res.data.data === true;
     })
+  },
+
+  /**
+   * 重置密码
+   */
+  resetPassword(email,emailCode){
+    return request({
+      url:'/common/resetPassword',
+      method:'post',
+      data:qs.stringify({
+        email:email,
+        emailCode:emailCode,
+      })
+    }).then( res =>{
+      return res.data.data;
+    })
+
   }
 
 };
