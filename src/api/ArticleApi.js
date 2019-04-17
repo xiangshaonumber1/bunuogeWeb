@@ -157,11 +157,7 @@ const article = {
         articleID:articleID
       }
     }).then(res=>{
-      if (res.data.code === '404'){
-        return null; //404返回null
-      }else {
-        return res.data.data //如果有数据，则返回获取的data
-      }
+     return res.data.data //如果有数据，则返回获取的data
     })
   },
 
@@ -177,11 +173,7 @@ const article = {
       }
     }).then( res => {
       console.log("输出的信息 res：",res);
-      if (res.data.code === '404'){
-        return null; //404返回null
-      }else {
-        return res.data.data //如果有数据，则返回获取的data
-      }
+      return res.data.data //如果有数据，则返回获取的data
     })
   },
 
@@ -231,11 +223,7 @@ const article = {
         page:page,
       }
     }).then( async (res) => {
-      if (res.data.code === '404') {
-        return null;
-      } else {
-        return res.data.data;
-      }
+      return res.data.data;
     })
   },
 
@@ -253,11 +241,7 @@ const article = {
       }
     }).then( async (res) => {
       console.log("get_userDiary 返回的所有信息：",res)
-      if (res.data.code === '404') {
-        return null;
-      } else {
-        return res.data.data;
-      }
+      return res.data.data;
     })
   },
 
@@ -375,8 +359,6 @@ const article = {
         }else {
           return null;
         }
-      }else if (res.data.code === '404'){
-        return null;
       }else {
         return res.data.data;
       }

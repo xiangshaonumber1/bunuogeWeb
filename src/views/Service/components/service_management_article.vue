@@ -124,9 +124,12 @@
           async getAdminArticleInfo(page, key_word, pageCount) {
             const result = await this.$apis.AdminApi.getAdminArticleInfo(page, key_word, pageCount);
             if (result.total > 0){
-              console.log("输出返回的结果：",result);
               this.articleTableData = result.adminArticleInfo.adminArticleList;
               this.dictionary_articleStatus = JSON.parse(result.adminArticleInfo.dictionary_articleStatus.toString());
+              this.articleTableDataTotal = result.total;
+              this.page = page;
+            }else {
+              this.articleTableData = [];
               this.articleTableDataTotal = result.total;
               this.page = page;
             }
