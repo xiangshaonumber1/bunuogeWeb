@@ -142,9 +142,9 @@
           scrollLoadSwitch:true, //滚动数据加载开关,防止滚动到底部的时候，防止多次请求
           autoplaySpeed:5000, //轮播切换时间
           CarouselOrder:0,  //幻灯片的索引，从 0 开始
-          topList:['Centos下安装docker以及docker-composer以及docker-composer',
-            '【跃迁之路】【696天】程序员高效学习方法论探索系列（实验阶段453-2019.1.16）',
-            '“崩溃了？不可能，我全 Catch 住了” | Java 异常处理 '],
+          topList:['暂无推荐，敬请期待...',
+            '暂无推荐，敬请期待...',
+            '暂无推荐，敬请期待...'],
           articleList:[], //首页基本文章信息
           posterList:[],  //首页海报信息
         }
@@ -184,6 +184,7 @@
           //只有允许加载下一页的情况下，才去请求数据
           if (this.loadMore){
             const result = await this.$apis.ArticleApi.get_article_list(articlePage);
+            console.log("我看看你到底要输出什么:",result)
             if (result.total === 0 && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
               this.notFound = true;
               this.isLoading = false;
@@ -260,7 +261,7 @@
           const token = localStorage.getItem("token");
           if (token){
             const result = await this.$apis.AuthenticationApi.getToken();
-            console.log("输出：",result);
+            console.log("是否有刷新token：",result);
           }else {
             console.log("token 获取为空，不用刷新");
           }

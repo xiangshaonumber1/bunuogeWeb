@@ -5,7 +5,7 @@
           <!--品牌图标-->
           <div class="navbar-header navbar-left">
             <!--Logo-->
-            <a class=" navbar-left" href="#">
+            <a class=" navbar-left" @click="goIndex">
               <img src="/static/picture/getok-2.png" alt="Brand" style="height: 60px">
             </a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -77,7 +77,11 @@
       methods:{
 
         goFeedBackMessage(){
-          this.$router.push({name:'web_feedback'});
+          this.$Notice.info({
+            title: '敬请期待：',
+            desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
+          })
+          // this.$router.push({name:'web_feedback'});
         },
         //前往本站的留言墙
         goMessage_wall(){

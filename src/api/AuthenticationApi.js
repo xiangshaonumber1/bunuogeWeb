@@ -50,6 +50,8 @@ const authentication = {
       })
     }).then(response => {
       if (response.data.code === '200') { //登录成功
+        console.log("登录成功，准备保存信息 response.data.data.avatar：",response.data.data.avatar)
+        console.log("登录成功，准备保存信息 JSON.parse(response.data.data.avatar)[0] ：",JSON.parse(response.data.data.avatar)[0])
         const userInfo = {
           openID: response.data.data.openID,
           nickname: response.data.data.nickname,
@@ -58,6 +60,8 @@ const authentication = {
         };
         store.dispatch("saveLoginInfo", userInfo);
         router.push({name: 'index'});
+      }else {
+        return false;
       }
     })
   },

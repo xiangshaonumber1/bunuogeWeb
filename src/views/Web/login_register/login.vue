@@ -13,26 +13,24 @@
               <label style="color: white;">用户登录</label>
               <a class="go-register" @click="goRegister">立即注册</a>
             </p>
-            <i-form :model="loginInfo">
+            <Form ref="loginInfoForm" :model="loginInfo" :rules="loginValidate">
               <form-item prop="username">
                 <Input type="text" v-model="loginInfo.username" placeholder="在这里输入邮箱号" size="large"></Input>
               </form-item>
-
               <form-item prop="password">
                 <Input type="password" v-model="loginInfo.password" placeholder="在这里输入您的密码" size="large" @on-enter="request_login"></Input>
               </form-item>
-
               <form-item>
                 <span><a style="color: white;font-size: 16px;float: right" @click="forgotPasswordClick">忘记密码？</a></span>
-                <Button type="info" size="large" @click="request_login" long style="margin:10px 0;">
+                <Button type="info" size="large" @click="request_login" long style="margin:10px 0;" :loading="loading_login">
                   <span  style="color: white;font-size: 22px">登&emsp;录</span>
                 </Button>
                 <div class="text-center" style="margin-top: 20px;">
                   <span><a style="color:white;font-size: 16px" @click="goIndex">前往首页>></a></span>
                 </div>
               </form-item>
-
-            </i-form>
+              <!--<Spin v-if="loading_login" fix></Spin>-->
+            </Form>
           </div>
         </div>
 
@@ -42,17 +40,16 @@
       <!--点击忘记密码对话框-->
 
         <Modal v-model="forgotPasswordModal"  footer-hide :mask-closable="false" title="申请重置密码">
-
-            <Form :model="resetPasswordInfo" label-position="left" :label-width="100">
-              <form-item label="重置账号">
+            <Form ref="resetPasswordForm" :model="resetPasswordInfo" label-position="left" :label-width="100" :rules="resetValidate" >
+              <form-item label="重置账号" prop="username">
                 <Input type="text" v-model="resetPasswordInfo.username" placeholder="请输入您的账号"></Input>
               </form-item>
-              <form-item label="绑定邮箱">
+              <form-item label="绑定邮箱" prop="email">
                 <Input type="text" v-model="resetPasswordInfo.email" placeholder="请输入您的绑定邮箱......"></Input>
               </form-item>
-              <form-item label="邮箱验证码">
+              <form-item label="邮箱验证码" prop="emailCode">
                 <Input type="text" v-model="resetPasswordInfo.emailCode" placeholder="请输入验证码......">
-                  <Button slot="append" type="primary" style="background-color: lightskyblue" @click="getEmailCode(resetPasswordInfo.email)">获取验证码</Button>
+                  <Button slot="append" @click="getEmailCode(resetPasswordInfo.email)">获取验证码</Button>
                 </Input>
               </form-item>
               <Button class="center-block" type="primary" size="large" @click="resetPassword">确认并验证</Button>
@@ -69,12 +66,28 @@
         name: "login",
       data: function () {
         return {
+          //登录用户信息
           loginInfo: {
             username: '',
             password: ''
           },
+          //申请重置密码表单校验规则
+          resetValidate:{
+            username:[{required:true,message:'账号不能为空！',trigger:'blur'}],
+            email:[
+              {required:true,message:'邮箱不能为空！',trigger:'blur'},
+              {type:'email',message:'请输入有效邮箱！',trigger:'blur'}
+            ],
+            emailCode:[{required:true,message:'验证码不能为空！',trigger:'blur'}]
+          },
+          //登录表单校验
+          loginValidate:{
+            username:[{required:true,message:'账号不能为空！',trigger:'blur'}],
+            password:[{required:true,message:'密码不能为空！',trigger:'blur'}]
+          },
           forgotPasswordModal: false, //忘记密码对话框
-          loading_reset: false, //重置等待
+          loading_reset: false, // 密码重置等待
+          loading_login:false,  //登录等待
           resetPasswordInfo: {  //重置密码确认信息
             username: '', //用户名（账号）
             email: '',  //用户绑定邮箱
@@ -93,25 +106,21 @@
           //通过验证，重置密码
         async resetPassword() {
           //这里还要对表单元素做检查
-
-          /**
-           * 待完成...............................
-           */
-
-          this.loading_reset = true;  //设置spin加载中
-          const result = await this.$apis.CommonApi.resetPassword(this.resetPasswordInfo.username,this.resetPasswordInfo.email,this.resetPasswordInfo.emailCode);
-          if (result){
-            this.$Message.success({
-              content:"恭喜你，密码重置成功，重置后的密码为123456789，建议登录后立即修改密码",
-              duration:10
-            });
-            this.forgotPasswordModal = false;
-          }else {
-            this.$Message.error({
-              content:'修改密码时遇到错误，请稍后再试，或联系管理员'
-            })
-          }
-          this.loading_reset = false;
+           this.$refs.resetPasswordForm.validate((async valid => {
+             if (valid) {
+               //通过form表单的检验后
+               this.loading_reset = true;  //设置spin加载中
+               const result = await this.$apis.CommonApi.resetPassword(this.resetPasswordInfo.username, this.resetPasswordInfo.email, this.resetPasswordInfo.emailCode);
+               if (result) {
+                 this.$Message.success({
+                   content: "恭喜你，密码重置成功，重置后的密码为123456789，建议登录后立即修改密码",
+                   duration: 15
+                 });
+                 this.forgotPasswordModal = false;
+               }
+               this.loading_reset = false;
+             }
+           }));
         },
 
         //忘记密码操作
@@ -128,18 +137,17 @@
           this.$router.push({name:'register'})
         },
         //登录请求
-        request_login(){
-          if (this.loginInfo.username === null || this.loginInfo.username ===''
-            || this.loginInfo.password === null || this.loginInfo.password ===''){
-            return this.$Notice.error({
-              title:'注意：',
-              desc:'账号或密码不能用为空！'
-            })
-          }
-
-          this.$apis.AuthenticationApi.login(this.loginInfo.username,this.loginInfo.password);
-
+        async request_login() {
+          this.$refs.loginInfoForm.validate( async valid => {
+            if (valid) {
+              //通过form表单的检验后
+              this.loading_login = true;  //设置spin加载中
+              await this.$apis.AuthenticationApi.login(this.loginInfo.username, this.loginInfo.password);
+              this.loading_login = false;
+            }
+          })
         }
+
       }
     }
 </script>

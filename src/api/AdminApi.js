@@ -188,23 +188,25 @@ const admin = {
   /**
    * 管理员重置指定用户密码
    */
-  adminResetPassword(aim_openID){
+  adminResetPassword(aim_openID,email){
     return request({
       url:'/admin/adminResetPassword',
       method:'post',
       data:qs.stringify({
-        aim_openID:aim_openID
+        aim_openID:aim_openID,
+        email:email,
       })
     }).then( async res => {
+      console.log("adminapi 输出:",res)
       if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result) {
-          return this.adminResetPassword(aim_openID);
+          return this.adminResetPassword(aim_openID,email);
         } else {
           return false;
         }
       } else {
-        return res.data.data;
+        return res.data;
       }
     })
   }

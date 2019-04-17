@@ -15,10 +15,18 @@
         <Row type="flex" align="middle" justify="center" class="code-row-bg row-title">
           <i-col span="12" >
           <span class="article_title">
-            <Tag color="rgb(251, 114, 153)" v-if="ArticleInfo.type === 'original' ">原创</Tag>
-            <Tag color="rgb(0, 192, 145)" v-else-if="ArticleInfo.type === 'reprint' ">转载</Tag>
-            <Tag color="rgb(2, 181, 218)" v-else-if="ArticleInfo.type === 'translate' ">翻译</Tag>
-            {{this.ArticleInfo.title}}
+            <div v-if="ArticleInfo.type === 'original' ">
+              <Tag color="rgb(251, 114, 153)">原创</Tag>{{this.ArticleInfo.title}}
+            </div>
+            <div v-else-if="ArticleInfo.type === 'reprint' ">
+              <Tag color="rgb(0, 192, 145)">转载</Tag>{{this.ArticleInfo.title}}
+              <br><span>原文链接:<a href="www.baidu.com"></a></span>
+            </div>
+            <div  v-else-if="ArticleInfo.type === 'translate' ">
+              <Tag color="rgb(2, 181, 218)">翻译</Tag>{{this.ArticleInfo.title}}
+              <br><span>原文链接:<a href="http://www.baidu.com">百度</a></span>
+            </div>
+
           </span>
           </i-col>
         </Row>
@@ -152,7 +160,8 @@
         chooseFunction(name){
           switch (name) {
             case "update"://点击修改
-              localStorage.setItem("update_articleInfo",JSON.stringify(this.ArticleInfo)); //临时保存文章信息
+              //临时保存文章信息
+              localStorage.setItem("update_articleInfo",JSON.stringify(this.ArticleInfo));
               this.$router.push({name:'article_update', params:{article_id:this.ArticleInfo.articleID,}});
               break;
             case "delete"://点击删除

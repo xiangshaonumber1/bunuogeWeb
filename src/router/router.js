@@ -33,10 +33,10 @@ import Web_diaryInfo from '../views/Web/mainContent/ArticleInfo/web_diaryInfo'
 import CommentAndReply from '../views/Web/mainContent/ArticleInfo/commentAndReply'
 
 import Web_feedBack from '../views/Web/mainContent/web_feedback'
-import NotFound from '../views/Web/mainContent/404'
 import Web_search from '../views/Web/mainContent/web_searchInfo'
 import Web_user from '../views/Web/mainContent/web_user'
 import Web_messageWall from '../views/Web/mainContent/web_messageWall'
+import NotFound from '../views/Web/mainContent/404'
 
 import Setting from '../views/Web/mainContent/web_setting'
 import Setting_update_pw from '../views/Web/mainContent/setting/setting_update_pw'

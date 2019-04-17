@@ -21,7 +21,7 @@
     <!--主要配置-->
     <div>
       <Row type="flex" class="row-code-bg" justify="center" align="middle" style="margin-bottom: 10px">
-        <i-col span="3" style="z-index: 10002;padding-right: 10px;">
+        <i-col span="3" style="z-index: 10003;padding-right: 10px;">
           <i-select v-model="select_type" size="large">
             <i-option value="original" label="原创文章"></i-option>
             <i-option value="reprint" label="转载文章"></i-option>
@@ -36,14 +36,19 @@
 
         <i-col span="2" class="article_confirm">
           <Button v-if="this.type === 'update' " type="success" size="large" long @click="request_push_article">修&nbsp;改&nbsp;保&nbsp;存</Button>
-          <Button v-else type="info" size="large" long @click="request_push_article">确&nbsp;认&nbsp;发&nbsp;布</Button>
+          <Button v-else type="info" size="large" long @click="request_push_article" :loading="loading_push">确&nbsp;认&nbsp;发&nbsp;布</Button>
         </i-col>
       </Row>
 
       <!--第二行（默认隐藏）  如何选择的是“转载文章”或者“翻译文章” 都必须要备注原文链接 -->
       <Row v-if="select_type!=='original'" type="flex" class="row-code-bg" justify="center" align="middle" style="margin-bottom: 10px">
-        <i-col span="14">
-          <Input v-model.trim="origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;"></Input>
+        <i-col span="14" style="z-index: 10002">
+          <Input v-model.trim="origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;">
+            <i-select v-model="origin_link_header" slot="prepend" style="width: 100px;">
+              <Option value="http">http://</Option>
+              <Option value="https">https://</Option>
+            </i-select>
+          </Input>
         </i-col>
       </Row>
 
@@ -84,11 +89,13 @@
             editor:'',
             articleTitle:'',
             articleContent:'',
-            select_type:'original',
+            select_type:'',
             origin_link:"",
             onlyText:'',
             type:'write', //write,update 是新建文章，还是修改文章,
             ArticleInfo:{},
+            loading_push:false, //发布上传等待中
+            origin_link_header:'http',//网站链接的头部 http 或者 https
           }
       },
 
@@ -173,54 +180,61 @@
             })
           }
 
+         this.loading_push = true;
           let result = false;
-          if(this.type === 'write'){  //新建文章请求
+         //新建文章请求
+          if(this.type === 'write'){
+            this.origin_link = this.origin_link_header + this.origin_link;
             result = await this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
-          }else if (this.type === 'update'){  //修改已发布的文章
+          }
+          //修改已发布的文章
+          else if (this.type === 'update'){
             if (this.select_type === 'original'){ //是其他类型的文章修改为原创文章，把original手动设置为null
               this.origin_link = null;
+            }else {
+              this.origin_link = this.origin_link_header + this.origin_link;
             }
             result = await this.$apis.ArticleApi.update_article(this.ArticleInfo.articleID,this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
-            console.log("在这里输出 result ",result);
-            if (result === true){
-              this.$Notice.success({
-                title:'修改成功：',
-                desc:'修改已生效，即将为你跳转到详情页面'
-              });
-              this.$router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID})
-            }else {
-              console.log("执行 else")
-            }
           }
+         this.loading_push = false;
         },
 
-        //请求修改类型：update操作类型初始化
+        //如果检查到时修改类型的请求：update操作类型初始化
         updateInstance(){
-          this.type = 'update';                                                                                         //辨别操作类型
-          this.ArticleInfo = JSON.parse(localStorage.getItem("update_articleInfo"));                                    //取出存放在本地session中的文章信息
-          this.select_type = this.ArticleInfo.type;                                                                     //文章类型赋值
+          this.type = 'update';
+          //辨别操作类型
+          this.ArticleInfo = JSON.parse(localStorage.getItem("update_articleInfo"));
+          //取出存放在本地session中的文章信息
+          console.log("赋值之前 的值：",this.select_type);
+          this.select_type = this.ArticleInfo.type;
+          //文章类型赋值
           console.log("this.select_type 的值：",this.select_type);
-          this.articleTitle = this.ArticleInfo.title;                                                                   //文章标题赋值
-          this.onlyText = this.ArticleInfo.content.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();                //用于检验纯文本字数
+          console.log("对比结果：","reprint" === this.select_type)
+          this.articleTitle = this.ArticleInfo.title;
+          //文章标题赋值
+          this.onlyText = this.ArticleInfo.content.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();
+          //用于检验纯文本字数
           if (this.ArticleInfo.type !== 'original'){
             this.origin_link = this.ArticleInfo.originLink;
           }
-          this.editor.txt.html(this.ArticleInfo.content);                                                               //文章主要内容赋值
+          this.editor.txt.html(this.ArticleInfo.content);
+          //文章主要内容赋值
           this.articleContent = this.ArticleInfo.content;
         }
 
       },
 
-      mounted(){
+      async mounted() {
 
         //执行编辑工具初始化
         this.editorCreate();
 
         //如果是有值传递过来，表示是修改类型的操作，
-        if (this.$route.params.article_id){
-          this.updateInstance();
-        }else {
+        if (this.$route.params.article_id) {
+          await this.updateInstance();
+        } else {
           console.log("是新建文章的请求")
+          this.select_type = "original"
         }
       },
 

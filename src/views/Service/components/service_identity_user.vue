@@ -122,20 +122,25 @@
         },
 
           //执行重置密码操作
-          doResetPassword(){
-          this.reset_loading_status = true;
+          async doResetPassword() {
+            this.reset_loading_status = true;
             let openID = this.userDataList[this.tableSelectedRow].openID;
+            let email = this.userDataList[this.tableSelectedRow].email;
             console.log("即将发起 重置密码的请求......");
-            const result = this.$apis.AdminApi.adminResetPassword(openID);
-            if (result){
+            const result = await this.$apis.AdminApi.adminResetPassword(openID, email);
+            if (result) {
               this.restConfirm = false;
-            }else {
+              this.$Message.success({
+                content:"密码重置已成功！",
+                duration:5
+              })
+            } else {
               this.$Message.error({
-                content:'重置密码失败，请注意处理！'
+                content: '重置密码失败，请注意处理！'
               })
             }
             this.reset_loading_status = false;
-            console.log("我应该是最后输出，result:",result)
+            console.log("我应该是最后输出，result:", result)
           },
 
         //表格选中某一行

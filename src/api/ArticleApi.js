@@ -31,13 +31,10 @@ const article = {
           title: "发布成功：",
           desc: "文章发布成功，已为您跳转到当前页面"
         });
-        return router.push({   //跳转到对应的文章详情页面
-          name:'web_articleInfo',
-          params:{
-            article_id:response.data.data
-          }
-        });
-      } else if (response.data.code === '402') {
+        //跳转到对应的文章详情页面
+        return router.push({name:'web_articleInfo', params:{article_id:response.data.data}});
+      }
+      else if (response.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.write_article(ArticleTitle, ArticleContent,ArticleType,ArticleLabel, origin_link)
@@ -69,7 +66,11 @@ const article = {
     }).then( async res => {
       console.log("返回信息 ： ",res);
       if (res.data.code === '200'){
-        return true;
+        Notice.success({
+          title:'修改成功：',
+          desc:'修改已生效，即将为你跳转到详情页面'
+        });
+        return  this.$router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID})
       }
       else if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
@@ -195,11 +196,8 @@ const article = {
        page: page,
      }
     }).then( res =>{
-      if (res.data.code === '404'){
-        return null;
-      }else {
-        return res.data.data;
-      }
+      console.log("返回的啥哦？:",res);
+      return res.data.data;
     })
   },
 
@@ -217,11 +215,7 @@ const article = {
         type:type,
       }
     }).then( res =>{
-      if (res.data.code === '404'){
-        return null;
-      }else {
-        return res.data.data;
-      }
+      return res.data.data;
     })
   },
 

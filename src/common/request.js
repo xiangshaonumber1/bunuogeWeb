@@ -3,34 +3,54 @@
  */
 
 import axios from 'axios';
-import {Message,Notice} from 'iview'
+import {Notice} from 'iview'
 import router from '../router/router'
 import store from '../blog_vuex/store'
 
 //axios默认设置
 const request = axios.create({
   baseURL: store.getters.serverPath,
-  timeout:'10000',
-  // retry:4,
-  // retryDelay:1000,
+  timeout: 10000,
+  retry:4, //请求次数
+  retryDelay:1000,  //请求的间隙
 });
 
 //http request 拦截器
 request.interceptors.request.use(config=>{
   //在请求发送前做某些事情
-  // if(config.method === "post"){//如果是post请求
-  //   config.data = qs.stringify(config.data)
-  // }
   //设置token
   config.headers["X-Auth-Token"] = localStorage.getItem("token");
   return config;
 },error => {
-  Notice.error({
-    title:'服务器连接异常：',
-    desc:'当前服务器连接异常，请稍后再试',
-    duration:5
+  var config = error.config;
+  //如果config不存在或者未设置重试选项，请拒绝
+  if (!config || !config.retry){
+    return Promise.reject(error);
+  }
+  //设置变量跟踪重试次数
+  config.__retryCount = config.__retryCount || 0;
+  //检查是否已达到最大重试次数
+  if (config.__retryCount >= config.retry){
+    //抛出错误信息
+    Notice.error({
+      title:'服务器连接异常提醒：',
+      desc:'当前服务器连接异常，请稍后再试',
+      duration:8
+    });
+    return Promise.reject(error);
+  }
+  //增加请求次数
+  config.__retryCount += 1;
+  //创建新的异步请求
+  var backoff = new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve();
+    },config.retryDelay || 1)
   });
-  return Promise.reject(error); //方法返回一个带有拒绝原因reason参数的Promise对象。
+  // 返回axios信息，重新请求
+  return backoff.then(function () {
+    return axios(config);
+  });
 });
 
 //响应拦截器,http请求后，后台返回的一些状态码，包括我们自己的服务器返回的错误码进行一个逻辑处理
@@ -60,11 +80,6 @@ request.interceptors.response.use(response=>{
     case '405': // 仅仅用于表示token拒绝刷新等处理
       //注销存储在本地的用户信息
       store.dispatch("clearLoginInfo");
-      // Notice.info({
-      //   title:'身份过期提示：',
-      //   desc:response.data.msg,
-      // });
-      // router.push({name:'login'});
       break;
 
     case '406': //用于修改，删除等需要对数据进行变动，但变动无效的，类似无效的修改，或者删除已删除的信息
@@ -102,7 +117,12 @@ request.interceptors.response.use(response=>{
     title : '网络链接阻塞',
     desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'
   });
-  return error; // 返回接口返回的错误信息
+  //返回链接错误时的信息，模拟后台返回给前端的格式
+  return {
+    code: '500',
+    msg: '网络链接阻塞',
+    data: false
+  }; // 返回接口返回的错误信息
 });
 
 //导出模块
