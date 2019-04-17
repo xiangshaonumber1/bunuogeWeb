@@ -139,6 +139,7 @@
       //获取相应的搜索结果
       async getSearchInfo(searchType,search_page){
         const result = await this.$apis.ArticleApi.get_search(this.$route.params.key_word,search_page,searchType);
+
         if (result.total === 0 && search_page === 1){
           this.isLoading = false; //取消正在加载
           this.notFound = true; //显示404
@@ -146,6 +147,7 @@
           this.isLoading = false; //取消正在加载
           this.notFound = false; //取消显示404
           var TempSearchInfoList = result.result; //赋值获取到的文章数据
+          //如果是搜索用户，还要对用户头像进行整理
           if (searchType === "user"){
             for (var searchInfo of TempSearchInfoList){
               searchInfo.userIcon =  this.$store.getters.serverPath+ JSON.parse(searchInfo.userIcon)[0];
@@ -155,9 +157,9 @@
           this.searchInfoList = TempSearchInfoList;
           this.listTotal = result.total;
           this.key_word_list = result.key_word_list;  //赋值获取到的分词器
-          //应该最后输出
-          this.searchType = searchType;
         }
+        //不论是否有值，应该最后输出搜索类型
+        this.searchType = searchType;
       },
 
       //去掉html标签
