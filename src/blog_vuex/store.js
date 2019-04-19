@@ -13,7 +13,8 @@ const state = {
   nickname:null,//用户昵称
   avatar:null,//用户头像地址
   isLogin:false,//判断当前用户是否已经登录
-  serverPath:'http://localhost:8089'
+  // serverPath:'http://localhost:8089', //开发环境
+  serverPath:'http://www.getok.top:8089',  //生产环境
 };
 
 const store = new Vuex.Store({

@@ -93,7 +93,6 @@ const admin = {
         pageCount:pageCount
       }
     }).then( async res => {
-      console.log("返回的是啥？",res.data);
       if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();
         if (result) {

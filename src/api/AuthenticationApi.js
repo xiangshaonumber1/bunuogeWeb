@@ -32,7 +32,7 @@ const authentication = {
           token: res.data.data.token,
         };
         store.dispatch("saveLoginInfo",userInfo);
-        router.push({name:'index'});
+        return true;
       }else {
         console.log("register else info :",res)
       }

@@ -30,7 +30,7 @@
 
           <form-item label="邮箱验证">
             <Input type="text" v-model="registerInfo.emailCode" placeholder="请输入邮箱验证码" size="large">
-              <Button type="text" slot="append" @click="request_mailCode">
+              <Button type="text" slot="append" @click="request_mailCode" :loading="loading_emailCode">
                 <strong style="color:#0aac8e;font-weight: normal;font-size:14px;">获取验证码</strong>
               </Button>
             </Input>
@@ -91,6 +91,7 @@
             this.ok_password = true;
             return callback();
           };
+
           //密码相同验证
           const validateCheckPassword = (rule,value,callback)=>{
             if (this.registerInfo.password !== value){
@@ -100,6 +101,7 @@
             this.ok_checkPassword = true;
             return callback();
           };
+
         return {
           ok_email:false,//用于检查，email是否符合注册条件
           ok_password:false,//用于检查，password是否符合规范
@@ -110,6 +112,7 @@
             password:null,
             checkPassword:null,
           },
+          //检验规则
           registerRule:{
             email:[
               { validator: validateEmail, trigger: 'blur' }
@@ -121,6 +124,9 @@
               { validator: validateCheckPassword, trigger: 'blur' }
             ]
           },
+
+          loading_emailCode:false,  //是否正在发送邮箱验证码
+          loading_login:false,  //登录验证加载
         }
       },
       methods:{
@@ -138,28 +144,36 @@
         },
 
         //获取邮箱验证码请求
-        request_mailCode(){
-          if (!this.ok_email){//如果不符合email规范，return 一个错误提示信息
+        async request_mailCode() {
+          //点击获取验证码后，立即设置为加载中
+          this.loading_emailCode = true;
+          if (!this.ok_email) {//如果不符合email规范，return 一个错误提示信息
             return this.$Notice.error({
-              title:'获取验证码提示',
-              desc:'请输入有效的工作邮箱后，再获取验证码'
+              title: '获取验证码提示',
+              desc: '请输入有效的工作邮箱后，再获取验证码'
             })
           }
           //请求发送验证码
-          this.$apis.UserApi.mailCode(this.registerInfo.email,"register");
+          await this.$apis.UserApi.mailCode(this.registerInfo.email, "register");
+          //不论是否发送成功，都设置取消加载
+          this.loading_emailCode = false;
         },
 
         //注册请求
-        request_register(){
-          if (this.ok_email && this.ok_password && this.ok_checkPassword && this.registerInfo.emailCode!==null){
+        async request_register() {
+          if (this.ok_email && this.ok_password && this.ok_checkPassword && this.registerInfo.emailCode !== null) {
             //注册的请求
-            this.$apis.AuthenticationApi.register(this.registerInfo.email,this.registerInfo.password,this.registerInfo.email,this.registerInfo.emailCode);
-          }else {
+            const result = await this.$apis.AuthenticationApi.register(this.registerInfo.email, this.registerInfo.password, this.registerInfo.email, this.registerInfo.emailCode);
+            if (result){
+              this.$router.push({name:'index'});
+            }
+          } else {
             this.$Notice.error({
-              title:'信息不完善',
-              desc:'尚有为未填完的信息，请补充完整后再继续'
+              title: '信息不完善',
+              desc: '尚有为未填完的信息，请补充完整后再继续'
             })
           }
+
         },
 
       }

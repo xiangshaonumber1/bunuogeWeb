@@ -27,6 +27,7 @@ const user = {
           title:'邮件发送成功',
           desc:'邮件已成功发送，请注意查收'
         })
+        return true;
       }
     })
   },

@@ -11,8 +11,8 @@ import store from '../blog_vuex/store'
 const request = axios.create({
   baseURL: store.getters.serverPath,
   timeout: 10000,
-  retry:4, //请求次数
-  retryDelay:1000,  //请求的间隙
+  // retry:4, //请求次数
+  // retryDelay:1000,  //请求的间隙
 });
 
 //http request 拦截器
@@ -113,6 +113,7 @@ request.interceptors.response.use(response=>{
   //不论最终是否需要跳转，都将返回response信息，然后再判断之前没判断的code
   return response;
 },error => { //请求返回错误信息时
+  console.log("error :",error);
   Notice.warning({
     title : '网络链接阻塞',
     desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'

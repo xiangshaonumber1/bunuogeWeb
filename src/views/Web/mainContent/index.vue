@@ -184,7 +184,7 @@
           //只有允许加载下一页的情况下，才去请求数据
           if (this.loadMore){
             const result = await this.$apis.ArticleApi.get_article_list(articlePage);
-            console.log("我看看你到底要输出什么:",result)
+            console.log("我看看你到底要输出什么:",result);
             if (result.total === 0 && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
               this.notFound = true;
               this.isLoading = false;

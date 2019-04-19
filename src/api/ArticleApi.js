@@ -188,7 +188,6 @@ const article = {
        page: page,
      }
     }).then( res =>{
-      console.log("返回的啥哦？:",res);
       return res.data.data;
     })
   },
