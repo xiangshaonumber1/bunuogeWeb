@@ -120,15 +120,16 @@
         </i-col>
       </Row>
 
+      <!--:styles="ModalHeight"-->
       <!-- **************************************** 图片裁剪 start ***************************************************** -->
-      <Modal title="请选择喜欢的区域作为你的个人头像" v-model="isShowModal" :mask-closable="false" width="75"
-             :styles="ModalHeight"
+      <Modal title="请选择喜欢的区域作为你的个人头像" v-model="isShowModal" :mask-closable="false" width="60"
+             class="vertical-center-modal"
              @on-ok="upLoadFiles"
              :loading="loadingStatus"
              ok-text="上传图片">
         <div class="cropper-content">
           <div class="cropper" :style="scrollHeight">
-            <vueCropper class="vueCropper"
+            <vueCropper
                         ref="cropper"
                         :img="option.img"
                         :outputSize="option.outputSize"
@@ -158,7 +159,7 @@
             isOneself:false,    //查询目标用户是否是当前已登录用户
             isEditing:false,    //是否正在编辑
             file:null,
-            loadingStatus: true,
+            loadingStatus: true, //上传头像modal加载状态
             uploadBase64:null,
             //Vue-cropper 配置
             option:{
@@ -211,8 +212,6 @@
          * 用户选择图片，裁剪后进行上传头像的操作
          */
         async upLoadFiles() {
-          //点击上传之后隐藏对话框
-          this.isShowModal = false;
           //立即显示Spin，防止期间错误
           this.$Spin.show({
             render: (h) => {
@@ -235,14 +234,24 @@
             let param = new FormData();
             param.append("file", file);
             const result = await this.$apis.UserApi.updateUserIcon(param);
+            //上传成功
             if (result !== null) {
               //上传成功后，更新当前也你按用户头像
               this.userInfo.userIcon = this.$store.getters.serverPath + result[0];
               //同时更新本地保存的用户的头像
               this.$store.dispatch("saveAvatar",this.userInfo.userIcon);
               console.log("上传后，重新给userInfo的userIcon赋值", this.userInfo.userIcon);
+              //点击上传成功之后隐藏对话框
+              this.isShowModal = false;
+            }else {
+              //上传失败
+              this.$Message.error({
+                content:'网络连接失败，无法上传图片，请稍后再试',
+                duration:3
+              })
             }
-            this.$Spin.hide(); //不论最后是否时候上传成功，取消整页加载
+            //不论最后是否时候上传成功，取消整页加载
+            this.$Spin.hide();
           });
 
         },
@@ -328,14 +337,11 @@
 
     computed:{
       scrollHeight(){
-        return "height:" + ((window.screen.height)*0.8) + "px;";
-      },
-      ModalHeight(){
         return {
-          top:'0',
-          marginTop:'25px'
+          height:  ((window.screen.height)*0.6) + 'px',
         }
       },
+
     },
 
     mounted() {
@@ -353,6 +359,17 @@
 </script>
 
 <style scoped>
+
+  /* 垂直居中modal */
+  .vertical-center-modal >>> .ivu-modal{
+    top:0;
+  }
+  .vertical-center-modal >>> .ivu-modal-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 
   .demo-spin-icon-load{
     animation: ani-demo-spin 1s linear infinite;
@@ -421,7 +438,7 @@
     color: #000;
   }
 
-  /* 用户头像裁剪部分 */
+  /* 裁剪框图片加载部分 */
   .cropper-content{
     width: 100%;
     height: 100%;
