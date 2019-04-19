@@ -180,7 +180,6 @@
          */
           async getUserRoleAndPermissionList(page,key_word,pageCount) {
             const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page,key_word,pageCount);
-            console.log("输出 返回的新信息 ：",result);
             if (result.total>0){
               let temp = result.userRoleAndPermission.userPartInfoList;
               for (let userPart of temp) {
@@ -192,7 +191,11 @@
               this.dictionary_role = JSON.parse(result.userRoleAndPermission.dictionary_role);
               this.page = page; //设置当前显示页号
               this.tableSelectedRow = -1; //重置当前选中行
-              console.log("数据已全部加载完毕")
+            }else {
+              this.userDataList = [];
+              this.userDataTotal = result.total;
+              this.page = page; //设置当前显示页号
+              this.tableSelectedRow = -1; //重置当前选中行
             }
 
           },

@@ -2,10 +2,11 @@
   <div class="layout">
 
     <Row v-if="isAdmin" type="flex">
+
       <!-- 左侧，导航栏 -->
       <i-col span="4" class="layout-menu-left">
-        <Menu :theme="theme" width="auto" style="height: 100%" :active-name="activeIndex">
-          <div class="layout-logo-left" v-on:click="goHome">GetOk<span>管理中心</span></div>
+        <Menu :theme="theme" width="auto" class="menu-controller" :active-name="activeIndex">
+          <div class="layout-logo-left" v-on:click="goIndex">GetOk<span>后台管理</span></div>
           <Submenu v-for="submenu in submenuList" :key="submenu.parent_index" :name="submenu.parent_index">
             <template slot="title"><Icon :type="submenu.icon" size="25"></Icon>{{submenu.parent_title}}</template>
             <MenuItem v-if="submenu.is_child" v-for="child in submenu.childList" :key="child.child_index" :name="child.child_index" @click.native="addTab(child.child_index,child.child_title,child.to_path)">
@@ -49,9 +50,10 @@
               // {parent_index:'1',parent_icon:'el-icon-menu',parent_title:'博客详情',icon:'md-globe',is_child:true,
               //   childList:[
               //     {child_title:'统计详情',child_index:'1-1',to_path:'service_blog_state'},
-              //     // {child_title:'个人详情',child_index:'1-2',to_path:'service_user_info'},
+              //     {child_title:'个人详情',child_index:'1-2',to_path:'service_user_info'},
+              //     {child_title:'空白测试',child_index:'1-3',to_path:'service_user_info'},
               //   ]},
-
+              //
               // {parent_index:'2',parent_icon:'el-icon-edit',parent_title:'发布文章',icon:'md-create',is_child:true,
               //   childList:[
               //     {child_title:'写文章',child_index:'2-1',to_path:'service_write_article'},
@@ -85,7 +87,7 @@
               content:null,//一般是子组件的路径
             }],
             openNames:[],
-            theme: 'light',
+            theme: 'dark',
           }
       },
 
@@ -93,9 +95,9 @@
       methods: {
 
         //前往首页
-        goHome(){
+        goIndex(){
           console.log("跳转到首页");
-          this.$router.push({name:'home'})
+          this.$router.push({name:'index'})
         },
 
         //实现点击面板，传递子菜单
@@ -239,6 +241,11 @@
   a{
     /* 去除所有a标签的默认下划线 */
     text-decoration: none;
+  }
+
+  .menu-controller{
+    height: 100vh;
+    overflow: auto;
   }
 
   .layout{
