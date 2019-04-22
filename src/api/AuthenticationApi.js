@@ -28,13 +28,14 @@ const authentication = {
         const userInfo = {
           openID: res.data.data.openID,
           nickname: res.data.data.nickname,
-          avatar: res.data.data.avatar,
+          avatar: store.getters.serverPath + JSON.parse(res.data.data.avatar),
           token: res.data.data.token,
         };
         store.dispatch("saveLoginInfo",userInfo);
         return true;
       }else {
-        console.log("register else info :",res)
+        console.log("register else info :",res);
+        return false;
       }
     })
   },

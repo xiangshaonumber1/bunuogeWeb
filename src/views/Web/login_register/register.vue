@@ -36,7 +36,7 @@
             </Input>
           </form-item>
 
-          <Button type="info" @click="request_register" style="background-color: rgb(0, 192, 145);border: none;margin:20px 0;" long>
+          <Button type="info" @click="request_register" style="background-color: rgb(0, 192, 145);border: none;margin:20px 0;" long :loading="loading_register">
             <span style="font-size: 22px;font-family: cursive;">注&emsp;册</span>
           </Button>
 
@@ -126,10 +126,11 @@
           },
 
           loading_emailCode:false,  //是否正在发送邮箱验证码
-          loading_login:false,  //登录验证加载
+          loading_register:false,  //登录验证加载
         }
       },
       methods:{
+
         //返回首页
         goIndex:function(){
           this.$router.push({name:'index'})
@@ -161,17 +162,26 @@
 
         //注册请求
         async request_register() {
+          //设置为正在注册中
+          this.loading_register = true;
+          let result = false;
+          //所有信息不为空，则进行请求
           if (this.ok_email && this.ok_password && this.ok_checkPassword && this.registerInfo.emailCode !== null) {
-            //注册的请求
-            const result = await this.$apis.AuthenticationApi.register(this.registerInfo.email, this.registerInfo.password, this.registerInfo.email, this.registerInfo.emailCode);
-            if (result){
-              this.$router.push({name:'index'});
-            }
-          } else {
+            result = await this.$apis.AuthenticationApi.register(this.registerInfo.email, this.registerInfo.password, this.registerInfo.email, this.registerInfo.emailCode);
+          }else {
             this.$Notice.error({
               title: '信息不完善',
               desc: '尚有为未填完的信息，请补充完整后再继续'
             })
+          }
+
+          //已获取注册返回结果，取消设置正在加载
+          this.loading_register = false;
+          //如果注册成功，则跳转到首页
+          if (result){
+            this.$router.push({name:'index'});
+          }else {
+
           }
 
         },

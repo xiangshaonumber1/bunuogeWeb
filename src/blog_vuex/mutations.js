@@ -23,7 +23,6 @@ export const clearLoginInfo = (state)=>{
     state.nickname = null;//用户昵称
     state.avatar = null;//用户头像地址
     state.isLogin = false;//判断当前用户是否已经登录
-    state.serverPath = 'http://localhost:8089';
 };
 
 /**
