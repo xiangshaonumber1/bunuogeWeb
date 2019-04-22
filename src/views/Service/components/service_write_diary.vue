@@ -115,27 +115,35 @@
         //初始化文本编辑器
         editorCreate(){
           this.editor = new E(this.$refs.editorMenu,this.$refs.diaryContent);
-          this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024; // 将图片大小限制为 3M
-          this.editor.customConfig.uploadFileName = 'file'; // * 指定上传类型为file
-          this.editor.customConfig.uploadImgServer = this.$store.getters.serverPath+'/common/uploadPicture?savePath=diary'; // *  上传文件请求地址
+          // 忽略粘贴内容中的图片
+          this.editor.customConfig.pasteIgnoreImg = true;
+          // 将图片大小限制为 3M
+          this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
+          // * 指定上传类型为file
+          this.editor.customConfig.uploadFileName = 'file';
+          // *  上传文件请求地址
+          this.editor.customConfig.uploadImgServer = this.$store.getters.serverPath+'/common/uploadPicture?savePath=diary';
           //监听编辑器内容变化，并赋给diaryContent
           this.editor.customConfig.onchange = (html) => {
             this.diaryContent = html
           };
           this.editor.customConfig.uploadImgHooks = {
-            success:function (xhr, editor, result) {//图片上传并返回结果，图片插入成功之后触发
+            //图片上传并返回结果，图片插入成功之后触发
+            success:function (xhr, editor, result) {
               Message.success({
                 content:'图片上传成功 ヾ(๑╹◡╹)ﾉ" ',
                 duration:3
               });
             },
-            error:function(xhr, editor){ //图片上传出错时触发
+            //图片上传出错时触发
+            error:function(xhr, editor){
               Message.error({
                 content:'图片上传过程中出现错误，请稍后再试 (＞人＜；)，任何问题均可联系管理员 ',
                 duration:3
               })
             },
-            timeout:function (xhr, editor) { //图片上传超时时触发
+            //图片上传超时时触发
+            timeout:function (xhr, editor) {
               Message.error({
                 content:'图片上传超时，请稍后再试 (＞人＜；)，任何问题均可联系管理员 ',
                 duration:3
@@ -173,6 +181,7 @@
       },
 
       mounted(){
+
         this.editorCreate();//执行初始化文本编辑器
 
         if (this.$route.params.diary_id){

@@ -20,11 +20,11 @@
             </div>
             <div v-else-if="ArticleInfo.type === 'reprint' ">
               <Tag color="rgb(0, 192, 145)">转载</Tag>{{this.ArticleInfo.title}}
-              <br><span>原文链接:<a href="www.baidu.com"></a></span>
+              <br><span>原文链接：<a :href="ArticleInfo.originLink" style="color: deepskyblue">{{ArticleInfo.originLink}}</a></span>
             </div>
             <div  v-else-if="ArticleInfo.type === 'translate' ">
               <Tag color="rgb(2, 181, 218)">翻译</Tag>{{this.ArticleInfo.title}}
-              <br><span>原文链接:<a href="http://www.baidu.com">百度</a></span>
+              <br><span>原文链接：<a :href="ArticleInfo.originLink" style="color: deepskyblue">{{ArticleInfo.originLink}}</a></span>
             </div>
 
           </span>

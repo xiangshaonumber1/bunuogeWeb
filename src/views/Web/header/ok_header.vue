@@ -17,11 +17,11 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <!--快捷导航菜单-->
             <Menu class="navbar-left" mode="horizontal" theme="light" :active-name="menuActive" >
-              <MenuItem name="message_wall" @click.native="goFeedBackMessage"><span>意见反馈</span></MenuItem>
-              <MenuItem name="message_wall" @click.native="goMessage_wall"><span>留言墙</span></MenuItem>
+              <MenuItem name="web_feedback" @click.native="goFeedBackMessage"><span>意见反馈</span></MenuItem>
+              <!--<MenuItem name="message_wall" @click.native="goMessage_wall"><span>留言墙</span></MenuItem>-->
               <MenuItem name="index" @click.native="goIndex" ><span>首页</span></MenuItem>
-              <MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>
-              <MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>
+              <!--<MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>-->
+              <!--<MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>-->
             </Menu>
 
             <!--搜索框-->
@@ -77,11 +77,11 @@
       methods:{
 
         goFeedBackMessage(){
-          this.$Notice.info({
-            title: '敬请期待：',
-            desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
-          })
-          // this.$router.push({name:'web_feedback'});
+          // this.$Notice.info({
+          //   title: '敬请期待：',
+          //   desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
+          // })
+          this.$router.push({name:'web_feedback'});
         },
         //前往本站的留言墙
         goMessage_wall(){

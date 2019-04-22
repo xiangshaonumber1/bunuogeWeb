@@ -70,7 +70,7 @@ const article = {
           title:'修改成功：',
           desc:'修改已生效，即将为你跳转到详情页面'
         });
-        return  this.$router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID})
+        return router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID});
       }
       else if (res.data.code === '402') {
         const result = await AuthenticationApi.getToken();

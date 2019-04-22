@@ -44,10 +44,6 @@
       <Row v-if="select_type!=='original'" type="flex" class="row-code-bg" justify="center" align="middle" style="margin-bottom: 10px">
         <i-col span="14" style="z-index: 10002">
           <Input v-model.trim="origin_link" placeholder="请将原文链接复制在这里" clearable size="large" style="width:100%;">
-            <i-select v-model="origin_link_header" slot="prepend" style="width: 100px;">
-              <Option value="http">http://</Option>
-              <Option value="https">https://</Option>
-            </i-select>
           </Input>
         </i-col>
       </Row>
@@ -95,7 +91,6 @@
             type:'write', //write,update 是新建文章，还是修改文章,
             ArticleInfo:{},
             loading_push:false, //发布上传等待中
-            origin_link_header:'http',//网站链接的头部 http 或者 https
           }
       },
 
@@ -109,9 +104,14 @@
         //初始化文本编辑器
         editorCreate(){
           this.editor = new E(this.$refs.editorMenu,this.$refs.articleContent);
-          this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024; // 将图片大小限制为 3M
-          this.editor.customConfig.uploadFileName = 'file'; // * 指定上传类型为file
-          this.editor.customConfig.uploadImgServer = this.$store.getters.serverPath+'/common/uploadPicture?savePath=article'; // *  上传文件请求地址
+          // 忽略粘贴内容中的图片
+          this.editor.customConfig.pasteIgnoreImg = true;
+          // 将图片大小限制为 3M
+          this.editor.customConfig.uploadImgMaxSize = 3 * 1024 *1024;
+          // * 指定上传类型为file
+          this.editor.customConfig.uploadFileName = 'file';
+          // *  上传文件请求地址
+          this.editor.customConfig.uploadImgServer = this.$store.getters.serverPath+'/common/uploadPicture?savePath=article';
           //监听编辑器内容变化，并赋给editorContent
           this.editor.customConfig.onchange = (html) => {
             //带html格式的文本
@@ -120,24 +120,28 @@
             this.onlyText = this.articleContent.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig,"").trim();
           };
           this.editor.customConfig.uploadImgHooks = {
-            success:function (xhr, editor, result) {//图片上传并返回结果，图片插入成功之后触发
+            //图片上传并返回结果，图片插入成功之后触发
+            success:function (xhr, editor, result) {
               Message.success({
                 content:'图片上传成功 ヾ(๑╹◡╹)ﾉ" ',
                 duration:3
               });
             },
-            fail:function(xhr, editor, result){ //图片上传并返回结果，但图片插入错误时触发
+            //图片上传并返回结果，但图片插入错误时触发
+            fail:function(xhr, editor, result){
               Message.error({
                 content:'图片插入过程中出现错误，请稍后再试 (＞人＜；)，任何问题均可联系管理员'
               })
             },
-            error:function(xhr, editor){ //图片上传出错时触发
+            //图片上传出错时触发
+            error:function(xhr, editor){
               Message.error({
                 content:'图片上传过程中出现错误，请稍后再试 (＞人＜；)，任何问题均可联系管理员 ',
                 duration:3
               })
             },
-            timeout:function (xhr, editor) { //图片上传超时时触发
+            //图片上传超时时触发
+            timeout:function (xhr, editor) {
               Message.error({
                 content:'图片上传超时，请稍后再试 (＞人＜；)，任何问题均可联系管理员 ',
                 duration:3
@@ -148,11 +152,13 @@
             customInsert:function (insertImg,result,editor) {
               //图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片） insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
               console.log("返回的信息：",result);
-              if (result.code === '200'){//表示上传图片成功,上传失败，在上面error中处理
+              //表示上传图片成功,上传失败，在上面error中处理
+              if (result.code === '200'){
                 var url = store.getters.serverPath + result.data;
                 insertImg(url);
               }
             }
+
           };
           this.editor.create();
         },
@@ -184,15 +190,12 @@
           let result = false;
          //新建文章请求
           if(this.type === 'write'){
-            this.origin_link = this.origin_link_header + this.origin_link;
             result = await this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
           }
           //修改已发布的文章
           else if (this.type === 'update'){
             if (this.select_type === 'original'){ //是其他类型的文章修改为原创文章，把original手动设置为null
               this.origin_link = null;
-            }else {
-              this.origin_link = this.origin_link_header + this.origin_link;
             }
             result = await this.$apis.ArticleApi.update_article(this.ArticleInfo.articleID,this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
           }
