@@ -1,7 +1,7 @@
 <template>
     <div id="feedbackMessage">
       <Divider orientation="left"> 用户反馈信息 </Divider>
-      <Table border :columns="feedbackModel" :data="feedbackData" >
+      <Table border :columns="feedbackModel" :data="feedbackData" :loading="data_loading_status">
         <template slot-scope="{ row, index }" slot="feedID">
           <span>{{ row.feedID }}</span>
         </template>
@@ -70,20 +70,25 @@
           feedbackTotal:0,
           showFeedBackContent:false,  //是否显示反馈内容详情
           feedbackContent:'',   //反馈内容详情
-          page:0,
+          page:0, //当前页数
+          data_loading_status:false,  //主数据加载中状态
         };
       },
 
       methods:{
         //获取用户的反馈信息
         async getFeedBackInfo(page) {
+          //开始时，则设置为加载中
+          this.data_loading_status = true;
+          //等待请求结果
           const result = await this.$apis.AdminApi.getFeedBackInfo(page);
           if (result.total>0){
             this.feedbackData = result.feedBackMessageList;
             this.feedbackTotal = result.total;
             this.page = page;
           }
-
+          //然后不论是否有结果，取消加载中状态
+          this.data_loading_status = false;
         },
 
         //修改反馈处理状态

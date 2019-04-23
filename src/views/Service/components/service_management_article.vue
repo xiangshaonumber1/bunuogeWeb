@@ -16,7 +16,7 @@
       </Row>
 
       <!--表单数据部分-->
-      <Table :columns="articleTableModel" :data="articleTableData" size="large" border>
+      <Table :columns="articleTableModel" :data="articleTableData" size="large" border :loading="data_loading_status">
 
           <template slot-scope="{row ,index}" slot="articleID">{{row.articleID}}</template>
 
@@ -86,13 +86,16 @@
             ],
             //表格具体数据
             articleTableData:[],
+            //数据总量
             articleTableDataTotal:0,
+            //当前页号
             page:0,
+            //表格数据加载中状态
+            data_loading_status:false,
           }
       },
 
       methods:{
-
 
         //  根据关键字，进行搜索查询
         doSearch(){
@@ -119,21 +122,24 @@
               })
             }
           },
-
-          //管理员获取文章信息
-          async getAdminArticleInfo(page, key_word, pageCount) {
-            const result = await this.$apis.AdminApi.getAdminArticleInfo(page, key_word, pageCount);
-            if (result.total > 0){
-              this.articleTableData = result.adminArticleInfo.adminArticleList;
-              this.dictionary_articleStatus = JSON.parse(result.adminArticleInfo.dictionary_articleStatus.toString());
-              this.articleTableDataTotal = result.total;
-              this.page = page;
-            }else {
-              this.articleTableData = [];
-              this.articleTableDataTotal = result.total;
-              this.page = page;
-            }
-          },
+        //管理员获取文章信息
+        async getAdminArticleInfo(page, key_word, pageCount) {
+          //开始时，则设置为加载中
+          this.data_loading_status = true;
+          //等待请求结果
+          const result = await this.$apis.AdminApi.getAdminArticleInfo(page, key_word, pageCount);
+          if (result.total > 0){
+            this.articleTableData = result.adminArticleInfo.adminArticleList;
+            this.dictionary_articleStatus = JSON.parse(result.adminArticleInfo.dictionary_articleStatus.toString());
+          }
+          //如果数据为空，没有设置 this.articleTableData = []，会出错，因为null 无法执行循环，不过不影响显示，只是控制台会报错
+          //设置数据总量
+          this.articleTableDataTotal = result.total;
+          //设置当前页数
+          this.page = page;
+          //然后不论是否有结果，取消加载中状态
+          this.data_loading_status = false;
+        },
 
         //去掉html标签
         replaceHtml(value){

@@ -19,7 +19,7 @@
 
         <!--表单数据展示-->
         <i-col span="24">
-          <Table ref="userDataTable" :columns="tabHead" :data="userDataList" border @on-row-click="selectedRow" highlight-row>
+          <Table ref="userDataTable" :columns="tabHead" :data="userDataList" border @on-row-click="selectedRow" highlight-row :loading="data_loading_status">
             <template slot-scope="{ row, index }" slot="openID">
               <span>{{ row.openID }}</span>
             </template>
@@ -58,7 +58,7 @@
 
       </Row>
 
-      <!-- 重置密码确认 对话框-->
+      <!-- 重置密码确认 对话框， 这里的loading，是指按钮的状态，不是整个modal-->
       <Modal v-model="restConfirm" :mask-closable="false" :loading="reset_loading_status">
         <p slot="header" style="color:red;text-align: center" >
           <Icon type="ios-information-circle"></Icon>
@@ -74,9 +74,8 @@
         <p slot="footer">
           <Button type="error" @click="doResetPassword" long size="large"><span style="font-size: 16px">确 认 并 重 置 密 码</span></Button>
         </p>
-
+        <!-- 该状态条是重置密码 等待结果的状态条 -->
         <Spin fix v-if="reset_loading_status"></Spin>
-
       </Modal>
     </div>
 </template>
@@ -102,7 +101,8 @@
           tableSelectedRow:-1, //表格默认选中行
           page:0,
           restConfirm:false, //重置密码确认
-          reset_loading_status:false,
+          reset_loading_status:false, //重置密码modal状态，和吗，modal按钮状态
+          data_loading_status:false, //主数据加载状态
         }
       },
       methods:{
@@ -179,6 +179,8 @@
          * 获取用户部分信息、权限和身份value
          */
           async getUserRoleAndPermissionList(page,key_word,pageCount) {
+            //开始时，则设置为加载中
+            this.data_loading_status = true;
             const result = await this.$apis.AdminApi.getUserRoleAndPermissionList(page,key_word,pageCount);
             if (result.total>0){
               let temp = result.userRoleAndPermission.userPartInfoList;
@@ -186,18 +188,17 @@
                 userPart.permission = JSON.parse(userPart.permission);
               }
               this.userDataList = temp;
-              this.userDataTotal = result.total;
               this.dictionary_permission = JSON.parse(result.userRoleAndPermission.dictionary_permission);
               this.dictionary_role = JSON.parse(result.userRoleAndPermission.dictionary_role);
-              this.page = page; //设置当前显示页号
-              this.tableSelectedRow = -1; //重置当前选中行
-            }else {
-              this.userDataList = [];
-              this.userDataTotal = result.total;
-              this.page = page; //设置当前显示页号
-              this.tableSelectedRow = -1; //重置当前选中行
             }
-
+            //设置当前总数据量
+            this.userDataTotal = result.total;
+            //设置当前显示页号
+            this.page = page;
+            //每次加载数据，重置当前选中行
+            this.tableSelectedRow = -1;
+            //然后不论是否有结果，取消加载中状态
+            this.data_loading_status = false;
           },
           // 回车，点击搜索图标，或点击搜索按钮 时 执行
           doSearch(){
