@@ -102,7 +102,7 @@
           page:0,
           restConfirm:false, //重置密码确认
           reset_loading_status:false, //重置密码modal状态，和吗，modal按钮状态
-          data_loading_status:false, //主数据加载状态
+          data_loading_status:true, //主数据加载状态
         }
       },
       methods:{

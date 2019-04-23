@@ -91,7 +91,7 @@
             //当前页号
             page:0,
             //表格数据加载中状态
-            data_loading_status:false,
+            data_loading_status:true,
           }
       },
 

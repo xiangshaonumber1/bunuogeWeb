@@ -71,7 +71,7 @@
           showFeedBackContent:false,  //是否显示反馈内容详情
           feedbackContent:'',   //反馈内容详情
           page:0, //当前页数
-          data_loading_status:false,  //主数据加载中状态
+          data_loading_status:true,  //主数据加载中状态
         };
       },
 
