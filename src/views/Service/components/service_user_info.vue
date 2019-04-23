@@ -103,8 +103,6 @@
           <span class="badge" style="font-size: 20px; padding: 10px;margin: 10px 0">个人描述</span>
           <textarea v-if="isOneself && isEditing" class="form-control personal_textarea" maxlength="300" v-model="userInfo.myDescribe"/>
           <textarea v-else class="form-control personal_textarea" style="border: 2px solid darkgray;" maxlength="300" v-model="userInfo.myDescribe" readonly/>
-          <br>
-          <small>注：昵称，心愿墙，个人描述等，<small style="color: red">点击所在区域改</small>即可进行修改，点击保存后即可提交；用户头像裁剪后上传属于立即修改类型，无需点击保存按钮</small>
         </i-col>
       </Row>
 

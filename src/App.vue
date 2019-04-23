@@ -14,7 +14,6 @@ export default {
   name:'App',
   components: {OkHeader},
   methods:{
-
     //登录检查
     async checkLogin(){
       await this.$apis.AuthenticationApi.getToken();
