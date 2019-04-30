@@ -41,6 +41,8 @@ import NotFound from '../views/Web/mainContent/404'
 import Setting from '../views/Web/mainContent/web_setting'
 import Setting_update_pw from '../views/Web/mainContent/setting/setting_update_pw'
 
+import Test from '../views/Web/test/test'
+
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
@@ -67,7 +69,7 @@ const routes = [
         ]},
     ]},
 
-
+  {path:'/test',component:Test, name:'test'},
 
   //文章详情
   {path:"/article/:article_id",component:Web_articleInfo,

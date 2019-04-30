@@ -9,6 +9,8 @@ import 'iview/dist/styles/iview.css'
 import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
+import VueSocketIO from 'vue-socket.io'
+import SocketIOClient from 'socket.io-client'
 //引入状态管理 store
 import store from './blog_vuex/store'
 import apis from './api/Api'
@@ -21,9 +23,11 @@ Vue.use(Iview);
 Vue.use(VueCropper);
 // 将api挂载到vue的原型上复制代码,让其可以在vue实例中 通过this.$apis 调用其中的接口
 Vue.prototype.$apis = apis;
-
-
-
+//Socket链接
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: store.getters.serverPath,
+}));
 
 
 // **********************************************************  必须放到最后系列  ****************************************************************************
@@ -37,10 +41,6 @@ const app = new Vue({
   // components: { App },
   router,
   store,
-  //Vue对象创建完成时
-  mounted(){
-  },
-
 });//现在，可以试试启动喽
 // ***********************************************************   必须放到最后系列   ************************************************************************************
 
