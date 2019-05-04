@@ -10,12 +10,10 @@ import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import VueSocketIO from 'vue-socket.io'
-import SocketIOClient from 'socket.io-client'
 //引入状态管理 store
 import store from './blog_vuex/store'
 import apis from './api/Api'
 import router from './router/router'
-//方便在main.js中，this尚未指向Vue的情况下，也能使用Message和Notice
 
 //Iview UI 框架
 Vue.use(Iview);
@@ -26,7 +24,8 @@ Vue.prototype.$apis = apis;
 //Socket链接
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: store.getters.serverPath,
+  //如果想要局域网内多台设备能够实现通信,应当制定服务器IP,而不是localhost
+  connection: 'http://localhost:9000',
 }));
 
 
