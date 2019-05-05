@@ -24,7 +24,6 @@ Vue.prototype.$apis = apis;
 //Socket链接
 Vue.use(new VueSocketIO({
   debug: true,
-  //如果想要局域网内多台设备能够实现通信,应当制定服务器IP,而不是localhost
   connection: 'http://localhost:9000',
 }));
 

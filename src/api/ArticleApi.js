@@ -25,6 +25,7 @@ const article = {
         origin_link:origin_link,
       })
     }).then( async (response) => {
+      console.log("write_article 输出：",response);
       //发布成功后，立即跳转到刚编辑的文章
       if (response.data.code === '200') {
         Notice.success({

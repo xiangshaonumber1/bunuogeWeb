@@ -133,6 +133,7 @@
     export default {
         name: "index",
       components: {BlogFooter, NotFound, Loading},
+
       data(){
         return {
           isLoading:true,       //第一次请求加载等待
@@ -269,7 +270,6 @@
 
       },
 
-      //首页数据获取
       mounted(){
 
         //首页刷新token，(如果有必要)
@@ -285,6 +285,11 @@
         this.scroll();
       },
 
+      sockets:{
+        notification_article(data){
+          console.log("前端返回的信息:",data);
+        }
+      }
     }
 </script>
 

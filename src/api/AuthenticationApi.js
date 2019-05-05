@@ -51,8 +51,6 @@ const authentication = {
       })
     }).then(response => {
       if (response.data.code === '200') { //登录成功
-        console.log("登录成功，准备保存信息 response.data.data.avatar：",response.data.data.avatar)
-        console.log("登录成功，准备保存信息 JSON.parse(response.data.data.avatar)[0] ：",JSON.parse(response.data.data.avatar)[0])
         const userInfo = {
           openID: response.data.data.openID,
           nickname: response.data.data.nickname,
@@ -61,6 +59,7 @@ const authentication = {
         };
         store.dispatch("saveLoginInfo", userInfo);
         router.push({name: 'index'});
+        return true;
       }else {
         return false;
       }
@@ -99,7 +98,9 @@ const authentication = {
     }).then(res=>{//这里不用考虑402
       if (res.data.code === '200'){
         console.log("getToken 刷新成功 输出：",res);
-        localStorage.setItem("token",res.data.data); //保存刷新后的token到本地
+        const result = res.data.data;
+        localStorage.setItem("token",result.get("token")); //保存刷新后的token到本地
+        // this.$socket.emit("online",result.get("openID"));
         return true;
       }else{ //token刷新失败（405）,已在拦截器中做处理,跳转到登录页面
         console.log("getToken else info：",res);
