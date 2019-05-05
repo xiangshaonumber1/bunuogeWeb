@@ -97,10 +97,8 @@ const authentication = {
       method:'get',
     }).then(res=>{//这里不用考虑402
       if (res.data.code === '200'){
-        console.log("getToken 刷新成功 输出：",res);
-        const result = res.data.data;
-        localStorage.setItem("token",result.get("token")); //保存刷新后的token到本地
-        // this.$socket.emit("online",result.get("openID"));
+        localStorage.setItem("token",res.data.data.token); //保存刷新后的token到本地
+        this.$socket.emit("online",res.data.data.openID);
         return true;
       }else{ //token刷新失败（405）,已在拦截器中做处理,跳转到登录页面
         console.log("getToken else info：",res);
