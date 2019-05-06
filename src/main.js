@@ -10,11 +10,10 @@ import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import VueSocketIO from 'vue-socket.io'
-//引入状态管理 store
+//引入状态管理 storet
 import store from './blog_vuex/store'
 import apis from './api/Api'
 import router from './router/router'
-
 //Iview UI 框架
 Vue.use(Iview);
 //Vue 截图工具
@@ -39,6 +38,7 @@ const app = new Vue({
   // components: { App },
   router,
   store,
+  // socket,
 });//现在，可以试试启动喽
 // ***********************************************************   必须放到最后系列   ************************************************************************************
 

@@ -144,6 +144,9 @@
               this.loading_login = true;  //设置spin加载中
               const result = await this.$apis.AuthenticationApi.login(this.loginInfo.username, this.loginInfo.password);
               console.log("登录返回结果：",result);
+              if (result){
+                this.$socket.emit("notification_login",this.$store.getters.openID);
+              }
               //不论是否登录成功，取消登录等待状态
               this.loading_login = false;
             }

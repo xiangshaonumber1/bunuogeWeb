@@ -285,11 +285,12 @@
         this.scroll();
       },
 
-      sockets:{
-        notification_article(data){
-          console.log("前端返回的信息:",data);
-        }
-      }
+      // sockets:{
+      //   notification_article(data){
+      //     console.log("前端返回的信息:",data);
+      //   }
+      // }
+
     }
 </script>
 

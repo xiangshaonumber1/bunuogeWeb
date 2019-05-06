@@ -7,9 +7,7 @@ import router from '../router/router'
 import store from '../blog_vuex/store'
 import qs from 'qs'
 
-
 const authentication = {
-
   //用户注册请求
   register(username,password,email,emailCode) {
     return request({
@@ -98,7 +96,6 @@ const authentication = {
     }).then(res=>{//这里不用考虑402
       if (res.data.code === '200'){
         localStorage.setItem("token",res.data.data.token); //保存刷新后的token到本地
-        this.$socket.emit("online",res.data.data.openID);
         return true;
       }else{ //token刷新失败（405）,已在拦截器中做处理,跳转到登录页面
         console.log("getToken else info：",res);
