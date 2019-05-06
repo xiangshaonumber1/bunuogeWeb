@@ -183,17 +183,23 @@
       },
 
       mounted() {
-          this.sockets.subscribe('notification_article',(data) => {
-            console.log("动态监听正式结果，并输出返回数据：",data);
-          });
-
-        this.sockets.subscribe('notification_article2',(data) => {
-          console.log("动态监听测试结果，并输出返回数据：",data);
-        });
+        //   this.sockets.subscribe('notification_article',(data) => {
+        //     console.log("动态监听正式结果，并输出返回数据：",data);
+        //   });
+        //
+        // this.sockets.subscribe('notification_article2',(data) => {
+        //   console.log("动态监听测试结果，并输出返回数据：",data);
+        // });
 
         this.userInfo = this.$store.getters.userInfo;
-        console.log("当前头像地址",this.userInfo.avatar);
         this.isLogin = this.$store.getters.isLogin;
+
+        if (this.isLogin) {
+          //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行
+          console.log("执行连接后台socketio")
+          this.$socket.emit("notification_connect",this.$store.getters.openID);
+        }
+
         this.getRouteName();
       },
 
