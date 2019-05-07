@@ -119,6 +119,7 @@
       <!--返回顶部-->
       <BackTop></BackTop>
 
+      <web_link></web_link>
       <blog-footer></blog-footer>
 
     </div>
@@ -129,10 +130,11 @@
     import NotFound from "./404";
     import BlogFooter from "../footer/footer";
     import store from '../../../blog_vuex/store'
+    import Web_link from "../comment/web_link";
 
     export default {
         name: "index",
-      components: {BlogFooter, NotFound, Loading},
+      components: {Web_link, BlogFooter, NotFound, Loading},
 
       data(){
         return {

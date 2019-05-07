@@ -53,7 +53,22 @@ const common = {
       console.log("重置密码返回结果：",res);
       return res.data.data;
     })
+  },
 
+  /**
+   * 获取底部导航栏信息
+   */
+  getBottomNavBar(){
+    return request({
+      url:'/common/getBottomNavBar',
+      method:'get',
+    }).then( res => {
+      if (res.data.code === '200'){
+        return res.data.data;
+      }else {
+        return null;
+      }
+    })
   }
 
 };

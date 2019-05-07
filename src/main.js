@@ -23,7 +23,8 @@ Vue.prototype.$apis = apis;
 //Socket链接
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: 'http://localhost:9000',
+  connection: 'http://localhost:8100', //开发环境
+  // connection: 'http://www.getok.top:8100',  //生产环境
 }));
 
 
@@ -38,7 +39,6 @@ const app = new Vue({
   // components: { App },
   router,
   store,
-  // socket,
 });//现在，可以试试启动喽
 // ***********************************************************   必须放到最后系列   ************************************************************************************
 

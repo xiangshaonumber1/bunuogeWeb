@@ -6,7 +6,15 @@
 
 <script>
     export default {
-        name: "link_edit"
+        name: "link_edit",
+      data() {
+        return {
+          
+        };
+      },
+
+
+
     }
 </script>
 

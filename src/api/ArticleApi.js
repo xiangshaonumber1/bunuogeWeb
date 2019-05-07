@@ -33,7 +33,8 @@ const article = {
           desc: "文章发布成功，已为您跳转到当前页面"
         });
         //跳转到对应的文章详情页面
-        return router.push({name:'web_articleInfo', params:{article_id:response.data.data}});
+        router.push({name:'web_articleInfo', params:{article_id:response.data.data}});
+        return true
       }
       else if (response.data.code === '402') {
         const result = await AuthenticationApi.getToken();
@@ -43,7 +44,7 @@ const article = {
         //Token刷新失败（405）这里不做任何处理，拦截器中会跳转
       } else {
         console.log("write_article else info :", response);
-        return response;
+        return false;
       }
     })
   },

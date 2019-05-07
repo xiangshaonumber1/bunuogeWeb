@@ -60,6 +60,8 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import VueSocketIO from 'vue-socket.io'
     export default {
         name: "ok-header",
       data(){
@@ -74,6 +76,7 @@
           }
         }
       },
+
       methods:{
 
         goFeedBackMessage(){
@@ -176,28 +179,29 @@
 
       },
 
-      sockets:{
-        notification_article(data){
-          console.log("监听 notification_article：",data)
-        }
-      },
+
 
       mounted() {
-        //   this.sockets.subscribe('notification_article',(data) => {
-        //     console.log("动态监听正式结果，并输出返回数据：",data);
-        //   });
-        //
-        // this.sockets.subscribe('notification_article2',(data) => {
-        //   console.log("动态监听测试结果，并输出返回数据：",data);
-        // });
 
         this.userInfo = this.$store.getters.userInfo;
         this.isLogin = this.$store.getters.isLogin;
 
         if (this.isLogin) {
           //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行
-          console.log("执行连接后台socketio")
+          console.log("执行连接后台 socketio -------------- ")
+          // this.$socket.emit("connect",this.$store.getters.openID);
           this.$socket.emit("notification_connect",this.$store.getters.openID);
+
+          this.sockets.subscribe('receive_article',(data)=>{
+            console.log("监听 receive_article 文章通知：",data)
+          });
+
+          this.sockets.subscribe('receive_connect',(data)=>{
+            console.log("监听 receive_connect：连接通知",data)
+          });
+
+
+
         }
 
         this.getRouteName();
@@ -215,6 +219,7 @@
           //这里表示 监听 ‘$route’的值，如果值发生变化，执行函数getRouteName
         "$route":"getRouteName"
       },
+
 
     }
 </script>
