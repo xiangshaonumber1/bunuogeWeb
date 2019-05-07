@@ -1,46 +1,48 @@
 <template>
-    <div>
+    <div v-if="web_link_data.length >0 " class="web-link">
+      <Row type="flex" class="code-row-bg web-like" align="top" justify="space-around">
 
-      <Row type="flex" class="code-row-bg web-like" align="top" justify="center">
-
-        <Col>
+        <!--友情连接部分-->
+        <i-col>
           <p class="text-center">友情链接</p>
           <ul>
             <li v-for="(link_data,index) in web_link_data" v-if="link_data.type === 'friend_link'">
               <a :href="link_data.website" target="_blank" :key="index">{{link_data.label}}</a>
             </li>
           </ul>
-        </Col>
+        </i-col>
 
-        <Col>
+        <!--实用推荐-->
+        <i-col>
           <p class="text-center">实用推荐</p>
           <ul>
             <li v-for="(link_data,index) in web_link_data" v-if="link_data.type === 'recommend'">
               <a :href="link_data.website" target="_blank" :key="index">{{link_data.label}}</a>
             </li>
           </ul>
-        </Col>
+        </i-col>
 
-        <Col>
+        <!--联系站长-->
+        <i-col>
           <p class="text-center">联系站长</p>
           <ul>
             <li v-for="(link_data,index) in web_link_data" v-if="link_data.type === 'about_author'">
               <a :href="link_data.website" target="_blank" :key="index">{{link_data.label}}</a>
             </li>
           </ul>
-        </Col>
+        </i-col>
 
-        <Col>
+        <!--网站相关-->
+        <i-col>
           <p class="text-center">网站相关</p>
           <ul>
             <li v-for="(link_data,index) in web_link_data" v-if="link_data.type === 'about_web'">
               <a :href="link_data.website" target="_blank" :key="index">{{link_data.label}}</a>
             </li>
           </ul>
-        </Col>
+        </i-col>
 
       </Row>
-
     </div>
 </template>
 
@@ -54,13 +56,14 @@
       },
 
       methods:{
+          //初始化连接信息
         async instanceLinkData() {
           this.web_link_data = await this.$apis.CommonApi.getBottomNavBar();
         }
       },
 
       mounted(){
-        instanceLinkData();
+        this.instanceLinkData();
       }
 
     }
@@ -70,6 +73,16 @@
 
   ul li{
     list-style-type: none;
+  }
+
+  p{
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .web-link{
+    padding-top: 20px;
+    background-color: rgb(245, 245, 245);
   }
 
 </style>

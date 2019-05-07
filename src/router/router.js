@@ -22,7 +22,7 @@ import BlogTotal from '../views/Service/components/service_blog_total'
 import Register from '../views/Web/login_register/register'
 import Login from '../views/Web/login_register/login'
 import Identity from '../views/Service/components/service_identity_user'
-import LinkEdit from '../views/Service/components/service_management_link'
+import service_management_link from '../views/Service/components/service_management_link'
 import service_feedbackMessage from '../views/Service/components/service_feedbackMessage'
 import Management_article from '../views/Service/components/service_management_article'
 import Management_comments from '../views/Service/components/service_management_comments'
@@ -46,7 +46,6 @@ import Test from '../views/Web/test/test'
 //  2.定义路由
 //  每个路由应该映射一个组件
 const routes = [
-
   //首页
   {path:'/', component: App,children:[
       //首页详情，默认子组件
@@ -108,24 +107,27 @@ const routes = [
     ]},
 
   //后台管理相关
-  {path:"/ServiceController", component: Controller, name:"ServiceController",                  //后台管理首页
+  {path:"/ServiceController", component: Controller, name:"ServiceController",
     children:[
-      {path: 'feedbackInfo',component: service_feedbackMessage,name:"service_feedback_message"},                       //博客统计
-      {path: 'blogState',component: BlogTotal,name:"service_blog_state"},                       //博客统计
-      {path: 'personalInfo', component: UserInfo, name:"service_user_info"},                    //个人数据
-      {path: 'writeArticle', component: WriteArticle, name:"service_write_article"},            //文章编辑
-      {path: 'writeDiary', component: WriteDiary, name:"service_write_diary"},                  //日记编辑
-      {path: 'dataArticles', component: DataArticles, name:"service_data_articles"},            //文章数据
-      {path: 'dataDiaries', component: DataDiaries, name:"service_data_diaries"},               //日记数据
-      {path: 'identityUser',component: Identity, name:"service_identity_user"},                 //用户管理
-      {path: 'writeEmail',component: WriteEmail,name:"service_write_email"},                    //发送邮件
-      {path: 'identityLink',component: LinkEdit, name:"service_identity_link"},                 //链接管理
-      {path: 'articleManagement',component: Management_article, name:"articleManagement"},                          //空白页
-      {path: 'commentsManagement',component: Management_comments, name:"commentsManagement"},                          //空白页
-      {path: 'whitePage',component: White, name:"service_white_page"},                          //空白页
+      //博客信息统计，待开发
+      {path: 'blogState',component: BlogTotal,name:"service_blog_state"},
+      //邮件发送，待开发
+      {path: 'writeEmail',component: WriteEmail,name:"service_write_email"},
+      //用户管理
+      {path: 'identityUser',component: Identity, name:"service_user_management"},
+      //反馈信息管理
+      {path: 'feedbackInfo',component: service_feedbackMessage,name:"service_feedback_management"},
+      //链接管理
+      {path: 'identityLink',component: service_management_link, name:"service_link_management"},
+      //文章管理
+      {path: 'articleManagement',component: Management_article, name:"service_article_management"},
+      //评论管理，待开发
+      {path: 'commentsManagement',component: Management_comments, name:"service_comments_management"},
+      //空白页面
+      {path: 'whitePage',component: White, name:"service_white_page"},
     ]},
   //404页面配置
-  {path:'*',component:NotFound,name:'404'},                                          //404
+  {path:'*',component:NotFound,name:'404'},
 
 ];
 

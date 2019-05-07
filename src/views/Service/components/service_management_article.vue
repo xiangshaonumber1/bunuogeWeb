@@ -1,5 +1,6 @@
 <template>
     <div id="service_management_article">
+
       <Divider orientation="left">
         <span style="font-size: 20px;font-weight: bold">文章信息管理</span>
       </Divider>

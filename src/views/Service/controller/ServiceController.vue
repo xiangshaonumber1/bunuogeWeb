@@ -70,12 +70,12 @@
 
               {parent_index:'4',parent_icon:'el-icon-setting',parent_title:'系统管理',icon:'md-settings',is_child:true,
                 childList:[
-                  {child_title:'文章管理',child_index:'4-1',to_path:'articleManagement'},
+                  {child_title:'文章管理',child_index:'4-1',to_path:'service_article_management'},
                   // {child_title:'评论管理',child_index:'4-2',to_path:'commentsManagement'},
-                  {child_title:'反馈信息',child_index:'4-3',to_path:'service_feedback_message'},
-                  {child_title:'用户管理',child_index:'4-4',to_path:'service_identity_user'},
+                  {child_title:'反馈信息',child_index:'4-3',to_path:'service_feedback_management'},
+                  {child_title:'用户管理',child_index:'4-4',to_path:'service_user_management'},
                   // {child_title:'发送邮件',child_index:'4-5',to_path:'service_write_email'},
-                  // {child_title:'链接编辑',child_index:'4-6',to_path:'service_identity_link'},
+                  {child_title:'链接编辑',child_index:'4-6',to_path:'service_link_management'},
                 ]
               },
             ],
@@ -159,10 +159,10 @@
             // console.log("初始化的 openNames value:"+this.openNames);
             this.openNames = open.split(",");
             // console.log("初始化后的 openNames value:"+this.openNames+' openNames 长度：'+this.openNames.length);
-            for (var i=0;i<this.openNames.length;i++){
+            for (let i=0;i<this.openNames.length;i++){
               // console.log(" 正在处理： "+this.openNames[i]);
-              for (var j=0;j<this.submenuList.length;j++){
-                for (var k=0;k<this.submenuList[j].childList.length;k++){
+              for (let j=0;j<this.submenuList.length;j++){
+                for (let k=0;k<this.submenuList[j].childList.length;k++){
                   //如果储存的openNames中有，则添加到面板上
                   if (this.submenuList[j].childList[k].child_index === this.openNames[i]){
                     // console.log("成功找到："+this.submenuList[j].childList[k]);

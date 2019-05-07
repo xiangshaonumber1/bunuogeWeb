@@ -1,6 +1,9 @@
 <template>
     <div id="feedbackMessage">
-      <Divider orientation="left"> 用户反馈信息 </Divider>
+      <Divider orientation="left">
+        <span style="font-size: 20px;font-weight: bold">用户反馈信息</span>
+      </Divider>
+
       <Table border :columns="feedbackModel" :data="feedbackData" :loading="data_loading_status">
         <template slot-scope="{ row, index }" slot="feedID">
           <span>{{ row.feedID }}</span>

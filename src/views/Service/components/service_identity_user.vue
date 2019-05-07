@@ -4,7 +4,9 @@
       <Row type="flex" class="code-row-bg" align="middle" justify="space-around">
 
         <i-col span="24">
-          <Divider horization orientation="left"><span>用户权限管理</span></Divider>
+          <Divider horization orientation="left">
+            <span style="font-size: 20px;font-weight: bold">用户权限管理</span>
+          </Divider>
         </i-col>
 
         <i-col span="24">
