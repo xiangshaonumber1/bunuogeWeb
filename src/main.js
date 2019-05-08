@@ -4,7 +4,7 @@
 //引入并安装vue-router插件
 import Vue from 'vue'
 import VueCropper from 'vue-cropper'
-import Iview from 'iview';
+import iview from 'iview';
 import 'iview/dist/styles/iview.css'
 import 'jquery'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -15,7 +15,7 @@ import store from './blog_vuex/store'
 import apis from './api/Api'
 import router from './router/router'
 //Iview UI 框架
-Vue.use(Iview);
+Vue.use(iview);
 //Vue 截图工具
 Vue.use(VueCropper);
 // 将api挂载到vue的原型上复制代码,让其可以在vue实例中 通过this.$apis 调用其中的接口

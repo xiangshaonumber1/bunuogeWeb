@@ -38,7 +38,7 @@
               <div v-if="row.openID === '0' || row.openID === $store.getters.openID">
                 <span style="font-size: 14px" class="center-block" v-bind:class="{adminColor : row.role === '超级管理员',rootColor : row.role === '管理员',userColor : row.role === '普通用户'}">{{row.role}}</span>
               </div>
-              <i-select v-else v-model="row.role" @on-change="updateRole(row.openID,$event)" v-bind:class="{adminColor : row.role === '超级管理员',rootColor : row.role === '管理员',userColor : row.role === '普通用户'}">
+              <i-select :transfer="true" v-else v-model="row.role" @on-change="updateRole(row.openID,$event)" v-bind:class="{adminColor : row.role === '超级管理员',rootColor : row.role === '管理员',userColor : row.role === '普通用户'}">
                 <i-option v-for="(role,index) in dictionary_role" v-if="!(role === '超级管理员')" :value="role" :label="role" :key="index" v-bind:class="{adminColor : role === '超级管理员',rootColor : role === '管理员',userColor : role === '普通用户'}"></i-option>
               </i-select>
             </template>
@@ -48,7 +48,7 @@
               <div v-if="row.openID === '0' || row.openID === $store.getters.openID">
                 <Tag  v-for="(permission,index) in row.permission" :key="index">{{permission}}</Tag>
               </div>
-              <i-select v-else v-model="row.permission" @on-open-change="allowedChangePermission" @on-change="updatePermission(row.openID,$event)" multiple>
+              <i-select :transfer="true" v-else v-model="row.permission" @on-open-change="allowedChangePermission" @on-change="updatePermission(row.openID,$event)" multiple>
                 <i-option v-for="permission in dictionary_permission" :value="permission" :label="permission" :key="permission" ></i-option>
               </i-select>
             </template>

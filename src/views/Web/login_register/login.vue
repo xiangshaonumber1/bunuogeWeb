@@ -52,7 +52,7 @@
                   <Button slot="append" @click="getEmailCode(resetPasswordInfo.email)">获取验证码</Button>
                 </Input>
               </form-item>
-              <Button class="center-block" type="primary" size="large" @click="resetPassword">确认并验证</Button>
+              <Button class="center-block" type="info" size="large" @click="resetPassword">确 认 并 验 证</Button>
             </Form>
           <spin v-if="loading_reset" fix></spin>
         </Modal>

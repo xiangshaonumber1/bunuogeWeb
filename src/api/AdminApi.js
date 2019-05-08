@@ -208,7 +208,24 @@ const admin = {
         return res.data;
       }
     })
-  }
+  },
+
+  //编辑底部链接信息
+  edit_link(link_info){
+    return request({
+      url:'/admin/edit_link',
+      method:'post',
+      data:qs.stringify({
+        linkID:link_info.linkID,
+        type:link_info.type,
+        label:link_info.label,
+        website:link_info.website,
+        operation:link_info.operation
+      })
+    }).then( res=>{
+      return res.data.data;
+    })
+  },
 
 
 

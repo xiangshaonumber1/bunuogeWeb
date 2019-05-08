@@ -29,7 +29,7 @@
         </template>
         <template slot-scope="{ row, index }" slot="status">
 
-          <i-select v-model="row.status" @on-change="updateFeedBackStatus(row.feedID,$event)"
+          <i-select :transfer="true" v-model="row.status" @on-change="updateFeedBackStatus(row.feedID,$event)"
                     v-bind:class="{ status_pending : row.status === '待处理',
                     status_dealing : row.status === '处理中',
                     status_complete : row.status === '已处理',

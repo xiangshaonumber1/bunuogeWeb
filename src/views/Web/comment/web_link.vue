@@ -70,16 +70,19 @@
 </script>
 
 <style scoped>
-
+  a{
+    color: rgb(105, 105, 105);
+    text-decoration: none;
+  }
+  a:hover{
+    color: rgb(87, 163, 243);
+  }
   ul li{
     list-style-type: none;
   }
-
   p{
-    font-size: 15px;
     font-weight: bold;
   }
-
   .web-link{
     padding-top: 20px;
     background-color: rgb(245, 245, 245);

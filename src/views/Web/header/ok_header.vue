@@ -8,6 +8,7 @@
             <a class=" navbar-left" @click="goIndex">
               <img src="/static/picture/getok-2.png" alt="Brand" style="height: 60px">
             </a>
+            <!--屏幕过小时收缩-->
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
               <Icon type="md-menu" />
             </button>
@@ -25,24 +26,31 @@
             </Menu>
 
             <!--搜索框-->
-            <div class="navbar-left container-fluid" style="height: 60px;padding-top: 3px">
+            <div class="navbar-left container-fluid" style="padding-top: 3px">
               <Input class="navbar-btn" search enter-button="搜 索" v-model.trim="search_key_word" size="large" @on-search="goSearchResult(search_key_word)"></Input>
             </div>
 
             <!-- 1.靠右的用户信息和写作快捷导航 / 2.靠右的登录注册提示-->
-            <div class="navbar-right" style="margin-right: 10px; height:60px;padding-top: 3px;">
+            <div class="navbar-right" style="margin-right: 10px;padding-top: 3px;">
               <!-- 个人信息 -->
-              <div v-if="$store.getters.isLogin">
+              <div v-if="$store.getters.isLogin" style="border: 1px solid red;height: 100%">
                 <Dropdown placement="bottom" @on-click="to_user_function">
-                  <a><img :src="userInfo.avatar"  alt="none" class="img-circle" width="40px" height="40px"/>&nbsp;<Icon type="ios-arrow-down"></Icon></a>&emsp;
+                  <a><img :src="userInfo.avatar"  alt="none" class="img-circle" width="35px" height="35px"/>&nbsp;<Icon type="ios-arrow-down"></Icon></a>&emsp;
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
                     <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
-                    <!--<DropdownItem name="userManager"><Icon type="ios-cloudy" size="20" /><span>&emsp;管理中心&emsp;</span></DropdownItem>-->
                     <DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>
                     <DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
+                <Dropdown placement="bottom">
+                  <a> <Icon type="md-notifications-outline" /></a>
+                  <DropdownMenu slot="list">
+                    <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+
+               <Icon type="ios-text-outline" />
                 <Button class="navbar-btn" type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>
                 <Button class="navbar-btn" type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>
               </div>
@@ -233,5 +241,6 @@
   span{
     font-size: 16px;
   }
+
 
 </style>

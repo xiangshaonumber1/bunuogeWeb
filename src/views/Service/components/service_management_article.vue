@@ -44,7 +44,7 @@
           <template slot-scope="{row ,index}" slot="time">{{row.time}}</template>
 
           <template slot-scope="{row ,index}" slot="status">
-            <i-select v-bind:class="{waitColor : row.status === '待审核',passColor : row.status === '已通过',refuseColor : row.status === '不通过'}"
+            <i-select :transfer="true"  v-bind:class="{waitColor : row.status === '待审核',passColor : row.status === '已通过',refuseColor : row.status === '不通过'}"
                       v-model="row.status" @on-change="updateArticleStatus(row.articleID,$event)">
               <i-option v-bind:class="{waitColor : status === '待审核',passColor : status === '已通过',refuseColor : status === '不通过'}"
                         v-for="(status,index) in dictionary_articleStatus" :label="status" :value="status" :key="index"></i-option>
