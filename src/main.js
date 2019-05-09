@@ -4,16 +4,19 @@
 //引入并安装vue-router插件
 import Vue from 'vue'
 import VueCropper from 'vue-cropper'
+import VueSocketIO from 'vue-socket.io'
 import iview from 'iview';
 import 'iview/dist/styles/iview.css'
-import 'jquery'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.min'
-import VueSocketIO from 'vue-socket.io'
+import BootstrapVue from 'bootstrap-vue'
+//bootstrap-vue中已包含bootstrap4，不用再单独安装
+import 'bootstrap-vue/node_modules/bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 //引入状态管理 storet
 import store from './blog_vuex/store'
 import apis from './api/Api'
 import router from './router/router'
+//引入BootstrapVue UI框架
+Vue.use(BootstrapVue);
 //Iview UI 框架
 Vue.use(iview);
 //Vue 截图工具

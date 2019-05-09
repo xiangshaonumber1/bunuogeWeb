@@ -1,69 +1,58 @@
 <template>
-    <div id="ok-header">
-      <Affix>
-        <nav class="navbar navbar-default" style="background-color: white;border: none;border-radius:0;border-bottom: 1px solid lightgrey">
-          <!--品牌图标-->
-          <div class="navbar-header navbar-left">
-            <!--Logo-->
-            <a class=" navbar-left" @click="goIndex">
-              <img src="/static/picture/getok-2.png" alt="Brand" style="height: 60px">
-            </a>
-            <!--屏幕过小时收缩-->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-              <Icon type="md-menu" />
-            </button>
-          </div>
+    <div class="ok-header">
+        <!-- bootstrap 导航条 -->
+        <b-navbar toggleable="lg"  type="light" variant="light" fixed="top" style="border-bottom: 1px solid lightgray;padding: 2px 0">
+          <b-navbar-brand @click="goIndex">
+            <img src="/static/picture/getok-2.png" alt="getok" style="height: 40px;">
+          </b-navbar-brand>
+          <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-          <!-- 导航栏快捷菜单内容 -->
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <!--快捷导航菜单-->
-            <Menu class="navbar-left" mode="horizontal" theme="light" :active-name="menuActive" >
-              <MenuItem name="web_feedback" @click.native="goFeedBackMessage"><span>意见反馈</span></MenuItem>
-              <!--<MenuItem name="message_wall" @click.native="goMessage_wall"><span>留言墙</span></MenuItem>-->
-              <MenuItem name="index" @click.native="goIndex" ><span>首页</span></MenuItem>
-              <!--<MenuItem name="collection" @click.native="goCollections"><span>收藏</span></MenuItem>-->
-              <!--<MenuItem name="dynamic" @click.native="goDynamic"><span>动态</span></MenuItem>-->
-            </Menu>
+          <b-collapse id="nav-collapse" is-nav>
 
-            <!--搜索框-->
-            <div class="navbar-left container-fluid" style="padding-top: 3px">
-              <Input class="navbar-btn" search enter-button="搜 索" v-model.trim="search_key_word" size="large" @on-search="goSearchResult(search_key_word)"></Input>
-            </div>
-
-            <!-- 1.靠右的用户信息和写作快捷导航 / 2.靠右的登录注册提示-->
-            <div class="navbar-right" style="margin-right: 10px;padding-top: 3px;">
+            <!-- 左对齐导航项 -->
+            <b-navbar-nav class="navbar-header-left" >
+              <b-nav-item @click="goFeedBackMessage">意见反馈</b-nav-item>
+              <b-nav-item @click="goIndex">首页</b-nav-item>
+              <!--搜索框-->
+                <b-nav-form>
+                  <Input search enter-button="搜 索" v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)"></Input>
+                </b-nav-form>
+            </b-navbar-nav>
+            <br/>
+            <!-- 右对齐导航项 -->
+            <b-navbar-nav v-if="$store.getters.isLogin" class="ml-auto">
               <!-- 个人信息 -->
-              <div v-if="$store.getters.isLogin" style="border: 1px solid red;height: 100%">
+              <b-nav-form>
                 <Dropdown placement="bottom" @on-click="to_user_function">
-                  <a><img :src="userInfo.avatar"  alt="none" class="img-circle" width="35px" height="35px"/>&nbsp;<Icon type="ios-arrow-down"></Icon></a>&emsp;
+                  <a><b-img :src="userInfo.avatar"  alt="none" rounded="circle" width="35px" height="35px"></b-img>&nbsp;<Icon type="ios-arrow-down"></Icon></a>&emsp;
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
                     <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
                     <DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>
                     <DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>
                   </DropdownMenu>
-                </Dropdown>
+                </Dropdown>&emsp;
                 <Dropdown placement="bottom">
                   <a> <Icon type="md-notifications-outline" /></a>
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
                   </DropdownMenu>
-                </Dropdown>
+                </Dropdown>&emsp;
+                <Icon type="ios-text-outline" />&emsp;
+                <Button type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>&emsp;
+                <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>&emsp;
+              </b-nav-form>
+            </b-navbar-nav>
 
-               <Icon type="ios-text-outline" />
-                <Button class="navbar-btn" type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>
-                <Button class="navbar-btn" type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>
-              </div>
-              <!-- 没有登录时显示 立即登录和 免费注册的按钮 -->
-              <div v-else>
-                <Button class="navbar-btn" type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>&emsp;
-                <Button class="navbar-btn" type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;" @click="to_sign_up"><span>免 费 注 册</span></Button>
-              </div>
-            </div>
-          </div>
+            <!-- 没有登录时显示 立即登录和 免费注册的按钮 -->
+            <b-navbar-nav v-else class="ml-auto">
+              <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>&emsp;
+              <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;" @click="to_sign_up"><span>免 费 注 册</span></Button>
+            </b-navbar-nav>
 
-        </nav>
-      </Affix>
+          </b-collapse>
+
+        </b-navbar>
     </div>
 </template>
 
@@ -240,6 +229,14 @@
 
   span{
     font-size: 16px;
+  }
+
+  .navbar-header-left li{
+    margin-right: 10px;
+  }
+
+  .ok-header{
+    margin-top:70px;
   }
 
 

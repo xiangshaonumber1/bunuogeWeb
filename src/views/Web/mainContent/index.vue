@@ -3,7 +3,7 @@
     <div class="index">
 
       <!--首页主要内容-->
-      <div class="index-content center-block">
+      <div class="index-content m-auto">
 
         <Row type="flex" align="middle" class="code-row-bg" justify="space-between">
           <i-col span="15">
@@ -18,9 +18,9 @@
 
           <i-col span="8" class="official-activities">
             <div>
-              <a @click="goSpecialArea()"><p class="bg-info">前端：Vue学习</p></a>
-              <a @click="goSpecialArea()"><p class="bg-success">后端：SpringBoot</p></a>
-              <a @click="goSpecialArea()"><p class="bg-danger">书籍：优质书籍推荐</p></a>
+              <a @click="goSpecialArea()"><b-alert show variant="primary">前端：Vue学习</b-alert></a>
+              <a @click="goSpecialArea()">  <b-alert show variant="success">后端：SpringBoot</b-alert></a>
+              <a @click="goSpecialArea()"> <b-alert show variant="danger">书籍：优质书籍推荐</b-alert></a>
             </div>
 
             <div class="excellent-articles">
