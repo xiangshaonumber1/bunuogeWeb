@@ -9,8 +9,9 @@ import iview from 'iview';
 import 'iview/dist/styles/iview.css'
 import BootstrapVue from 'bootstrap-vue'
 //bootstrap-vue中已包含bootstrap4，不用再单独安装
-import 'bootstrap-vue/node_modules/bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap-vue/node_modules/'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/css/bootstrap.css'
 //引入状态管理 storet
 import store from './blog_vuex/store'
 import apis from './api/Api'

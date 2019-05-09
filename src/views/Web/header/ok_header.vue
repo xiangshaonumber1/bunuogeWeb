@@ -1,53 +1,71 @@
 <template>
     <div class="ok-header">
         <!-- bootstrap 导航条 -->
-        <b-navbar toggleable="lg"  type="light" variant="light" fixed="top" style="border-bottom: 1px solid lightgray;padding: 2px 0">
+        <b-navbar toggleable="lg"  type="light" variant="light" fixed="top" style="border-bottom: 1px solid lightgray;padding: 4px 0">
           <b-navbar-brand @click="goIndex">
-            <img src="/static/picture/getok-2.png" alt="getok" style="height: 40px;">
+            <img src="/static/picture/getok-2.png" alt="getok" style="height: 50px;">
           </b-navbar-brand>
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
           <b-collapse id="nav-collapse" is-nav>
 
             <!-- 左对齐导航项 -->
-            <b-navbar-nav class="navbar-header-left" >
-              <b-nav-item @click="goFeedBackMessage">意见反馈</b-nav-item>
-              <b-nav-item @click="goIndex">首页</b-nav-item>
+            <b-navbar-nav class="navbar-header-left">
+              <b-nav-item @click="goFeedBackMessage">&emsp;意见反馈&ensp;</b-nav-item>
+              <b-nav-item @click="goIndex">&ensp;首页&emsp;</b-nav-item>
               <!--搜索框-->
-                <b-nav-form>
-                  <Input search enter-button="搜 索" v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)"></Input>
-                </b-nav-form>
+              <b-nav-form>
+                <Input search enter-button="搜 索" v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)" size="large"></Input>
+              </b-nav-form>
             </b-navbar-nav>
-            <br/>
+
             <!-- 右对齐导航项 -->
-            <b-navbar-nav v-if="$store.getters.isLogin" class="ml-auto">
+            <b-navbar-nav v-if="$store.getters.isLogin" class="navbar-header-right ml-auto">
+
               <!-- 个人信息 -->
               <b-nav-form>
                 <Dropdown placement="bottom" @on-click="to_user_function">
-                  <a><b-img :src="userInfo.avatar"  alt="none" rounded="circle" width="35px" height="35px"></b-img>&nbsp;<Icon type="ios-arrow-down"></Icon></a>&emsp;
+                  <a><b-img :src="userInfo.avatar"  alt="none" rounded="circle" width="40px" height="40px"></b-img>&nbsp;<Icon type="ios-arrow-down"></Icon></a>
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
                     <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
                     <DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>
                     <DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>
                   </DropdownMenu>
-                </Dropdown>&emsp;
-                <Dropdown placement="bottom">
-                  <a> <Icon type="md-notifications-outline" /></a>
-                  <DropdownMenu slot="list">
-                    <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>&emsp;
-                <Icon type="ios-text-outline" />&emsp;
-                <Button type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>&emsp;
-                <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>&emsp;
+                </Dropdown>
               </b-nav-form>
+
+              <!--消息通知 注:m-auto 垂直居中-->
+              <b-nav-item class="m-auto">
+                <Dropdown placement="bottom">
+                  <span>&emsp;消息&ensp;</span>
+                  <DropdownMenu slot="list">
+                    <DropdownItem name="userCenter"><span>&emsp;回复我的&emsp;</span></DropdownItem>
+                    <DropdownItem name="userCenter"><span>&emsp;我的消息&emsp;</span></DropdownItem>
+                    <DropdownItem name="userCenter"><span>&emsp;系统通知&emsp;</span></DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </b-nav-item>
+              <!--动态-->
+              <b-nav-item class="m-auto">
+                <span>&ensp;动态&emsp;</span>
+              </b-nav-item>
+              <b-nav-item class="m-auto">
+                <Button type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>
+              </b-nav-item>
+              <b-nav-item class="m-auto">
+                <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>
+              </b-nav-item>
             </b-navbar-nav>
 
             <!-- 没有登录时显示 立即登录和 免费注册的按钮 -->
             <b-navbar-nav v-else class="ml-auto">
-              <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>&emsp;
-              <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;" @click="to_sign_up"><span>免 费 注 册</span></Button>
+              <b-nav-item>
+                <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>&emsp;
+              </b-nav-item>
+              <b-nav-item>
+                <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;" @click="to_sign_up"><span>免 费 注 册</span></Button>
+              </b-nav-item>
             </b-navbar-nav>
 
           </b-collapse>
@@ -57,8 +75,6 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import VueSocketIO from 'vue-socket.io'
     export default {
         name: "ok-header",
       data(){
@@ -172,10 +188,29 @@
         getRouteName(){
          console.log("ok_header 当前routeName :",this.$route.name);
          this.menuActive = this.$route.name;
+        },
+
+        //获取我的未读‘回复我的’类消息，待完成
+        getUnreadReply(){
+
+        },
+
+        //获取我的未读‘我的消息’类通知，待完成
+        getMyMessage(){
+
+        },
+
+        //获取我的未读‘系统通知’类通知，待完成
+        getSystemMessage(){
+
+        },
+
+        //获取关注用户的动态消息，待完成
+        getMarkerActivity(){
+
         }
 
       },
-
 
 
       mounted() {
@@ -185,22 +220,16 @@
 
         if (this.isLogin) {
           //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行
-          console.log("执行连接后台 socketio -------------- ")
           // this.$socket.emit("connect",this.$store.getters.openID);
           this.$socket.emit("notification_connect",this.$store.getters.openID);
-
           this.sockets.subscribe('receive_article',(data)=>{
             console.log("监听 receive_article 文章通知：",data)
           });
-
           this.sockets.subscribe('receive_connect',(data)=>{
             console.log("监听 receive_connect：连接通知",data)
           });
-
-
-
         }
-
+        //监听当前访问路径
         this.getRouteName();
       },
 
@@ -236,7 +265,7 @@
   }
 
   .ok-header{
-    margin-top:70px;
+    margin-top:100px;
   }
 
 
