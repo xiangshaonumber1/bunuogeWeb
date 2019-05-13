@@ -8,8 +8,6 @@ import VueSocketIO from 'vue-socket.io'
 import iview from 'iview';
 import 'iview/dist/styles/iview.css'
 import BootstrapVue from 'bootstrap-vue'
-//bootstrap-vue中已包含bootstrap4，不用再单独安装
-// import 'bootstrap-vue/node_modules/'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/css/bootstrap.css'
 //引入状态管理 storet

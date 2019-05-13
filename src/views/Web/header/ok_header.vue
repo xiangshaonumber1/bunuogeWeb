@@ -1,31 +1,34 @@
 <template>
     <div class="ok-header">
         <!-- bootstrap 导航条 -->
-        <b-navbar toggleable="lg"  type="light" variant="light" fixed="top" style="border-bottom: 1px solid lightgray;padding: 4px 0">
-          <b-navbar-brand @click="goIndex">
-            <img src="/static/picture/getok-2.png" alt="getok" style="height: 50px;">
-          </b-navbar-brand>
+        <b-navbar toggleable="lg"  fixed="top" style="padding: 0;background-color: white;" >
+          <!--Iview 实现-->
+          <Menu mode="horizontal">
+            <img src="/static/picture/getok-2.png" alt="getok" style="height: 50px;background-color: white;">
+          </Menu>
+
+          <!--展开更多按钮-->
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-          <b-collapse id="nav-collapse" is-nav>
-
-            <!-- 左对齐导航项 -->
-            <b-navbar-nav class="navbar-header-left">
-              <b-nav-item @click="goFeedBackMessage">&emsp;意见反馈&ensp;</b-nav-item>
-              <b-nav-item @click="goIndex">&ensp;首页&emsp;</b-nav-item>
+          <!---->
+          <b-collapse id="nav-collapse" is-nav >
+            <!--导航栏菜单 Iview 实现-->
+            <Menu mode="horizontal" style="width: 100%;">
+              <!--顶部导航栏基本功能-->
+              <div class="menu-common">
+                <MenuItem name="1">
+                  <a @click="goFeedBackMessage"><span>&emsp;意见反馈&ensp;</span></a>
+                </MenuItem>
+                <MenuItem name="2">
+                  <a @click="goIndex"><span>&emsp;首页&ensp;</span></a>
+                </MenuItem>
+              </div>
               <!--搜索框-->
-              <b-nav-form>
-                <Input search enter-button="搜 索" v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)" size="large"></Input>
-              </b-nav-form>
-            </b-navbar-nav>
-
-            <!-- 右对齐导航项 -->
-            <b-navbar-nav v-if="$store.getters.isLogin" class="navbar-header-right ml-auto">
-
-              <!-- 个人信息 -->
-              <b-nav-form>
-                <Dropdown placement="bottom" @on-click="to_user_function">
-                  <a><b-img :src="userInfo.avatar"  alt="none" rounded="circle" width="40px" height="40px"></b-img>&nbsp;<Icon type="ios-arrow-down"></Icon></a>
+              <Input search v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)" size="large" style="width: auto;margin-left: 20px" />
+              <!--顶部导航栏登录用户功能-->
+              <div v-if="$store.getters.isLogin" class="menu-user" style="float: right">
+                <Dropdown style="float: left" placement="bottom" @on-click="to_user_function">
+                  <a style="margin-right: 10px"><b-img :src="userInfo.avatar"  alt="none" rounded="circle" width="40px" height="40px"></b-img>&ensp;<Icon type="ios-arrow-down"/></a>
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>
                     <DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>
@@ -33,41 +36,32 @@
                     <DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
-              </b-nav-form>
-
-              <!--消息通知 注:m-auto 垂直居中-->
-              <b-nav-item class="m-auto">
-                <Dropdown placement="bottom">
-                  <span>&emsp;消息&ensp;</span>
-                  <DropdownMenu slot="list">
-                    <DropdownItem name="userCenter"><span>&emsp;回复我的&emsp;</span></DropdownItem>
-                    <DropdownItem name="userCenter"><span>&emsp;我的消息&emsp;</span></DropdownItem>
-                    <DropdownItem name="userCenter"><span>&emsp;系统通知&emsp;</span></DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              </b-nav-item>
-              <!--动态-->
-              <b-nav-item class="m-auto">
-                <span>&ensp;动态&emsp;</span>
-              </b-nav-item>
-              <b-nav-item class="m-auto">
-                <Button type="info" icon="md-create" size="large" @click="go_writeArticle"><span>创作文章</span></Button>
-              </b-nav-item>
-              <b-nav-item class="m-auto">
-                <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary"><span>写笔记</span></Button>
-              </b-nav-item>
-            </b-navbar-nav>
-
-            <!-- 没有登录时显示 立即登录和 免费注册的按钮 -->
-            <b-navbar-nav v-else class="ml-auto">
-              <b-nav-item>
+                <MenuItem name="4">
+                  <Dropdown placement="bottom">
+                    <Badge :count="replyCount + myMessageCount + systemMessage" :offset="[15,-5]">
+                      <span style="height: 40px;width: 40px" class="text-center center-block mt-auto">&ensp;消息&ensp;</span>
+                    </Badge>
+                    <DropdownMenu slot="list">
+                      <DropdownItem name="userCenter"><span><Badge :count="replyCount" />&emsp;回复我的&emsp;</span></DropdownItem>
+                      <DropdownItem name="userCenter"><span><Badge :count="myMessageCount" />&emsp;我的消息&emsp;</span></DropdownItem>
+                      <DropdownItem name="userCenter"><span><Badge :count="systemMessage" />&emsp;系统通知&emsp;</span></DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </MenuItem>
+                <MenuItem name="5">
+                  <Badge :count="markerActivity" dot :offset="[20,0]">
+                    <span>&ensp;动态&ensp;</span>
+                  </Badge>
+                </MenuItem>
+                <Button type="info" icon="md-create" size="large" @click="go_writeArticle" style="margin:0 5px 0 10px "><span>创作文章</span></Button>
+                <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary" style="margin: 0 10px 0 5px"><span>写笔记</span></Button>
+              </div>
+              <!--顶部导航栏游客功能-->
+              <div v-else class="menu-guest">
                 <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>&emsp;
-              </b-nav-item>
-              <b-nav-item>
                 <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;" @click="to_sign_up"><span>免 费 注 册</span></Button>
-              </b-nav-item>
-            </b-navbar-nav>
-
+              </div>
+            </Menu>
           </b-collapse>
 
         </b-navbar>
@@ -86,7 +80,11 @@
             nickname:'',//用户昵称
             avatar:'',//用户头像地址
             token:'',//用户登录后持有的token
-          }
+          },
+          replyCount:0,  //用户未读信息（评论回复类）
+          myMessageCount:0, //我的消息，私聊类消息
+          systemMessage:0,  //系统发起的通知类消息
+          markerActivity:0, //关注用户的活动信息
         }
       },
 
@@ -254,18 +252,16 @@
 
   a{
     text-decoration: none;
+    color: black;
   }
 
   span{
     font-size: 16px;
   }
 
-  .navbar-header-left li{
-    margin-right: 10px;
-  }
-
   .ok-header{
     margin-top:100px;
+    background-color: white;
   }
 
 
