@@ -24,7 +24,7 @@
                 </MenuItem>
               </div>
               <!--搜索框-->
-              <Input search v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)" size="large" style="width: auto;margin-left: 20px" />
+              <Input search v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)" placeholder="请输入关键字..." size="large" style="width: auto;margin-left: 20px" />
               <!--顶部导航栏登录用户功能-->
               <div v-if="$store.getters.isLogin" class="menu-user" style="float: right">
                 <Dropdown style="float: left" placement="bottom" @on-click="to_user_function">
@@ -57,9 +57,9 @@
                 <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary" style="margin: 0 10px 0 5px"><span>写笔记</span></Button>
               </div>
               <!--顶部导航栏游客功能-->
-              <div v-else class="menu-guest">
-                <Button type="text" ghost @click="to_sign_in()"><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>&emsp;
-                <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;" @click="to_sign_up"><span>免 费 注 册</span></Button>
+              <div v-else class="menu-guest" style="float: right">
+                <Button type="text" ghost @click="to_sign_in()" style="margin:0 5px 0 10px "><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>
+                <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;margin: 0 10px 0 5px" @click="to_sign_up"><span>免 费 注 册</span></Button>
               </div>
             </Menu>
           </b-collapse>
@@ -199,7 +199,7 @@
         },
 
         //获取我的未读‘系统通知’类通知，待完成
-        getSystemMessage(){
+        getUnreadSystemMessageCount(){
 
         },
 
