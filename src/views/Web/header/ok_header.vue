@@ -26,7 +26,7 @@
               <!--搜索框-->
               <Input search v-model.trim="search_key_word" @on-search="goSearchResult(search_key_word)" placeholder="请输入关键字..." size="large" style="width: auto;margin-left: 20px" />
               <!--顶部导航栏登录用户功能-->
-              <div v-if="$store.getters.isLogin" class="menu-user" style="float: right">
+              <div v-if="$store.getters.isLogin" class="menu-user">
                 <Dropdown style="float: left" placement="bottom" @on-click="to_user_function">
                   <a style="margin-right: 10px"><b-img :src="userInfo.avatar"  alt="none" rounded="circle" width="40px" height="40px"></b-img>&ensp;<Icon type="ios-arrow-down"/></a>
                   <DropdownMenu slot="list">
@@ -37,19 +37,19 @@
                   </DropdownMenu>
                 </Dropdown>
                 <MenuItem name="4">
-                  <Dropdown placement="bottom">
-                    <Badge :count="replyCount + myMessageCount + systemMessage" :offset="[15,-5]">
+                  <Dropdown placement="bottom" @on-click="to_message_module">
+                    <Badge :count="replyMessageCount + personalMessageCount + systemMessageCount" :offset="[15,-5]">
                       <span style="height: 40px;width: 40px" class="text-center center-block mt-auto">&ensp;消息&ensp;</span>
                     </Badge>
-                    <DropdownMenu slot="list">
-                      <DropdownItem name="userCenter"><span><Badge :count="replyCount" />&emsp;回复我的&emsp;</span></DropdownItem>
-                      <DropdownItem name="userCenter"><span><Badge :count="myMessageCount" />&emsp;我的消息&emsp;</span></DropdownItem>
-                      <DropdownItem name="userCenter"><span><Badge :count="systemMessage" />&emsp;系统通知&emsp;</span></DropdownItem>
+                    <DropdownMenu slot="list" :padding="0">
+                      <DropdownItem name="reply"><Badge :count="replyMessageCount" /><span>&emsp;回复我的&emsp;</span></DropdownItem>
+                      <DropdownItem name="personal"><Badge :count="personalMessageCount" /><span>&emsp;我的消息&emsp;</span></DropdownItem>
+                      <DropdownItem name="system"><Badge :count="systemMessageCount" /><span>&emsp;系统通知&emsp;</span></DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 </MenuItem>
                 <MenuItem name="5">
-                  <Badge :count="markerActivity" dot :offset="[20,0]">
+                  <Badge :count="markerActivityCount" dot :offset="[20,0]">
                     <span>&ensp;动态&ensp;</span>
                   </Badge>
                 </MenuItem>
@@ -81,20 +81,44 @@
             avatar:'',//用户头像地址
             token:'',//用户登录后持有的token
           },
-          replyCount:0,  //用户未读信息（评论回复类）
-          myMessageCount:0, //我的消息，私聊类消息
-          systemMessage:0,  //系统发起的通知类消息
-          markerActivity:0, //关注用户的活动信息
+          replyMessageCount:0,  //用户未读信息（评论回复类）
+          personalMessageCount:0, //我的消息，私聊类消息
+          systemMessageCount:0,  //系统发起的通知类消息
+          markerActivityCount:0, //关注用户的活动信息
         }
       },
 
       methods:{
 
+        //前往消息模块
+        to_message_module(type){
+          switch (type) {
+            //回复类消息
+            case 'reply':
+              this.$router.push({
+                name:'replyMessage',
+                params:{openID:this.$store.getters.openID,messageType:'reply'}
+              });
+              break;
+            case 'personal':
+              this.$router.push({
+                name:'personalMessage',
+                params:{openID:this.$store.getters.openID,messageType:'personal'}
+              });
+              break;
+            case 'system':
+              this.$router.push({
+                name:'systemMessage',
+                params:{openID:this.$store.getters.openID,messageType:'system'}
+              });
+              break;
+            default:
+              return;
+          }
+        },
+
+        //前往意见反馈模块
         goFeedBackMessage(){
-          // this.$Notice.info({
-          //   title: '敬请期待：',
-          //   desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
-          // })
           this.$router.push({name:'web_feedback'});
         },
         //前往本站的留言墙
@@ -188,19 +212,12 @@
          this.menuActive = this.$route.name;
         },
 
-        //获取我的未读‘回复我的’类消息，待完成
-        getUnreadReply(){
-
-        },
-
-        //获取我的未读‘我的消息’类通知，待完成
-        getMyMessage(){
-
-        },
-
-        //获取我的未读‘系统通知’类通知，待完成
-        getUnreadSystemMessageCount(){
-
+        //获取未读消息数量
+        async getUnread() {
+          const result = await this.$apis.UserApi.getUnreadCount();
+          this.systemMessageCount = result.system;
+          this.replyMessageCount = result.reply;
+          this.personalMessageCount = result.personal;
         },
 
         //获取关注用户的动态消息，待完成
@@ -216,9 +233,10 @@
         this.userInfo = this.$store.getters.userInfo;
         this.isLogin = this.$store.getters.isLogin;
 
+        this.getUnread();
+
         if (this.isLogin) {
           //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行
-          // this.$socket.emit("connect",this.$store.getters.openID);
           this.$socket.emit("notification_connect",this.$store.getters.openID);
           this.sockets.subscribe('receive_article',(data)=>{
             console.log("监听 receive_article 文章通知：",data)
@@ -226,6 +244,10 @@
           this.sockets.subscribe('receive_connect',(data)=>{
             console.log("监听 receive_connect：连接通知",data)
           });
+          this.sockets.subscribe('notification_system_message', data=>{
+            console.log("监听到系统有发布新的系统消息",data);
+            this.systemMessageCount++;
+          })
         }
         //监听当前访问路径
         this.getRouteName();
@@ -262,6 +284,10 @@
   .ok-header{
     margin-top:100px;
     background-color: white;
+  }
+
+  .menu-user{
+    float: right;
   }
 
 

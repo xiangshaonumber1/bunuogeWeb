@@ -74,7 +74,7 @@
                   // {child_title:'评论管理',child_index:'4-2',to_path:'commentsManagement'},
                   {child_title:'反馈信息',child_index:'4-3',to_path:'service_feedback_management'},
                   {child_title:'用户管理',child_index:'4-4',to_path:'service_user_management'},
-                  // {child_title:'发送邮件',child_index:'4-5',to_path:'service_write_email'},
+                  {child_title:'消息发送',child_index:'4-5',to_path:'service_send_message'},
                   {child_title:'链接编辑',child_index:'4-6',to_path:'service_link_management'},
                 ]
               },

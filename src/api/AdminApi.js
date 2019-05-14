@@ -227,6 +227,21 @@ const admin = {
     })
   },
 
+  //发送全体系统消息
+  sendSystemMessage(message_info){
+    return request({
+      url:'/admin/sendSystemMessage',
+      method:'post',
+      data:qs.stringify({
+        sendType:message_info.sendType,
+        acceptor:message_info.acceptor,
+        title:message_info.title,
+        content:message_info.content,
+      })
+    }).then( res =>{
+      return res.data.data;
+    })
+  },
 
 
 };

@@ -13,7 +13,7 @@ import Home from '../views/Web/home/home'
 import Controller from '../views/Service/controller/ServiceController'
 import WriteArticle from '../views/Service/components/service_write_article'
 import WriteDiary from '../views/Service/components/service_write_diary'
-import WriteEmail from '../views/Service/components/service_write_email'
+import SendMssage from '../views/Service/components/service_send_message'
 import White from '../views/Service/components/service_white'
 import DataArticles from '../views/Service/components/service_data_articles'
 import DataDiaries from '../views/Service/components/service_data_diaries'
@@ -28,10 +28,13 @@ import Management_article from '../views/Service/components/service_management_a
 import Management_comments from '../views/Service/components/service_management_comments'
 
 
-import Web_articleInfo from '../views/Web/mainContent/ArticleInfo/web_articleInfo'
-import Web_diaryInfo from '../views/Web/mainContent/ArticleInfo/web_diaryInfo'
-import CommentAndReply from '../views/Web/mainContent/ArticleInfo/commentAndReply'
-
+import Web_articleInfo from '../views/Web/mainContent/articleInfo/web_articleInfo'
+import Web_diaryInfo from '../views/Web/mainContent/articleInfo/web_diaryInfo'
+import CommentAndReply from '../views/Web/mainContent/articleInfo/commentAndReply'
+import WebModule_message from '../views/Web/mainContent/messageInfo/web_module_message'
+import Web_replyMessage from '../views/Web/mainContent/messageInfo/web_replyMessage'
+import Web_systemMessage from '../views/Web/mainContent/messageInfo/web_systemMessage'
+import Web_personalMessage from '../views/Web/mainContent/messageInfo/web_personalMessage'
 import Web_feedBack from '../views/Web/mainContent/web_feedback'
 import Web_search from '../views/Web/mainContent/web_searchInfo'
 import Web_user from '../views/Web/mainContent/web_user'
@@ -68,6 +71,16 @@ const routes = [
         ]},
     ]},
 
+  //消息通知模块
+  {path:'/message/:openID',component:WebModule_message,
+    children:[
+      {path:'replyMessage',component:Web_replyMessage,name:'replyMessage'},
+      {path:'systemMessage',component:Web_systemMessage,name:'systemMessage'},
+      {path:'personalMessage',component:Web_personalMessage,name:'personalMessage'},
+    ]
+  },
+
+  //测试页面
   {path:'/test',component:Test, name:'test'},
 
   //文章详情
@@ -112,7 +125,7 @@ const routes = [
       //博客信息统计，待开发
       {path: 'blogState',component: BlogTotal,name:"service_blog_state"},
       //邮件发送，待开发
-      {path: 'writeEmail',component: WriteEmail,name:"service_write_email"},
+      {path: 'sendMessage',component: SendMssage,name:"service_send_message"},
       //用户管理
       {path: 'identityUser',component: Identity, name:"service_user_management"},
       //反馈信息管理

@@ -168,6 +168,40 @@ const user = {
     })
   },
 
+  //确认消息已阅读(新增系统消息已读记录),这里的messageIDArray应该是数组类型
+  confirmSystemMessage(messageIDArray){
+    return request({
+      url:'/user/confirmSystemMessage',
+      method:'post',
+      data:qs.stringify({
+        messageArray:messageIDArray
+      })
+    }).then( res =>{
+      return res.data.data;
+    })
+  },
+
+  //获取我的未读‘系统通知’类通知
+  getUnreadCount(){
+    return request({
+      url:'/user/getUnreadCount',
+      method:'get',
+    }).then( res =>{
+      return res.data.data;
+    })
+  },
+
+  //获取系统信息详情
+  getSystemMessageDetails(){
+    return request({
+      url:'/user/getSystemMessageDetails',
+      method:'get',
+    }).then( res =>{
+      console.log("输出info : ",res)
+      return res.data.data;
+    })
+  },
+
 };
 
 export default user
