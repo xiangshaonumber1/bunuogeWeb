@@ -23,6 +23,7 @@
               <a @click="goSpecialArea()"> <b-alert show variant="danger">书籍：优质书籍推荐</b-alert></a>
             </div>
 
+            <!--首页推荐部分-->
             <div class="excellent-articles">
 
               <p style="font-size: 22px;margin-bottom: 0">
@@ -72,13 +73,10 @@
         <!--正文内容-->
         <Row type="flex" class="code-row-bg" justify="center">
           <i-col span="24">
-
             <!--数据获取完成前显示正在加载-->
             <loading v-if="isLoading"></loading>
-
             <!--如果没有数据，显示404-->
             <not-found v-else-if="notFound"></not-found>
-
             <!--如果有数据，正常显示-->
             <div  v-else v-for="article in articleList">
               <Card :bordered="false" class="articleCard">
@@ -98,7 +96,6 @@
               </Card>
               <Divider style="margin-top: 0;" />
             </div>
-
           </i-col>
 
           <!--加载更多Button,当自动加载次数超过三次时，需要手动加载更多-->
@@ -111,15 +108,13 @@
           </i-col>
 
         </Row>
-
-
-
       </div>
 
       <!--返回顶部-->
       <BackTop></BackTop>
-
+      <!--网站链接管理-->
       <web_link></web_link>
+      <!--备案信息-->
       <blog-footer></blog-footer>
 
     </div>
@@ -286,12 +281,6 @@
         //滑到距离底部一定距离时，自动加载下一页的数据
         this.scroll();
       },
-
-      // sockets:{
-      //   notification_article(data){
-      //     console.log("前端返回的信息:",data);
-      //   }
-      // }
 
     }
 </script>

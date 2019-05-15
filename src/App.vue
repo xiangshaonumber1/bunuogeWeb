@@ -1,8 +1,10 @@
 <!-- 展示模板 -->
 <template>
   <div id="app"  >
-    <ok-header></ok-header>
-    <router-view></router-view>
+    <affix>
+      <ok-header></ok-header>
+    </affix>
+    <router-view style="margin-top: 30px"></router-view>
   </div>
 </template>
 

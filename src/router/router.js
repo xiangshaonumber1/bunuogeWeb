@@ -69,6 +69,21 @@ const routes = [
         children:[
           {path: 'update_pd', component:Setting_update_pw, name:"update_password"},     //修改密码
         ]},
+
+      //文章详情
+      {path:"/article/:article_id",component:Web_articleInfo,
+        children:[
+          //默认子组件，父组件不需要name
+          {path:'',component:CommentAndReply,name:'web_articleInfo',}
+        ]},
+
+      //日记详情页面
+      {path:"/diary/:diary_id",component:Web_diaryInfo,
+        children:[
+          //默认子组件，父组件不需要name
+          {path:'',component:CommentAndReply,name:'web_diaryInfo'}
+        ]},
+
     ]},
 
   //消息通知模块
@@ -76,23 +91,14 @@ const routes = [
     children:[
       {path:'replyMessage',component:Web_replyMessage,name:'replyMessage'},
       {path:'systemMessage',component:Web_systemMessage,name:'systemMessage'},
-      {path:'personalMessage',component:Web_personalMessage,name:'personalMessage'},
-    ]
+      {path:'personalMessage',component:Web_personalMessage,name:'personalMessage'},]
   },
 
   //测试页面
   {path:'/test',component:Test, name:'test'},
 
-  //文章详情
-  {path:"/article/:article_id",component:Web_articleInfo,
-    children:[  //默认子组件，父组件不需要name
-      {path:'',component:CommentAndReply,name:'web_articleInfo',}
-    ]},
-  //日记详情页面
-  {path:"/diary/:diary_id",component:Web_diaryInfo,
-    children:[  //默认子组件，父组件不需要name
-      {path:'',component:CommentAndReply,name:'web_diaryInfo'}
-    ]},
+
+
 
 
   //用户文章修改页

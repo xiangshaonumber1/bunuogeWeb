@@ -1,7 +1,7 @@
 <template>
     <div class="ok-header">
         <!-- bootstrap 导航条 -->
-        <b-navbar toggleable="lg"  fixed="top" style="padding: 0;background-color: white;" >
+        <b-navbar toggleable="lg"  style="padding: 0;background-color: white;" >
           <!--Iview 实现-->
           <Menu mode="horizontal">
             <img src="/static/picture/getok-2.png" alt="getok" style="height: 50px;background-color: white;">
@@ -10,7 +10,7 @@
           <!--展开更多按钮-->
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-          <!---->
+          <!-- bootstrap-vue 折叠导航栏 -->
           <b-collapse id="nav-collapse" is-nav >
             <!--导航栏菜单 Iview 实现-->
             <Menu mode="horizontal" style="width: 100%;">
@@ -218,6 +218,8 @@
           this.systemMessageCount = result.system;
           this.replyMessageCount = result.reply;
           this.personalMessageCount = result.personal;
+          //同时保存到localstorage中，以便其消息中心需要显示
+          localStorage.setItem('unreadCount',JSON.stringify(result));
         },
 
         //获取关注用户的动态消息，待完成
@@ -282,7 +284,6 @@
   }
 
   .ok-header{
-    margin-top:100px;
     background-color: white;
   }
 

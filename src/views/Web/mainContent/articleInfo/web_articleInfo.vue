@@ -1,9 +1,6 @@
 <template>
     <div id="articleInfo">
 
-      <!--ok_header 导航栏-->
-      <ok-header></ok-header>
-
       <loading v-if="isLoading"></loading>
 
       <!-- 是否显示404页面 -->
@@ -353,7 +350,7 @@
   }
   /* 标题行 */
   .row-title{
-    padding: 30px 0;
+    padding-bottom: 30px;
   }
 
   /* 主要内容行 */
