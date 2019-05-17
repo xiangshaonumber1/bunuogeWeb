@@ -46,11 +46,9 @@
         },
 
         getUnreadCount(){
-          const result = JSON.parse(localStorage.getItem("unreadCount"));
-          console.log("从本地中读取的 unreadCount:",result.system,result.reply,result.personal);
-          this.systemMessageCount = result.system;
-          this.replyMessageCount = result.reply;
-          this.personalMessageCount = result.personal;
+          this.systemMessageCount = this.$store.getters.userInfo.systemMessageCount;
+          this.replyMessageCount = this.$store.getters.userInfo.replyMessageCount;
+          this.personalMessageCount = this.$store.getters.userInfo.personalMessageCount;
         }
       },
 

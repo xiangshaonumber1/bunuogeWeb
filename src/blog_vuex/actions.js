@@ -23,6 +23,10 @@ const actions = {
     context.commit("saveAvatar",newAvatar);
   },
 
+  SaveUnreadMessageCount(context,unreadMessageCount){
+    context.commit("SaveUnreadMessageCount",unreadMessageCount);
+  }
+
 };
 
 export default actions;

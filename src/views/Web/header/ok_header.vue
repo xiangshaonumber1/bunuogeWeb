@@ -38,18 +38,18 @@
                 </Dropdown>
                 <MenuItem name="4">
                   <Dropdown placement="bottom" @on-click="to_message_module">
-                    <Badge :count="replyMessageCount + personalMessageCount + systemMessageCount" :offset="[15,-5]">
+                    <Badge :count="$store.getters.userInfo.replyMessageCount + $store.getters.userInfo.personalMessageCount + $store.getters.userInfo.systemMessageCount" :offset="[15,-5]">
                       <span style="height: 40px;width: 40px" class="text-center center-block mt-auto">&ensp;消息&ensp;</span>
                     </Badge>
                     <DropdownMenu slot="list" :padding="0">
-                      <DropdownItem name="reply"><Badge :count="replyMessageCount" /><span>&emsp;回复我的&emsp;</span></DropdownItem>
-                      <DropdownItem name="personal"><Badge :count="personalMessageCount" /><span>&emsp;我的消息&emsp;</span></DropdownItem>
-                      <DropdownItem name="system"><Badge :count="systemMessageCount" /><span>&emsp;系统通知&emsp;</span></DropdownItem>
+                      <DropdownItem name="reply"><Badge :count="$store.getters.userInfo.replyMessageCount" /><span>&emsp;回复我的&emsp;</span></DropdownItem>
+                      <DropdownItem name="personal"><Badge :count="$store.getters.userInfo.personalMessageCount" /><span>&emsp;我的消息&emsp;</span></DropdownItem>
+                      <DropdownItem name="system"><Badge :count="$store.getters.userInfo.systemMessageCount" /><span>&emsp;系统通知&emsp;</span></DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 </MenuItem>
                 <MenuItem name="5">
-                  <Badge :count="markerActivityCount" dot :offset="[20,0]">
+                  <Badge :count="$store.getters.userInfo.markedActivityCount" dot :offset="[20,0]">
                     <span>&ensp;动态&ensp;</span>
                   </Badge>
                 </MenuItem>
@@ -81,10 +81,10 @@
             avatar:'',//用户头像地址
             token:'',//用户登录后持有的token
           },
-          replyMessageCount:0,  //用户未读信息（评论回复类）
-          personalMessageCount:0, //我的消息，私聊类消息
-          systemMessageCount:0,  //系统发起的通知类消息
-          markerActivityCount:0, //关注用户的活动信息
+          // replyMessageCount:0,  //用户未读信息（评论回复类）
+          // personalMessageCount:0, //我的消息，私聊类消息
+          // systemMessageCount:0,  //系统发起的通知类消息
+          // markedActivityCount:0, //关注用户的活动信息
         }
       },
 
@@ -213,13 +213,10 @@
         },
 
         //获取未读消息数量
-        async getUnread() {
-          const result = await this.$apis.UserApi.getUnreadCount();
-          this.systemMessageCount = result.system;
-          this.replyMessageCount = result.reply;
-          this.personalMessageCount = result.personal;
+        async getUnreadMessage() {
+          const result = await this.$apis.UserApi.getUnreadMessageCount();
           //同时保存到localstorage中，以便其消息中心需要显示
-          localStorage.setItem('unreadCount',JSON.stringify(result));
+          this.$store.dispatch("SaveUnreadMessageCount",result);
         },
 
         //获取关注用户的动态消息，待完成
@@ -235,7 +232,7 @@
         this.userInfo = this.$store.getters.userInfo;
         this.isLogin = this.$store.getters.isLogin;
 
-        this.getUnread();
+        this.getUnreadMessage();
 
         if (this.isLogin) {
           //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行

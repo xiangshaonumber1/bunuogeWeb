@@ -33,6 +33,17 @@ const mutations = {
    */
   saveAvatar(state,newAvatar){
     state.avatar = newAvatar;
+  },
+
+  /**
+   * 保存未读消息数量
+   * @constructor
+   */
+  SaveUnreadMessageCount(state,unreadMessageCount){
+    state.systemMessageCount = unreadMessageCount.system;
+    state.replyMessageCount = unreadMessageCount.reply;
+    state.personalMessageCount = unreadMessageCount.personal;
+    state.markedActivityCount = unreadMessageCount.marked;
   }
 
 };

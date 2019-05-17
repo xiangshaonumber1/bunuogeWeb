@@ -14,7 +14,7 @@ const state = {
   systemMessageCount:0, //未读 '系统消息' 数量
   replyMessageCount:0,  //未读 '回复我的' 消息数量
   personalMessageCount:0, //未读 '我的消息' 消息数量
-  markerActivityCount:0,  //未读 '动态' 消息数量
+  markedActivityCount:0,  //未读 '动态' 消息数量
   serverPath:'http://localhost:8089', //开发环境
   // serverPath:'http://www.getok.top:8089',  //生产环境
 }

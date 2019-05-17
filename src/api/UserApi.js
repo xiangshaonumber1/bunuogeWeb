@@ -182,22 +182,26 @@ const user = {
   },
 
   //获取我的未读‘系统通知’类通知
-  getUnreadCount(){
+  getUnreadMessageCount(){
     return request({
-      url:'/user/getUnreadCount',
+      url:'/user/getUnreadMessageCount',
       method:'get',
     }).then( res =>{
+      console.log("输出未读信息 ：",res)
       return res.data.data;
     })
   },
 
   //获取系统信息详情
-  getSystemMessageDetails(){
+  getSystemMessageDetails(page){
     return request({
       url:'/user/getSystemMessageDetails',
       method:'get',
+      params:{
+        page:page,
+      }
     }).then( res =>{
-      console.log("输出info : ",res)
+      console.log("输出系统信息详情: ",res);
       return res.data.data;
     })
   },

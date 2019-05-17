@@ -23,7 +23,8 @@ const getters =  {  //实时监听state值的变化(最新状态)
   //获取服务ip地址
   serverPath(context){
     return context.serverPath;
-  }
+  },
+
 
 };
 export default getters
