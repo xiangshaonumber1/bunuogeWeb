@@ -1,10 +1,10 @@
 <template>
     <div class="systemMessage">
-      <Divider orientation="left" ><span class="message-title">系统消息</span></Divider>
+      <Divider orientation="left" ><span class="s-message-title">系统消息</span></Divider>
 
       <!--主要内容-->
-      <div ref="m-wrapper" class="m-wrapper">
-        <Card class="m-card" v-for="message in systemMessageData" :key="message.messageID">
+      <div ref="s-message-wrapper" class="s-message-wrapper">
+        <Card class="s-message-card" v-for="message in systemMessageData" :key="message.messageID">
           <div>
             <span style="font-weight: bold">{{message.title}}</span>
             <span style="margin-left: 20px;color: gray">{{message.time}}</span>
@@ -58,9 +58,8 @@
           }
         },
 
-
         wrapperListener(){
-          let container = this.$refs['m-wrapper'];
+          let container = this.$refs['s-message-wrapper'];
           //div可视高度
           var clientHeight = container.clientHeight;
           //滚动条的偏移量，即滚动条距离起点距离
@@ -81,28 +80,26 @@
       mounted() {
         //重新加载时，获取首页数据
         this.getMessageDetails(1);
-
+        //注册scroll，滚动监听事件
         window.addEventListener('scroll',this.wrapperListener,true);
       }
-
-
 
     }
 </script>
 
 <style scoped>
-  .m-wrapper{
+  .s-message-wrapper{
     height: 75vh;
     overflow: auto;
   }
 
-  .m-card{
+  .s-message-card{
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
   }
 
-  .message-title{
+  .s-message-title{
     font-size: 18px;
     letter-spacing: 5px;
     font-weight: bold;
