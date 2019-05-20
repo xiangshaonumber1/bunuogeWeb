@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import createPersistedState from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate'
 import getters from './getters'
 import mutations from './mutations'
 import actions from './actions'
@@ -16,11 +16,10 @@ const state = {
   personalMessageCount:0, //未读 '我的消息' 消息数量
   markedActivityCount:0,  //未读 '动态' 消息数量
   serverPath:'http://localhost:8089', //开发环境
-  // serverPath:'http://www.getok.top:8089',  //生产环境
-}
+};
 
 const store = new Vuex.Store({
-  // plugins:[createPersistedState()],
+  plugins:[createPersistedState()], //vuex持久化插件
   state,
   getters,  //注册getters, 获取数据并渲染
   mutations,  //注册mutations,处理数据的唯一途径，state的改变或赋值只能在这里

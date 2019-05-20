@@ -182,7 +182,6 @@
           //只有允许加载下一页的情况下，才去请求数据
           if (this.loadMore){
             const result = await this.$apis.ArticleApi.get_article_list(articlePage);
-            console.log("我看看你到底要输出什么:",result);
             if (result.total === 0 && articlePage === 1) {                     //情况一：第一次请求返回null，直接返回无资源
               this.notFound = true;
               this.isLoading = false;
@@ -228,7 +227,6 @@
             if (bottomOfWindow && this.loadMore===true && this.page<=3 && this.scrollLoadSwitch === true){
               //打开滚动加载数据开关，防止重复请求
               this.scrollLoadSwitch = false;
-              console.log("请求加载数据，请求page为",this.page);
               this.get_article_list(this.page);
             }
           }
@@ -246,7 +244,6 @@
           }else{
             this.posterList = [{},{},{},{},{}];
           }
-          // console.log("this.posterList : ",this.posterList.length)
         },
 
         //获取近三日热门推荐文章

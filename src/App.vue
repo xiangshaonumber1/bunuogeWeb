@@ -18,7 +18,8 @@ export default {
   methods:{
     //登录检查
     async checkLogin(){
-      await this.$apis.AuthenticationApi.getToken();
+      const result = await this.$apis.AuthenticationApi.getToken();
+      console.log("App.vue 中输出 result : ",result)
       //token刷新成功，什么都不做
       //token刷新失败（405），前往登录页面（已在拦截器中实现）
     },

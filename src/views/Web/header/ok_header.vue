@@ -208,7 +208,7 @@
 
         //获取当前routeName,并赋值给menuActive
         getRouteName(){
-         console.log("ok_header 当前routeName :",this.$route.name);
+         // console.log("ok_header 当前routeName :",this.$route.name);
          this.menuActive = this.$route.name;
         },
 
@@ -227,24 +227,24 @@
       },
 
 
-      mounted() {
+      async mounted() {
 
-        this.userInfo = this.$store.getters.userInfo;
-        this.isLogin = this.$store.getters.isLogin;
+        this.userInfo = await this.$store.getters.userInfo;
+        this.isLogin = await this.$store.getters.isLogin;
 
         this.getUnreadMessage();
 
         if (this.isLogin) {
           //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行
-          this.$socket.emit("notification_connect",this.$store.getters.openID);
-          this.sockets.subscribe('receive_article',(data)=>{
-            console.log("监听 receive_article 文章通知：",data)
+          this.$socket.emit("notification_connect", this.$store.getters.openID);
+          this.sockets.subscribe('receive_article', (data) => {
+            console.log("监听 receive_article 文章通知：", data)
           });
-          this.sockets.subscribe('receive_connect',(data)=>{
-            console.log("监听 receive_connect：连接通知",data)
+          this.sockets.subscribe('receive_connect', (data) => {
+            console.log("监听 receive_connect：连接通知", data)
           });
-          this.sockets.subscribe('notification_system_message', data=>{
-            console.log("监听到系统有发布新的系统消息",data);
+          this.sockets.subscribe('notification_system_message', data => {
+            console.log("监听到系统有发布新的系统消息", data);
             this.systemMessageCount++;
           })
         }

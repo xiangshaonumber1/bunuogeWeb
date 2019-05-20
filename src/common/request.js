@@ -78,6 +78,7 @@ request.interceptors.response.use(response=>{
       break;
 
     case '405': // 仅仅用于表示token拒绝刷新等处理
+      console.log("request.js提示：操作返回405，即将清除用户信息");
       //注销存储在本地的用户信息
       store.dispatch("clearLoginInfo");
       break;

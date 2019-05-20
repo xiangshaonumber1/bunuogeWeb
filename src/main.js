@@ -24,7 +24,7 @@ Vue.use(VueCropper);
 Vue.prototype.$apis = apis;
 //Socket链接
 Vue.use(new VueSocketIO({
-  debug: true,
+  // debug: true, //自动打印调试信息
   connection: 'http://localhost:8100', //开发环境
   // connection: 'http://www.getok.top:8100',  //生产环境
 }));
