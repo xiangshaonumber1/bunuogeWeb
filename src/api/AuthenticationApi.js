@@ -20,9 +20,7 @@ const authentication = {
           MailVerificationCode: emailCode//邮箱验证码
         })
     }).then(res =>{
-      if (res.data.code === '200'){
-        console.log("register : ",res);
-        console.log("register openID",res.data.data.openID);
+      if (res.data.code === 200){
         const userInfo = {
           openID: res.data.data.openID,
           nickname: res.data.data.nickname,
@@ -48,7 +46,7 @@ const authentication = {
         password: password,
       })
     }).then(response => {
-      if (response.data.code === '200') { //登录成功
+      if (response.data.code === 200) { //登录成功
         const userInfo = {
           openID: response.data.data.openID,
           nickname: response.data.data.nickname,
@@ -70,8 +68,7 @@ const authentication = {
      url:'/Authentication/logout',
      method:"post",
     }).then(res =>{
-      console.log("logout 返回的信息 ： ",res);
-      if (res.data.code === '200'){
+      if (res.data.code === 200){
         Notice.success({
           title:'操作结果：',
           desc:'用户登出成功'
@@ -94,7 +91,7 @@ const authentication = {
       url:'/Authentication/getToken',
       method:'get',
     }).then(res=>{//这里不用考虑402
-      if (res.data.code === '200'){
+      if (res.data.code === 200){
         localStorage.setItem("token",res.data.data.token); //保存刷新后的token到本地
         return true;
       }else{ //token刷新失败（405）,已在拦截器中做处理,跳转到登录页面
@@ -113,7 +110,7 @@ const authentication = {
         username:email,
       }
     }).then( res =>{
-      return res.data.code === '200';
+      return res.data.code === 200;
     })
   },
 

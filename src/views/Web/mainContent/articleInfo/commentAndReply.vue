@@ -110,7 +110,10 @@
 
           console.log("输出 articleID:", this.$route.params.article_id,);
           //参数未加 我为自己刚发布的一篇文章新增一条评论
-          const result = await this.$apis.ArticleApi.write_comment(this.$route.params.article_id, this.$store.getters.openID, value);
+          let authorID = this.$route.params.openID;
+          let articleID = this.$route.params.articleID;
+          let openID = this.$store.getters.openID;
+          const result = await this.$apis.ArticleApi.write_comment(articleID,authorID,openID,value);
           if (result) {
             this.$Message.success({
               content:"新增评论成功！",
@@ -179,6 +182,7 @@
 
         //给该篇的某个评论信息留下一条回复
         async write_reply(aim_openID, reply_content, commentID) {
+          //回复需要的信息
           let replyInfo = {
             articleID: this.$route.params.article_id,
             commentID: commentID,

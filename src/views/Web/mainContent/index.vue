@@ -81,7 +81,7 @@
             <div  v-else v-for="article in articleList">
               <Card :bordered="false" class="articleCard">
                 <div class="articles-title">
-                  <p><a @click="goArticleInfo(article.articleID)">{{article.title}}</a></p>
+                  <p><a @click="goArticleInfo(article.articleID,article.openID)">{{article.title}}</a></p>
                 </div>
                 <div class="articles-content">
                   <span style="color: gray;font-size: 14px">{{replaceHtml(article.content)}}</span>
@@ -159,12 +159,13 @@
         },
 
         //前往文章详情页面
-        goArticleInfo(id){
+        goArticleInfo(articleID,openID){
           //新建窗口跳转
           let ArticleInfo = this.$router.resolve({
             name:'web_articleInfo',
             params:{
-              article_id:id
+              article_id:articleID,
+              open_id:openID
             }
           });
           window.open(ArticleInfo.href,'_blank')

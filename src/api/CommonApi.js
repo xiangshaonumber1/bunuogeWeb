@@ -63,7 +63,7 @@ const common = {
       url:'/common/getBottomNavBar',
       method:'get',
     }).then( res => {
-      if (res.data.code === '200'){
+      if (res.data.code === 200){
         return res.data.data;
       }else {
         return null;

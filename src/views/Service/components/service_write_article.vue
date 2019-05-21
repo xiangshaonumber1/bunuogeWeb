@@ -191,10 +191,6 @@
          //新建文章请求
           if(this.type === 'write'){
             result = await this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
-            if (result){
-              console.log("新的文章已发布，准备通知粉丝")
-              this.$socket.emit("notification_article",this.$store.getters.openID)
-            }
           }
           //修改已发布的文章
           else if (this.type === 'update'){

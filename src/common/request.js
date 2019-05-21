@@ -6,6 +6,7 @@ import axios from 'axios';
 import {Notice} from 'iview'
 import router from '../router/router'
 import store from '../blog_vuex/store'
+import AuthenticationApi from '../api/AuthenticationApi'
 
 //axios默认设置
 const request = axios.create({
@@ -62,7 +63,7 @@ request.interceptors.response.use(response=>{
   * 404(查询信息类根据需要是否判断) 因为404页面是组件化到其他组件中，所以也不方便统一拦截
   * */
   switch (response.data.code) {
-    case '401':// 表示该功能需要登录才能继续,
+    case 401:// 表示该功能需要登录才能继续,
       Notice.info({
         title: "登录提示：",
         desc: response.data.msg,
@@ -70,61 +71,81 @@ request.interceptors.response.use(response=>{
       router.push({name:'login'});
       break;
 
-    case '403': // 服务器请求成功，但有，比如注册失败，登录失败，等等失败操作
+    case 403: // 服务器请求成功，但有，比如注册失败，登录失败，等等失败操作
       Notice.error({
         title: "无法继续提示：",
         desc: response.data.msg,
       });
       break;
 
-    case '405': // 仅仅用于表示token拒绝刷新等处理
+    case 405: // 仅仅用于表示token拒绝刷新等处理
       console.log("request.js提示：操作返回405，即将清除用户信息");
       //注销存储在本地的用户信息
       store.dispatch("clearLoginInfo");
       break;
 
-    case '406': //用于修改，删除等需要对数据进行变动，但变动无效的，类似无效的修改，或者删除已删除的信息
+    case 406: //用于修改，删除等需要对数据进行变动，但变动无效的，类似无效的修改，或者删除已删除的信息
       Notice.info({
         title:'无效的操作：',
         desc:response.data.msg
       });
       break;
 
-    case '407': //表示没有足够的 权限 或者 身份
+    case 407: //表示没有足够的 权限 或者 身份
       Notice.warning({
         title:'无权访问提示：',
         desc:response.data.msg,
       });
       break;
 
-    case '408': //邮件发送失败
+    case 408: //邮件发送失败
       Notice.warning({
         title:'请求验证码失败提示：',
         desc:response.data.msg,
       });
       break;
 
-    case '500'://表示服务器处理该请求的时候，出现了错误,不需要返回response
+    case 500://表示服务器处理该请求的时候，出现了错误,不需要返回response
       Notice.error({
         title:'服务处理异常：',
         desc:response.data.msg,
       });
       break;
+    case 10300:
+      Notice.error({title:'异常提示：', desc:'返回请求结果异常，请联系管理员'});
+      break;
+    case 10301:
+      Notice.error({title:'操作异常：',desc:'当前操作出现异常，服务器已拒绝处理，请联系管理员处理'});
+      break;
+    case 10400:
+      Notice.error({title:'登录提示：',desc:'请登录后再继续该操作'});
+      break;
+    case 10401:
+      Notice.error({title:'权限不足：',desc:'当前权限不足，如需要更高权限请联系管理员'});
+      break;
+    case 10500:
+      Notice.error({title:'邮件发送异常：',desc:'邮件发送失败，请稍后再试，或联系管理员解决'});
+      break;
+    case 10600:
+      console.log("需要刷新token，待执行");
+      break;
+    case 10601:
+      console.log("需要执行清除缓存用户信息");
+      //注销存储在本地的用户信息
+      store.dispatch("clearLoginInfo");
+      break
   }
   //不论最终是否需要跳转，都将返回response信息，然后再判断之前没判断的code
   return response;
-},error => { //请求返回错误信息时
-  console.log("error :",error);
-  Notice.warning({
-    title : '网络链接阻塞',
-    desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'
-  });
+},error => {
+  console.log("error信息 :",error);
+  return Notice.warning({title : '网络链接阻塞', desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'});
   //返回链接错误时的信息，模拟后台返回给前端的格式
-  return {
-    code: '500',
-    msg: '网络链接阻塞',
-    data: false
-  }; // 返回接口返回的错误信息
+  // return {
+  //   code: 500,
+  //   msg: '网络链接阻塞',
+  //   data: false
+  // }; // 返回接口返回的错误信息
 });
 
 //导出模块

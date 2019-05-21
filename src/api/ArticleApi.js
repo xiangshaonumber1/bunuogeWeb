@@ -27,7 +27,7 @@ const article = {
     }).then( async (response) => {
       console.log("write_article 输出：",response);
       //发布成功后，立即跳转到刚编辑的文章
-      if (response.data.code === '200') {
+      if (response.data.code === 200) {
         Notice.success({
           title: "发布成功：",
           desc: "文章发布成功，已为您跳转到当前页面"
@@ -36,7 +36,7 @@ const article = {
         router.push({name:'web_articleInfo', params:{article_id:response.data.data}});
         return true
       }
-      else if (response.data.code === '402') {
+      else if (response.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.write_article(ArticleTitle, ArticleContent,ArticleType,ArticleLabel, origin_link)
@@ -67,14 +67,14 @@ const article = {
       })
     }).then( async res => {
       console.log("返回信息 ： ",res);
-      if (res.data.code === '200'){
+      if (res.data.code === 200){
         Notice.success({
           title:'修改成功：',
           desc:'修改已生效，即将为你跳转到详情页面'
         });
         return router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID});
       }
-      else if (res.data.code === '402') {
+      else if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if(result){
           return this.update_article(ArticleID,ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link)
@@ -96,7 +96,7 @@ const article = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === '200') {
+      if (res.data.code === 200) {
         Notice.success({
           title: '日记保存成：',
           desc: "即将为你跳转到当前日记界面"
@@ -107,7 +107,7 @@ const article = {
             diary_id: res.data.data
           }
         })
-      } else if (res.data.code === '402') {
+      } else if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.write_diary(title,content,type);
@@ -136,10 +136,10 @@ const article = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === '200'){
+      if (res.data.code === 200){
         return true;
       }
-      else if (res.data.code === '402') {
+      else if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.update_diary(diaryID,title,content,type)
@@ -259,7 +259,7 @@ const article = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.delete_article(deleteID,type)
@@ -353,7 +353,7 @@ const article = {
       }
     }).then( async res => {
       console.log("请求评论和回复结果：",res.data);
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.getCommentAndReplyInfo(articleID,page);
@@ -370,20 +370,22 @@ const article = {
   /**
    * 评论一篇文章
    * @param articleID 文章ID
+   * @param authorID 作者ID
    * @param from_openID 评论者ID
    * @param comment_content 评论内容
    */
-  write_comment(articleID,from_openID,comment_content) {
+  write_comment(articleID,authorID,from_openID,comment_content) {
     return request({
       url:'/article/write_comment',
       method:'post',
       data:qs.stringify({
-        articleID:articleID,
+        articleID:articleID,  
+        authorID:authorID,
         from_openID:from_openID,
         comment_content:comment_content
       })
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.write_comment(articleID,from_openID,comment_content);
@@ -414,7 +416,7 @@ const article = {
         to_openID:replyInfo.to_openID
       })
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.write_reply(replyInfo);

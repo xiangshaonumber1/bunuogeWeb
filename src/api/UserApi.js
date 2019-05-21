@@ -44,7 +44,7 @@ const user = {
         openID:openID,
       }
     }).then( async res => {
-      if (res.data.code === '404') {
+      if (res.data.code === 404) {
         return null;
       }else{
         return res.data.data;
@@ -66,9 +66,9 @@ const user = {
         myDescribe:userInfo.myDescribe
       })
     }).then( async res => {
-      if (res.data.code === '200') {
+      if (res.data.code === 200) {
         return true;
-      } else if (res.data.code === '402') {
+      } else if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result)
           return this.updateUserInfo(userInfo);
@@ -90,7 +90,7 @@ const user = {
       data:formData,  //上传的为文件类型，不需要qs格式化
     }).then( async res => {
       console.log("updateUserIcon 输出res :", res);
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result)
           return this.updateUserIcon(formData);
@@ -150,13 +150,13 @@ const user = {
         type:type
       })
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result)
           return this.update_pw(new_pw,old_pw,mail_code,type);
         else
           return null;
-      }else if(res.data.code === '200') {
+      }else if(res.data.code === 200) {
         Notice.success({
           title:'密码修改成功：',
           desc: res.data.msg,

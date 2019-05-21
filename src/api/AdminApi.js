@@ -16,7 +16,7 @@ const admin = {
       method:'post'
     }).then( async res => {
       console.log("service_login 输出返回信息：", res);
-      if (res.data.code === "402") {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result){
           return this.service_login();
@@ -41,7 +41,7 @@ const admin = {
       }
     }).then( async res => {
       console.log("AdminApi 输出：", res.data);
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.getFeedBackInfo(page)
@@ -66,7 +66,7 @@ const admin = {
         status:status,
       })
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.updateStatus(feedID,status)
@@ -93,7 +93,7 @@ const admin = {
         pageCount:pageCount
       }
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.getUserRoleAndPermissionList(page,key_word)
@@ -119,7 +119,7 @@ const admin = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.updateRoleOrPermission(aim_openID,new_value,type)
@@ -145,7 +145,7 @@ const admin = {
         new_status:new_status
       })
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.updateArticleStatus(aim_articleID, new_status);
@@ -171,7 +171,7 @@ const admin = {
         pageCount:pageCount
       }
     }).then( async res => {
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.getAdminArticleInfo(page, key_word, pageCount);
@@ -197,7 +197,7 @@ const admin = {
       })
     }).then( async res => {
       console.log("adminapi 输出:",res)
-      if (res.data.code === '402') {
+      if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
         if (result) {
           return this.adminResetPassword(aim_openID,email);
