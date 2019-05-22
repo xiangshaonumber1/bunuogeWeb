@@ -232,6 +232,7 @@
         this.userInfo = await this.$store.getters.userInfo;
         this.isLogin = await this.$store.getters.isLogin;
 
+        //获取未读消息数量（这个可以考虑优化下，不用每次加载header就获取一次）
         this.getUnreadMessage();
 
         if (this.isLogin) {
@@ -246,7 +247,13 @@
           this.sockets.subscribe('notification_system_message', data => {
             console.log("监听到系统有发布新的系统消息", data);
             this.systemMessageCount++;
+          });
+
+          this.sockets.subscribe('notification_reply',() =>{
+            console.log("监听到有新的回复消息，请注意查收！");
+            this.$store.dispatch("addUnreadMessageCount","reply")
           })
+
         }
         //监听当前访问路径
         this.getRouteName();

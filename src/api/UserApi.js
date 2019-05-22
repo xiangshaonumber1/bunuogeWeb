@@ -206,6 +206,18 @@ const user = {
     })
   },
 
+  getMessageDetails(page){
+    return request({
+      url:'/user/getMessageDetails',
+      method:'get',
+      params:{
+        page:page
+      }
+    }).then( res =>{
+      return res.data.data;
+    })
+  }
+
 
 
 };

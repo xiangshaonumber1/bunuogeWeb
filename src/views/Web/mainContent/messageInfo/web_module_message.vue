@@ -4,9 +4,9 @@
     <Sider class="message-left">
       <Menu theme="light" class="message-menu" width="auto" :active-name="$route.name" @on-select="changeMessage">
         <div class="menu-title text-center"><Icon type="md-paper-plane" />消息中心</div>
-        <menu-item name="replyMessage"><Badge :count="replyMessageCount" :offset="[0,-10]"><span>回复我的</span></Badge></menu-item>
-        <menu-item name="personalMessage"><Badge :count="personalMessageCount" :offset="[0,-10]"><span>我的消息</span></Badge></menu-item>
-        <menu-item name="systemMessage"><Badge :count="systemMessageCount" :offset="[0,-10]"><span>系统通知</span></Badge></menu-item>
+        <menu-item name="replyMessage"><Badge :count="$store.getters.userInfo.replyMessageCount" :offset="[0,-10]"><span>回复我的</span></Badge></menu-item>
+        <menu-item name="personalMessage"><Badge :count="$store.getters.userInfo.personalMessageCount" :offset="[0,-10]"><span>我的消息</span></Badge></menu-item>
+        <menu-item name="systemMessage"><Badge :count="$store.getters.userInfo.systemMessageCount" :offset="[0,-10]"><span>系统通知</span></Badge></menu-item>
       </Menu>
     </Sider>
 
@@ -45,15 +45,11 @@
           this.$router.push({name:name});
         },
 
-        getUnreadCount(){
-          this.systemMessageCount = this.$store.getters.userInfo.systemMessageCount;
-          this.replyMessageCount = this.$store.getters.userInfo.replyMessageCount;
-          this.personalMessageCount = this.$store.getters.userInfo.personalMessageCount;
-        }
+
       },
 
       mounted(){
-          this.getUnreadCount();
+
       }
 
     }

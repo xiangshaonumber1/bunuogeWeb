@@ -63,11 +63,8 @@ const common = {
       url:'/common/getBottomNavBar',
       method:'get',
     }).then( res => {
-      if (res.data.code === 200){
-        return res.data.data;
-      }else {
-        return null;
-      }
+      console.log("输出底部链接信息：",res.data);
+      return res.data.data;
     })
   }
 

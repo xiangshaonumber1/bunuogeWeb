@@ -110,8 +110,8 @@
 
           console.log("输出 articleID:", this.$route.params.article_id,);
           //参数未加 我为自己刚发布的一篇文章新增一条评论
-          let authorID = this.$route.params.openID;
-          let articleID = this.$route.params.articleID;
+          let authorID = this.$route.params.open_id;
+          let articleID = this.$route.params.article_id;
           let openID = this.$store.getters.openID;
           const result = await this.$apis.ArticleApi.write_comment(articleID,authorID,openID,value);
           if (result) {

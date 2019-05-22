@@ -44,6 +44,56 @@ const mutations = {
     state.replyMessageCount = unreadMessageCount.reply;
     state.personalMessageCount = unreadMessageCount.personal;
     state.markedActivityCount = unreadMessageCount.marked;
+  },
+
+  /**
+   * 读取未读消息(清除指定类型的未读消息统计)
+   * @param state 源数据
+   * @param type 消息类型（system/reply/personal/markedActivity）
+   */
+  readUnreadMessageCount(state,type){
+    switch (type) {
+      case 'system':
+        state.systemMessageCount = 0;
+        break;
+      case 'reply':
+        state.replyMessageCount = 0;
+        break;
+      case 'personal':
+        state.personalMessageCount = 0;
+        break;
+      case 'markedActivity':
+        state.markedActivityCount = 0;
+        break;
+      default:
+        console.log("修改未读消息错误");
+        break;
+    }
+  },
+
+  /**
+   * 未读消息数量增加
+   * @param state 源数据
+   * @param type 消息类型（system/reply/personal/markedActivity）
+   */
+  addUnreadMessageCount(state,type){
+    switch (type) {
+      case 'system':
+        state.systemMessageCount++;
+        break;
+      case 'reply':
+        state.replyMessageCount++;
+        break;
+      case 'personal':
+        state.personalMessageCount++;
+        break;
+      case 'markedActivity':
+        state.markedActivityCount++;
+        break;
+      default:
+        console.log("修改未读消息错误");
+        break;
+    }
   }
 
 };

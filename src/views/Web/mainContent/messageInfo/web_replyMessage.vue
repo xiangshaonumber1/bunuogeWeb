@@ -5,14 +5,22 @@
     <!--主要内容-->
     <div ref="r-message-wrapper" class="r-message-wrapper">
       <Card class="r-message-card" v-for="message in replyMessageData" :key="message.messageID">
-        <div>
-          <span style="font-weight: bold">{{message.title}}</span>
-          <span style="margin-left: 20px;color: gray">{{message.time}}</span>
+
+        <div v-if="message.type === 'comment'">
+          <!--评论类型消息提示-->
+          <span class="m-comment-fromNickname">{{message.from_nickname}}</span>评论了您的文章<span class="m-comment-aimContent">{{message.aim_content}}</span>说：
+          <div class="m-comment-content"><span>{{message.content}}</span></div>
+          <span>{{message.time}}</span>
         </div>
-        <div>
-          <span style="letter-spacing: 1px;color: dimgrey">{{message.content}}</span>
+
+        <!--回复类型消息提示-->
+        <div v-else>
+
         </div>
+
       </Card>
+
+
     </div>
 
 
@@ -34,13 +42,15 @@
       methods:{
 
         //获取信息详情
-        async getMessageDetails(page) {
+        async getMessage(page) {
           if (this.loadMore){
-            const result = await this.$apis.UserApi.getSystemMessageDetails(page);
+            const result = await this.$apis.UserApi.getMessageDetails(page);
+            console.log("输出评论及回复信息详情1：",result);
+            console.log("输出评论及回复信息详情2：",result.length);
             //判断返回数据长度，即是返回有效数据
-            if (result.system_message_infos.length >0){
+            if (result.reply_message_details.length >0){
               //返回有数据时，才叠加载数据
-              for (let data of result.system_message_infos){
+              for (let data of result.reply_message_details){
                 this.replyMessageData.push(data)
               }
             }
@@ -70,7 +80,7 @@
             //只有允许滚动加载时，才请求加载数据
             if (this.scrollLoadSwitch){
               this.scrollLoadSwitch = false;
-              this.getMessageDetails(this.page);
+              this.getMessage(this.page);
             }
           }
         }
@@ -79,7 +89,7 @@
 
       mounted() {
         //重新加载时，获取首页数据
-        this.getMessageDetails(1);
+        this.getMessage(1);
         //注册scroll，滚动监听事件
         window.addEventListener('scroll',this.wrapperListener,true);
       }
@@ -92,17 +102,35 @@
     height: 75vh;
     overflow: auto;
   }
-
   .r-message-card{
     margin-bottom: 20px;
     margin-left: 20px;
     margin-right: 20px;
   }
-
   .r-message-title{
     font-size: 18px;
     letter-spacing: 5px;
     font-weight: bold;
     color: dimgrey;
   }
+
+
+  .m-comment-fromNickname{
+    font-size: 16px;
+    margin: 0 10px;
+    color: rgb(95, 158, 160);
+    font-weight: bold;
+  }
+  .m-comment-aimContent{
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0 10px;
+  }
+  .m-comment-content{
+    background-color: rgb(245, 245, 245);
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
 </style>

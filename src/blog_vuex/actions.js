@@ -23,9 +23,21 @@ const actions = {
     context.commit("saveAvatar",newAvatar);
   },
 
+  // 保存未读消息数量
   SaveUnreadMessageCount(context,unreadMessageCount){
     context.commit("SaveUnreadMessageCount",unreadMessageCount);
+  },
+
+  //增加未读消息数量
+  addUnreadMessageCount(context,type){
+    context.commit("addUnreadMessageCount",type)
+  },
+
+  //读取未读消息(清除指定类型的未读消息统计)
+  readUnreadMessageCount(context,type){
+    context.commit("readUnreadMessageCount",type)
   }
+
 
 };
 

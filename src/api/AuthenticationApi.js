@@ -46,19 +46,16 @@ const authentication = {
         password: password,
       })
     }).then(response => {
-      if (response.data.code === 200) { //登录成功
-        const userInfo = {
-          openID: response.data.data.openID,
-          nickname: response.data.data.nickname,
-          avatar: store.getters.serverPath+JSON.parse(response.data.data.avatar)[0],
-          token: response.data.data.token,
-        };
-        store.dispatch("saveLoginInfo", userInfo);
-        router.push({name: 'index'});
-        return true;
-      }else {
-        return false;
-      }
+      console.log("登录返回信息：",response)
+      const userInfo = {
+        openID: response.data.data.openID,
+        nickname: response.data.data.nickname,
+        avatar: store.getters.serverPath+JSON.parse(response.data.data.avatar)[0],
+        token: response.data.data.token,
+      };
+      store.dispatch("saveLoginInfo", userInfo);
+      router.push({name: 'index'});
+      return true;
     })
   },
 

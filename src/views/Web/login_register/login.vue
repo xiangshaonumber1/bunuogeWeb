@@ -129,7 +129,7 @@
           this.forgotPasswordModal = true;
         },
         //返回首页
-        goIndex:function(){
+        goIndex(){
           this.$router.push({name:'index'})
         },
         //前往注册
