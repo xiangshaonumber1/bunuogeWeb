@@ -35,7 +35,7 @@
               <Card :bordered="false">
                 <!--文章标题-->
                 <div class="searchArticleTitle">
-                  <a @click="goArticleInfo(searchArticle.articleID)"><span v-html="brightenKeyword(searchArticle.title,key_word_list)"></span></a>
+                  <a @click="goArticleInfo(searchArticle.articleID,searchArticle.openID)"><span v-html="brightenKeyword(searchArticle.title,key_word_list)"></span></a>
                 </div>
                 <!--文章内容-->
                 <div class="searchArticleContent">
@@ -169,12 +169,13 @@
       },
 
       //前往文章详情页面
-      goArticleInfo(id){
+      goArticleInfo(article_id,open_id){
         //新建窗口跳转
         let ArticleInfo = this.$router.resolve({
           name:'web_articleInfo',
           params:{
-            article_id:id
+            article_id:article_id,
+            open_id:open_id
           }
         });
         window.open(ArticleInfo.href,'_blank')

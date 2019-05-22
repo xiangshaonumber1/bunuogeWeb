@@ -24,7 +24,7 @@
             <Tag color="rgb(251, 114, 153)" v-if="myArticle.type === 'original' ">原创</Tag>
             <Tag color="rgb(0, 192, 145)" v-else-if="myArticle.type === 'reprint' ">转载</Tag>
             <Tag color="rgb(2, 181, 218)" v-else-if="myArticle.type === 'translate' ">翻译</Tag>
-            <a @click="goArticleInfo(myArticle.articleID)"><span v-html="myArticle.title"></span></a>
+            <a @click="goArticleInfo(myArticle.articleID,myArticle.openID)"><span v-html="myArticle.title"></span></a>
           </div>
 
           <!--文章内容-->
@@ -87,12 +87,13 @@
         },
 
         //前往文章详情页面
-        goArticleInfo(id){
+        goArticleInfo(article_id,open_id){
           //新建窗口跳转
           let ArticleInfo = this.$router.resolve({
             name:'web_articleInfo',
             params:{
-              article_id:id
+              article_id:article_id,
+              open_id:open_id
             }
           });
           window.open(ArticleInfo.href,'_blank');

@@ -24,29 +24,30 @@ const article = {
         label:ArticleLabel,
         origin_link:origin_link,
       })
-    }).then( async (response) => {
+    }).then( async res => {
 
-     if (response.data.code === 402) {
+     if (res.data.code === 402) {
        const result = await AuthenticationApi.getToken();
        if (result) {
-         return this.write_article(ArticleTitle, ArticleContent,ArticleType,ArticleLabel, origin_link)
+         return this.write_article(ArticleTitle, ArticleContent, ArticleType, ArticleLabel, origin_link)
        }
-       //Token刷新失败（405）这里不做任何处理，拦截器中会跳转
-     } else {
-       console.log("write_article else info :", response);
-       return false;
      }
 
-     console.log("write_article 输出：",response);
      //发布成功后，立即跳转到刚编辑的文章
      Notice.success({
        title: "发布成功：",
        desc: "文章发布成功，已为您跳转到当前页面"
      });
      //跳转到对应的文章详情页面
-     router.push({name:'web_articleInfo', params:{article_id:response.data.data}});
+     router.push({
+       name: 'web_articleInfo',
+       params: {
+         article_id: res.data.data.articleID,
+         open_id: res.data.data.authorID
+       }
+     });
      return true
-    })
+   })
   },
 
 

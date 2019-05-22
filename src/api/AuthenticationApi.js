@@ -2,7 +2,6 @@
  * 角色权限相关统一管理
  */
 import request from '../common/request'
-import {Notice} from 'iview'
 import router from '../router/router'
 import store from '../blog_vuex/store'
 import qs from 'qs'
@@ -20,7 +19,7 @@ const authentication = {
           MailVerificationCode: emailCode//邮箱验证码
         })
     }).then(res =>{
-      if (res.data.code === 200){
+      if (res.data.code === 10200){
         const userInfo = {
           openID: res.data.data.openID,
           nickname: res.data.data.nickname,
@@ -65,19 +64,7 @@ const authentication = {
      url:'/Authentication/logout',
      method:"post",
     }).then(res =>{
-      if (res.data.code === 200){
-        Notice.success({
-          title:'操作结果：',
-          desc:'用户登出成功'
-        });
-        return 'success'
-      }else{
-        Notice.error({
-          title:'操作结果：',
-          desc:'用户登出失败'
-        });
-        return 'fail'
-      }
+      return res.data.data;
    })
   },
 
@@ -107,7 +94,7 @@ const authentication = {
         username:email,
       }
     }).then( res =>{
-      return res.data.code === 200;
+      return res.data.data;
     })
   },
 

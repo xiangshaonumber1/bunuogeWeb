@@ -141,7 +141,12 @@
         },
         //前往指定文章
         goArticleInfo(id){
-          this.$router.push({path:"/ai/"+id+""})
+          this.$router.push({
+            name:'web_articleInfo',
+            params:{
+              article_id:'0',
+              open_id:'0'
+            }})
         },
 
         //获取邮箱验证码请求

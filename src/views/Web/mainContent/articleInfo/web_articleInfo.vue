@@ -159,7 +159,12 @@
             case "update"://点击修改
               //临时保存文章信息
               localStorage.setItem("update_articleInfo",JSON.stringify(this.ArticleInfo));
-              this.$router.push({name:'article_update', params:{article_id:this.ArticleInfo.articleID,}});
+              this.$router.push({
+                name:'article_update',
+                params:{
+                  article_id:this.ArticleInfo.articleID,
+                }
+              });
               break;
             case "delete"://点击删除
               this.functionConfirm = true;

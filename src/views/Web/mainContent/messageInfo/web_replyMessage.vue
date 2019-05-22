@@ -8,14 +8,16 @@
 
         <div v-if="message.type === 'comment'">
           <!--评论类型消息提示-->
-          <span class="m-comment-fromNickname">{{message.from_nickname}}</span>评论了您的文章<span class="m-comment-aimContent">{{message.aim_content}}</span>说：
-          <div class="m-comment-content"><span>{{message.content}}</span></div>
-          <span>{{message.time}}</span>
+          <span class="m-comment-fromNickname" v-html="message.from_nickname"></span>评论了您的文章<span class="m-comment-aimContent" v-html="message.aim_content"></span>说：
+          <div class="m-comment-content" v-html="message.content"><span></span></div>
+          回复时间：<span>{{message.time}}</span>
         </div>
 
         <!--回复类型消息提示-->
         <div v-else>
-
+          <span class="m-comment-fromNickname" v-html="message.from_nickname"></span>回复了信息<span class="m-comment-aimContent" v-html="message.aim_content"></span>说：
+          <div class="m-comment-content"><span v-html="message.content">{{message.content}}</span></div>
+          回复时间：<span>{{message.time}}</span>
         </div>
 
       </Card>

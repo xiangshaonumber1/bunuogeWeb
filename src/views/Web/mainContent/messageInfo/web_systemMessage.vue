@@ -5,12 +5,10 @@
       <!--主要内容-->
       <div ref="s-message-wrapper" class="s-message-wrapper">
         <Card class="s-message-card" v-for="message in systemMessageData" :key="message.messageID">
-          <div>
-            <span style="font-weight: bold">{{message.title}}</span>
-            <span style="margin-left: 20px;color: gray">{{message.time}}</span>
-          </div>
-          <div>
-            <span style="letter-spacing: 1px;color: dimgrey">{{message.content}}</span>
+          <span class="m-system-title" v-html="message.title"></span>
+          <span style="margin-left: 20px;color: gray">{{message.time}}</span>
+          <div class="m-system-content">
+            <span v-html="message.content"></span>
           </div>
         </Card>
       </div>
@@ -104,5 +102,15 @@
     letter-spacing: 5px;
     font-weight: bold;
     color: dimgrey;
+  }
+
+  .m-system-title{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .m-system-content{
+    margin: 10px 0;
+    font-size: 16px;
+    letter-spacing: 1px;
   }
 </style>

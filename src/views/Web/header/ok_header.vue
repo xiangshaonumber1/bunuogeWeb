@@ -188,9 +188,14 @@
               this.$router.push({name:'web_feedback'});break;
             case 'userExit': // 注销当前登录
               const result = await this.$apis.AuthenticationApi.logout();
-              if (result === 'success'){
+              if (result){
                 this.$store.dispatch("clearLoginInfo");
                 this.$router.push({name:"index"});
+              }else {
+                this.$Notice.error({
+                  title:'操作结果：',
+                  desc:'用户登出失败'
+                });
               }
               break;
           }
