@@ -25,14 +25,14 @@
           systemMessageData:[],
           page:1,
           loadMore:true,  //判断是否允许请求加载数据
-          scrollLoadSwitch:true, //判断数据加载开关，防止发起重复请求
+          scrollLoadSwitch:false, //判断数据加载开关，防止发起重复请求
         }
       },
 
       methods:{
 
         //获取信息详情
-        async getMessageDetails(page) {
+        async getMessageInfo(page) {
           if (this.loadMore){
             const result = await this.$apis.UserApi.getSystemMessageDetails(page);
             //判断返回数据长度，即是返回有效数据
@@ -68,7 +68,7 @@
             //只有允许滚动加载时，才请求加载数据
             if (this.scrollLoadSwitch){
               this.scrollLoadSwitch = false;
-              this.getMessageDetails(this.page);
+              this.getMessageInfo(this.page);
             }
           }
         }
@@ -77,9 +77,14 @@
 
       mounted() {
         //重新加载时，获取首页数据
-        this.getMessageDetails(1);
+        this.getMessageInfo(1);
         //注册scroll，滚动监听事件
         window.addEventListener('scroll',this.wrapperListener,true);
+      },
+
+      beforeDestroy(){
+        //vue销毁前，移除监听
+        window.removeEventListener('scroll',this.wrapperListener,true);
       }
 
     }

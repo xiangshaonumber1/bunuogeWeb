@@ -4,7 +4,7 @@
         <b-navbar toggleable="lg"  style="padding: 0;background-color: white;" >
           <!--Iview 实现-->
           <Menu mode="horizontal">
-            <img src="/static/picture/getok-2.png" alt="getok" style="height: 50px;background-color: white;">
+            <b-img src="/static/picture/getok-2.png" alt="getok" style="height: 50px;background-color: white;"></b-img>
           </Menu>
 
           <!--展开更多按钮-->
@@ -243,22 +243,6 @@
         if (this.isLogin) {
           //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行
           this.$socket.emit("notification_connect", this.$store.getters.openID);
-          this.sockets.subscribe('receive_article', (data) => {
-            console.log("监听 receive_article 文章通知：", data)
-          });
-          this.sockets.subscribe('receive_connect', (data) => {
-            console.log("监听 receive_connect：连接通知", data)
-          });
-          this.sockets.subscribe('notification_system_message', data => {
-            console.log("监听到系统有发布新的系统消息", data);
-            this.systemMessageCount++;
-          });
-
-          this.sockets.subscribe('notification_reply',() =>{
-            console.log("监听到有新的回复消息，请注意查收！");
-            this.$store.dispatch("addUnreadMessageCount","reply")
-          })
-
         }
         //监听当前访问路径
         this.getRouteName();

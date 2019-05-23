@@ -48,7 +48,9 @@
               </FormItem>
             </i-form>
             <!--确认按钮-->
-            <Button class="center-block" type="success" size="large" @click="writeFeedBackMessage">&emsp;确 认 发 送&emsp;</Button>
+            <p class="text-center">
+              <Button class="center-block" type="success" size="large" @click="writeFeedBackMessage">&emsp;确 认 发 送&emsp;</Button>
+            </p>
           </i-col>
         </Row>
       </div>

@@ -31,17 +31,9 @@
     animation: ani-spin 1s linear infinite;
   }
 
-
-
-  .loading{
-    /*border: 1px solid red;*/
-  }
-
   .spin-col{
     height: 300px;
     position: relative;
   }
-
-
 
 </style>

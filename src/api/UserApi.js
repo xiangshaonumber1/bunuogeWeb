@@ -66,7 +66,7 @@ const user = {
         myDescribe:userInfo.myDescribe
       })
     }).then( async res => {
-      if (res.data.code === 200) {
+      if (res.data.code === 10200) {
         return true;
       } else if (res.data.code === 402) {
         const result = await AuthenticationApi.getToken();
@@ -156,7 +156,7 @@ const user = {
           return this.update_pw(new_pw,old_pw,mail_code,type);
         else
           return null;
-      }else if(res.data.code === 200) {
+      }else if(res.data.code === 10200) {
         Notice.success({
           title:'密码修改成功：',
           desc: res.data.msg,
@@ -168,26 +168,13 @@ const user = {
     })
   },
 
-  //确认消息已阅读(新增系统消息已读记录),这里的messageIDArray应该是数组类型
-  confirmSystemMessage(messageIDArray){
-    return request({
-      url:'/user/confirmSystemMessage',
-      method:'post',
-      data:qs.stringify({
-        messageArray:messageIDArray
-      })
-    }).then( res =>{
-      return res.data.data;
-    })
-  },
-
   //获取我的未读‘系统通知’类通知
   getUnreadMessageCount(){
     return request({
       url:'/user/getUnreadMessageCount',
       method:'get',
     }).then( res =>{
-      console.log("输出未读信息 ：",res)
+      console.log("输出未读信息 ：",res);
       return res.data.data;
     })
   },
@@ -206,9 +193,10 @@ const user = {
     })
   },
 
-  getMessageDetails(page){
+  //获取回复类消息详情
+  getReplyMessageDetails(page){
     return request({
-      url:'/user/getMessageDetails',
+      url:'/user/getReplyMessageDetails',
       method:'get',
       params:{
         page:page

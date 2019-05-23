@@ -10,7 +10,7 @@
 
 <script>
 
-import OkHeader from "./views/Web/header/ok_header";
+import OkHeader from "./views/Common/ok_header";
 
 export default {
   name:'App',
@@ -26,7 +26,20 @@ export default {
   },
 
   mounted(){
-    // this.checkLogin();
+    this.sockets.subscribe('receive_article', (data) => {
+      console.log("监听 receive_article 文章通知：", data)
+    });
+    this.sockets.subscribe('receive_connect', (data) => {
+      console.log("监听 receive_connect：连接通知", data)
+    });
+    this.sockets.subscribe('notification_system_message', data => {
+      console.log("监听到系统有发布新的系统消息", data);
+      this.systemMessageCount++;
+    });
+    this.sockets.subscribe('notification_reply',() =>{
+      console.log("监听到有新的回复消息，请注意查收！");
+      this.$store.dispatch("addUnreadMessageCount","reply")
+    })
   }
 }
 
@@ -38,6 +51,10 @@ export default {
     /*border: 1px solid red;*/
     width: 100vm;
     height: auto;
+  }
+
+  *{
+    font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
   }
 
 </style>

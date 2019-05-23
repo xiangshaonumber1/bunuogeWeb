@@ -101,9 +101,9 @@
 </template>
 
 <script>
-  import OkHeader from "../header/ok_header";
+  import OkHeader from "../../Common/ok_header";
   import NotFound from "./404";
-  import Loading from "../loading/loading";
+  import Loading from "../../Common/loading";
 
   export default {
         name: "web_searchInfo",

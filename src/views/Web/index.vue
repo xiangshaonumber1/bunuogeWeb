@@ -121,11 +121,11 @@
 </template>
 
 <script>
-    import Loading from "../loading/loading";
-    import NotFound from "./404";
-    import BlogFooter from "../footer/footer";
-    import store from '../../../blog_vuex/store'
-    import Web_link from "../comment/web_link";
+    import Loading from "../Common/loading";
+    import NotFound from "./otherModule/404";
+    import BlogFooter from "../Common/footer";
+    import store from '../../blog_vuex/store'
+    import Web_link from "../Common/web_link";
 
     export default {
         name: "index",
@@ -162,7 +162,7 @@
         goArticleInfo(articleID,openID){
           //新建窗口跳转
           let ArticleInfo = this.$router.resolve({
-            name:'web_articleInfo',
+            name:'article_info',
             params:{
               article_id:articleID,
               open_id:openID

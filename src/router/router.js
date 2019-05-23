@@ -5,45 +5,54 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 //  1.定义（路由）组件
 
-//加载组组件
+//主页内容
 import App from '../App'
-import Index from '../views/Web/mainContent/index'
-import Welcome from '../views/Web/login_register/welcome'
-import Home from '../views/Web/home/home'
-import Controller from '../views/Service/controller/ServiceController'
-import WriteArticle from '../views/Service/components/service_write_article'
-import WriteDiary from '../views/Service/components/service_write_diary'
-import SendMssage from '../views/Service/components/service_send_message'
-import White from '../views/Service/components/service_white'
-import DataArticles from '../views/Service/components/service_data_articles'
-import DataDiaries from '../views/Service/components/service_data_diaries'
-import UserInfo from '../views/Service/components/service_user_info'
-import BlogTotal from '../views/Service/components/service_blog_total'
-import Register from '../views/Web/login_register/register'
-import Login from '../views/Web/login_register/login'
-import Identity from '../views/Service/components/service_identity_user'
-import service_management_link from '../views/Service/components/service_management_link'
-import service_feedbackMessage from '../views/Service/components/service_feedbackMessage'
-import Management_article from '../views/Service/components/service_management_article'
-import Management_comments from '../views/Service/components/service_management_comments'
+import Index from '../views/Web'
 
-import Web_articleInfo from '../views/Web/mainContent/articleInfo/web_articleInfo'
-import Web_diaryInfo from '../views/Web/mainContent/articleInfo/web_diaryInfo'
-import CommentAndReply from '../views/Web/mainContent/articleInfo/commentAndReply'
-import WebModule_message from '../views/Web/mainContent/messageInfo/web_module_message'
-import Web_replyMessage from '../views/Web/mainContent/messageInfo/web_replyMessage'
-import Web_systemMessage from '../views/Web/mainContent/messageInfo/web_systemMessage'
-import Web_personalMessage from '../views/Web/mainContent/messageInfo/web_personalMessage'
-import Web_feedBack from '../views/Web/mainContent/web_feedback'
-import Web_search from '../views/Web/mainContent/web_searchInfo'
-import Web_user from '../views/Web/mainContent/web_user'
-import Web_messageWall from '../views/Web/mainContent/web_messageWall'
-import NotFound from '../views/Web/mainContent/404'
+//loginRegisterInfo登录注册模块
+import ModuleLoginRegister from '../views/Web/loginRegisterModule/web_module_loginRegister'
+import Register from '../views/Web/loginRegisterModule/web_loginRegister_register'
+import Login from '../views/Web/loginRegisterModule/web_loginRegister_login'
 
-import Setting from '../views/Web/mainContent/web_setting'
-import Setting_update_pw from '../views/Web/mainContent/setting/setting_update_pw'
+//文章相关模块
+import ArticleInfo from '../views/Web/articleModule/web_article_info'
+import ArticleEdit from '../views/Web/articleModule/web_article_edit'
+import ArticleCommentAndReply from '../views/Web/articleModule/web_article_commentAndReply'
 
-import Test from '../views/Web/test/test'
+//日记相关模块
+import DiaryInfo from '../views/Web/diaryModule/web_diary_info'
+import DiaryEdit from '../views/Web/diaryModule/web_diary_edit'
+
+//账号设置相关
+import ModuleSetting from '../views/Web/settingModule/web_module_setting'
+import SettingPW from '../views/Web/settingModule/web_setting_pw'
+
+//用户信息相关模块
+import ModuleUser from '../views/Web/personalModule/web_module_user'
+import UserArticles from '../views/Web/personalModule/web_user_articles'
+import UserDiaries from '../views/Web/personalModule/web_user_diaries'
+import UserInfo from '../views/Web/personalModule/web_user_info'
+
+//站内消息模块
+import ModuleMessage from '../views/Web/messageModule/web_module_message'
+import MessageReply from '../views/Web/messageModule/web_message_reply'
+import MessageSystem from '../views/Web/messageModule/web_message_system'
+import MessagePersonal from '../views/Web/messageModule/web_message_personal'
+
+//其他独立模块
+import Feedback from '../views/Web/otherModule/web_feedback'
+import Search from '../views/Web/otherModule/web_searchInfo'
+import MessageWall from '../views/Web/otherModule/web_messageWall'
+import NotFound from '../views/Web/otherModule/404'
+
+//后台管理相关模块
+import ServiceController from '../views/Service/ServiceController'
+import ManagementSystemMessage from '../views/Service/components/service_management_systemMessage'
+import ManagementUser from '../views/Service/components/service_management_user'
+import ManagementLink from '../views/Service/components/service_management_link'
+import ManagementFeedback from '../views/Service/components/service_management_feedback'
+import ManagementArticle from '../views/Service/components/service_management_article'
+import ManagementComments from '../views/Service/components/service_management_comments'
 
 //  2.定义路由
 //  每个路由应该映射一个组件
@@ -51,93 +60,85 @@ const routes = [
   //首页
   {path:'/', component: App,children:[
       //首页详情，默认子组件
-      {path:'',component:Index, name:'index'},
+      {path:'/',component:Index, name:'index'},
       //留言墙
-      {path:'message',component:Web_messageWall, name:'message_wall'},
+      {path:'message_wall',component:MessageWall, name:'message_wall'},
       //搜索详情
-      {path:'search/:key_word',component:Web_search, name:'web_search'},
+      {path:'search/:key_word',component:Search, name:'search'},
       //用户信息相关
-      {path:'user/:open_id',component:Web_user,
+      {path:'user_about/:open_id',component:ModuleUser,
         children:[
-          {path: 'info', component: UserInfo, name:"web_userInfo"},                 //用户信息页面(可公开信息)
-          {path: 'articles', component: DataArticles, name:"web_data_articles"},        //用户文章数据页
-          {path: 'diaries', component: DataDiaries, name:"web_data_diaries"},           //用户文章日记页(只显示作者设置为公开的)
+          {path: 'user_info', component: UserInfo, name:"user_info"},                 //用户信息页面(可公开信息)
+          {path: 'user_articles', component: UserArticles, name:"user_articles"},        //用户文章数据页
+          {path: 'user_diaries', component: UserDiaries, name:"user_diaries"},           //用户文章日记页(只显示作者设置为公开的)
         ]},
       //用户设置相关
-      {path:'setting/:open_id',component:Setting,                                       //个人设置的导航页
+      {path:'setting/:open_id',component:ModuleSetting,                                       //个人设置的导航页
         children:[
-          {path: 'update_pd', component:Setting_update_pw, name:"update_password"},     //修改密码
+          {path: 'update_pd', component:SettingPW, name:"update_pd"},     //修改密码
         ]},
 
       //文章详情
-      {path:"/",component:Web_articleInfo,
+      {path:"article_info/",component:ArticleInfo,
         children:[
           //默认子组件，父组件不需要name
-          {path:'/article/:article_id&:open_id',component:CommentAndReply,name:'web_articleInfo',}
+          {path:':article_id&:open_id', component:ArticleCommentAndReply,  name:'article_info'}
         ]},
 
       //日记详情页面
-      {path:"/diary/:diary_id",component:Web_diaryInfo,
-        children:[
-          //默认子组件，父组件不需要name
-          {path:'/',component:CommentAndReply,name:'web_diaryInfo'}
-        ]},
+      {path:"diary/:diary_id",component:DiaryInfo}
+
     ]},
 
   //消息通知模块
-  {path:'/message/:openID',component:WebModule_message,
+  {path:'/message/:openID',component:ModuleMessage,
     children:[
-      {path:'replyMessage',component:Web_replyMessage,name:'replyMessage'},
-      {path:'systemMessage',component:Web_systemMessage,name:'systemMessage'},
-      {path:'personalMessage',component:Web_personalMessage,name:'personalMessage'},
+      {path:'replyMessage',component:MessageReply,name:'replyMessage'},
+      {path:'systemMessage',component:MessageSystem,name:'systemMessage'},
+      {path:'personalMessage',component:MessagePersonal,name:'personalMessage'},
     ]},
 
-  //测试页面
-  {path:'/test',component:Test, name:'test'},
-
+  //用户文章编辑页
+  {path:'/write/article',component:ArticleEdit,name:'write_article'},
   //用户文章修改页
-  {path:'/article/update/:article_id',component:WriteArticle,name:'article_update'},
-  //用户修改日记页面
-  {path:'/diary/update/:diary_id',component:WriteDiary, name:'diary_update'},
+  {path:'/article/update/:article_id',component:ArticleEdit,name:'article_update'},
 
   //用户文章编辑页
-  {path:'/write/article',component:WriteArticle,name:'web_write_article'},
-  //用户文章编辑页
-  {path:'/write/diary',component:WriteDiary,name:'web_write_diary'},
+  {path:'/write/diary',component:DiaryEdit,name:'write_diary'},
+  //用户修改日记页面
+  {path:'/diary/update/:diary_id',component:DiaryEdit, name:'diary_update'},
+
+
 
   //意见反馈页
-  {path:'/feedback',component:Web_feedBack, name:'web_feedback'},
-  //个人博客页
-  {path:'/home', component: Home, name:"home"},
+  {path:'/feedback',component:Feedback, name:'feedback'},
 
-  //登录页面
-  {path: '/', component: Welcome,
+  //登录注册模块
+  {path: '/', component: ModuleLoginRegister,
     children:[
       //登录页
-      {path:'login',component:Login, name:"login"},
+      {path:'login',component: Login, name:"login"},
       //注册页
       {path:'register' , component: Register , name:"register"}
     ]},
 
   //后台管理相关
-  {path:"/ServiceController", component: Controller, name:"ServiceController",
+  {path:"/ServiceController", component: ServiceController, name:"ServiceController",
     children:[
       //博客信息统计，待开发
-      {path: 'blogState',component: BlogTotal,name:"service_blog_state"},
-      //邮件发送，待开发
-      {path: 'sendMessage',component: SendMssage,name:"service_send_message"},
+      // {path: 'blogState',component: BlogTotal,name:"service_blog_state"},
+      //系统消息发送，待完善
+      {path: 'system_message_management',component: ManagementSystemMessage,name:"system_message_management"},
       //用户管理
-      {path: 'identityUser',component: Identity, name:"service_user_management"},
+      {path: 'user_management',component: ManagementUser, name:"user_management"},
       //反馈信息管理
-      {path: 'feedbackInfo',component: service_feedbackMessage,name:"service_feedback_management"},
+      {path: 'feedback_management',component: ManagementFeedback,name:"feedback_management"},
       //链接管理
-      {path: 'identityLink',component: service_management_link, name:"service_link_management"},
+      {path: 'link_management',component:ManagementLink, name:"link_management"},
       //文章管理
-      {path: 'articleManagement',component: Management_article, name:"service_article_management"},
+      {path: 'article_management',component: ManagementArticle, name:"article_management"},
       //评论管理，待开发
-      {path: 'commentsManagement',component: Management_comments, name:"service_comments_management"},
-      //空白页面
-      {path: 'whitePage',component: White, name:"service_white_page"},
+      // {path: 'comments_management',component: ManagementComments, name:"comments_management"},
     ]},
   //404页面配置
   {path:'*',component:NotFound,name:'404'},

@@ -21,7 +21,7 @@
 
 <script>
   //局部注册部件
-  import Footer from 'src/views/Web/footer/footer'
+  import Footer from '../../Common/footer'
 
     export default {
       name: "Login",

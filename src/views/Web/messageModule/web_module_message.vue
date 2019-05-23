@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import OkHeader from "../../header/ok_header";
+    import OkHeader from "../../Common/ok_header";
 
     export default {
         name: "web_message_module",
