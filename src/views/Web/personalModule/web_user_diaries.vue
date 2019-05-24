@@ -46,8 +46,8 @@
 </template>
 
 <script>
-    import Loading from "../../Web/loading/loading";
-    import NotFound from "../../Web/mainContent/404";
+    import Loading from "../../Common/loading";
+    import NotFound from "../otherModule/404";
     export default {
       name: "management_diaries",
       components: {NotFound, Loading},

@@ -50,8 +50,8 @@
 </template>
 
 <script>
-    import NotFound from "../../Web/mainContent/404";
-    import Loading from "../../Web/loading/loading";
+    import NotFound from "../otherModule/404";
+    import Loading from "../../Common/loading";
     export default {
         name: "management_articles",
       components: {Loading, NotFound},

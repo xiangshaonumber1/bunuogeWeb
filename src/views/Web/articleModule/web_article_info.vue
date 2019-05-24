@@ -34,7 +34,7 @@
             <!--该div用于显示用户头像-->
             <div style="float: left">
               <a style="text-decoration: none;margin: 0 10px" @click="goUserInfo">
-                <img :src="this.ArticleInfo.userIcon"  alt="图片加载失败" class="img-circle" width="45px" height="45px"/>
+                <b-img rounded="circle" :src="this.ArticleInfo.userIcon"  alt="none" width="45px" height="45px"></b-img>
               </a>
             </div>
 
@@ -133,9 +133,9 @@
 
 <script>
 
-    import NotFound from "../404";
-    import OkHeader from "../../header/ok_header";
-    import Loading from "../../loading/loading";
+    import NotFound from "../otherModule/404";
+    import OkHeader from "../../Common/ok_header";
+    import Loading from "../../Common/loading";
 
     export default {
       name: "articleInfo",
@@ -187,7 +187,6 @@
               title: '操作成功',
               desc: '该篇文章已成功删除！所有人都将无法再获取该篇文章的信息'
             });
-            // this.$router.go(-1);//返回上一页
             this.$router.push({name:'index'});//返回首页
           }
         },
@@ -263,11 +262,12 @@
 
         //前往用户详情页面
         goUserInfo(){
-          this.$router.push({name:'web_userInfo',params:{open_id:this.ArticleInfo.openID}})
+          this.$router.push({name:'user_info',params:{open_id:this.ArticleInfo.openID}})
         },
       },
 
-     async mounted(){
+      mounted(){
+        console.log("我有执行这个吗？")
         //请求获取该篇文章的所有信息
         this.getArticleInfo(this.$route.params.article_id);
         //请求用户对该篇文章的点赞状态

@@ -1,79 +1,78 @@
 <template>
     <div class="commentAndReply">
 
-      <!--新建文章评论编辑区-->
+      <!--文章评论编辑区-->
       <Row v-if="$store.getters.isLogin" type="flex" class="code-row-bg" align="middle" justify="start">
-        <i-col style="line-height: 40px" span="24">
+        <i-col span="24">
           <Divider />
-          <img :src="this.$store.getters.avatar" alt="..." class="img-circle" width="40px">
-          <span style="font-size: 18px" v-html="this.$store.getters.userInfo.nickname"></span><br>
-          <Input type="textarea" v-model.trim="comment_content" :rows="5"  placeholder="自古套路留不住，评论底下出人才，你想说什么呢？" class="write_comment"></Input><br>
-          <Button type="info" size="large" style="float: right;margin: 5px 0" @click="write_comment(comment_content)"><span>发&nbsp;送&nbsp;评&nbsp;论</span></Button>
+          <b-img class="c-img-avatar" rounded="circle" :src="this.$store.getters.avatar" alt="none"></b-img>
+          <span class="c-span-nickname" v-html="this.$store.getters.userInfo.nickname"></span><br>
+          <Input class="c-input-comment" type="textarea" v-model.trim="comment_content" :rows="5" placeholder="自古套路留不住，评论底下出人才，你想说什么呢？"></Input><br>
+          <Button class="c-button-article" type="info" size="large" @click="write_comment(comment_content)"><span>发送评论</span></Button>
         </i-col>
       </Row>
 
-      <!--文章的评论和回复 部分-->
+      <!--文章的评论和回复的展示部分-->
       <div>
-        <!--包含文章的评论和回复信息,循环部分-->
+        <!--循环展示评论及下的回复信息-->
         <div v-for="(commentAndReplyInfo,comment_index) in commentAndReplyInfoList" :key="comment_index">
           <Divider/>
           <!--文章的评论信息，有则加载，无则不显示，该div下包含回复（reply）部分的div-->
-          <div class="div-commentInfo">
-            <a @click="goUserInfo(commentAndReplyInfo.from_openID)">
-              <img style="float: left" :src="commentAndReplyInfo.from_userIcon" alt="..." class="img-circle" width="45px">
-              <span style="margin-left: 10px" v-html="commentAndReplyInfo.from_nickname"></span>
-            </a>
-            <br>
-            <span style="margin-left: 10px">{{commentAndReplyInfo.comment_time}}</span>
+          <div class="comment">
+            <!--评论头部机构-->
+            <div class="comment-header">
+              <a @click="goUserInfo(commentAndReplyInfo.from_openID)">
+                <b-img class="c-header-avatar" rounded="circle" :src="commentAndReplyInfo.from_userIcon" alt="..."></b-img>
+                <span class="c-header-nickname" v-html="commentAndReplyInfo.from_nickname"></span>
+              </a>
+              <span class="c-header-time" v-html="commentAndReplyInfo.comment_time"></span>
+            </div>
 
-            <!--具体的评论内容 隔行-->
-            <blockquote style="margin:10px 0;padding: 3px 20px">
-              <h5 style="font-size: 20px;">{{commentAndReplyInfo.comment_content}}&emsp;
-                <a @click="edit_comment_reply(comment_index)"><Icon type="md-chatboxes" />&nbsp;回复ta</a>
-              </h5>
+            <!--评论内容详情结构-->
+            <blockquote class="comment-content">
+              <span v-html="commentAndReplyInfo.comment_content"></span>
+              <span class="iconfont icon-huifu c-content-button" @click="edit_comment_reply(comment_index)">回复ta</span>
             </blockquote>
 
-            <!--文章的评论的编辑框-->
-            <div v-if="commentAndReplyInfo.isEdit">
-              <Input v-model="commentAndReplyInfo.answer_comment" type="textarea" :rows="3" placeholder="在这里写下你对这篇文章的看法......" autofocus></Input><br>
-              <p class="text-right"><Button type="primary" style="margin-top: 5px" ghost @click="write_reply(commentAndReplyInfo.from_openID,commentAndReplyInfo.answer_comment,commentAndReplyInfo.commentID)">确&nbsp;认&nbsp;评&nbsp;论&nbsp;ta</Button></p>
+            <!--回复相关信息部分-->
+            <div v-if="commentAndReplyInfo.isEdit" class="comment-reply">
+              <Input v-model="commentAndReplyInfo.answer_comment" type="textarea" :rows="3" placeholder="想对他说......" autofocus></Input><br>
+              <Button class="c-reply-button" type="primary" ghost @click="write_reply(commentAndReplyInfo.from_openID,commentAndReplyInfo.answer_comment,commentAndReplyInfo.commentID)">确认评论ta</Button>
             </div>
 
             <!--文章评论下的回复信息，有则加载，无则不加载-->
-            <div v-if="commentAndReplyInfo.replyInfoList.length >0" class="div-replyInfo">
-              <div >
-                <Timeline>
-                  <TimelineItem color="cadetblue" v-for="(replyInfo,reply_index) in commentAndReplyInfo.replyInfoList" :key="reply_index">
-                    <span><span style="color: gray">{{replyInfo.reply_time}}</span></span>
-                    <br>
-                    <a @click="goUserInfo(replyInfo.from_openID)"><span style="color: cadetblue" v-html="replyInfo.from_nickname"></span></a>
-                    <span style="font-size: 18px;font-weight: bolder;margin: 0 8px;">@to</span>
-                    <a @click="goUserInfo(replyInfo.to_openID)"><span style="color: cadetblue" v-html="replyInfo.to_nickname"></span></a>
-                    <span>：&nbsp;{{replyInfo.reply_content}}</span>&emsp;
-                    <span><a @click="edit_reply_reply(comment_index,reply_index)"><Icon type="md-chatboxes" />&nbsp;回复ta</a></span>
-                    <!--文章的评论下的回复的编辑框-->
-                    <div v-if="replyInfo.isEdit">
-                      <Input v-model="replyInfo.answer_reply" type="textarea" :rows="3" :placeholder="'@to '+replaceHtml(replyInfo.from_nickname)+'：'"></Input>
-                      <p class="text-right">
-                        <Button type="primary" style="margin-top: 5px" ghost @click="write_reply(replyInfo.from_openID,replyInfo.answer_reply,replyInfo.commentID)">确&nbsp;认&nbsp;回&nbsp;复&nbsp;ta</Button>
-                      </p>
-                    </div>
-                  </TimelineItem>
-                </Timeline>
-
-              </div>
+            <div class="comment-replyInfo" v-if="commentAndReplyInfo.replyInfoList.length >0" >
+              <Timeline>
+                <TimelineItem color="cadetblue" v-for="(replyInfo,reply_index) in commentAndReplyInfo.replyInfoList" :key="reply_index">
+                  <div class="comment-replyInfo-info">
+                    <span class="reply-time" v-html="replyInfo.reply_time"></span>
+                    <span class="from-nickname" v-html="replyInfo.from_nickname" @click="goUserInfo(replyInfo.from_openID)"></span>
+                    <span>@to</span>
+                    <span class="to-nickname" v-html="replyInfo.to_nickname" @click="goUserInfo(replyInfo.to_openID)"></span>
+                    <span>说:</span>
+                    <span class="reply-content" v-html="replyInfo.reply_content"></span>
+                    <span class="iconfont icon-huifu reply-button" @click="edit_reply_reply(comment_index,reply_index)">回复ta</span>
+                  </div>
+                  <!--文章的评论下的回复的编辑框-->
+                  <div v-if="replyInfo.isEdit">
+                    <Input v-model="replyInfo.answer_reply" type="textarea" :rows="3" :placeholder="'@to '+replaceHtml(replyInfo.from_nickname)+'：'"></Input>
+                    <p class="text-right">
+                      <Button class="c-replyInfo-button" type="primary" ghost @click="write_reply(replyInfo.from_openID,replyInfo.answer_reply,replyInfo.commentID)">确认回复ta</Button>
+                    </p>
+                  </div>
+                </TimelineItem>
+              </Timeline>
             </div>
-
           </div>
-
         </div>
 
         <!-- 加载更多按钮 -->
-        <p class="text-center" v-if="isLoadMoreComment" style="margin-top: 50px">
+        <p class="comment-getAll text-center" v-if="isLoadMoreComment">
           <Button type="info" @click="getCommentAndReplyInfo($route.params.article_id,0)" size="large">
-            <span style="font-size: 18px">&emsp;查 看 全 部&emsp;>>&nbsp;</span>
+            <span>查看全部>></span>
           </Button>
         </p>
+
       </div>
 
     </div>
@@ -163,7 +162,7 @@
 
         //前往查看用户信息
         goUserInfo(openID){
-          this.$router.push({name:'web_userInfo',params:{open_id:openID}})
+          this.$router.push({name:'user_info',params:{open_id:openID}})
         },
 
         //点击回复，激活编辑
@@ -218,6 +217,9 @@
 </script>
 
 <style scoped>
+  *{
+    font-size: 16px;
+  }
 
   >>> .ivu-timeline-item-tail{
     border-left: 1px solid cadetblue;
@@ -225,35 +227,129 @@
 
   >>> .ivu-input{
     resize: none;
-    margin-top: 10px;
   }
 
   a{
     text-decoration: none;
   }
 
-  .div-replyInfo{
-    /*border: 1px solid blue;*/
-    float: none;
+  /*文章评论编辑部分*/
+  .c-button-article{
+    float: right;
+    margin-top: 5px;
+    letter-spacing: 5px;
+    font-size: 16px;
+  }
+  .c-input-comment{
+    margin-top: 10px;
+  }
+  .c-img-avatar{
+    float: left;
+    height: 40px;
+  }
+  .c-span-nickname{
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    /*border: 1px solid red;*/
+  }
+
+  /*评论展示-头部*/
+  .comment{
     border-radius: 8px;
     padding: 5px 20px;
     background-color: rgba(238, 238, 238,0.6);
-  }
-  .div-replyInfo div{
-    margin: 5px 0;
     /*border: 1px solid red;*/
   }
-  .div-replyInfo span{
-    font-size: 16px;
-    /*border: 1px solid blue;*/
-    line-height: 28px;
+  .comment-header{
+    display: block;
+    height: 40px;
+    line-height: 40px;
   }
-  .div-commentInfo{
-    /*border: 1px solid red;*/
-    margin-top: 20px;
+  .c-header-avatar{
+    float: left;
+    height: 40px;
+    line-height: 40px;
+  }
+  .c-header-nickname{
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    text-indent: 10px;
+  }
+  .c-header-time{
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    text-indent: 10px;
+  }
+
+  /*评论展示-评论详情*/
+  .comment-content{
+    margin-top: 15px;
+  }
+  .c-content-button {
+    margin-left: 15px;
+    color: rgb(95, 158, 160);
+    letter-spacing: 1px;
+    cursor: pointer;
+  }
+
+  /*回复相关信息部分*/
+  .comment-reply{
+    width: 100%;
+    display: inline-block;
+  }
+  .c-reply-button{
+    float: right;
+    margin-top: 5px;
+    letter-spacing: 2px;
+    font-size: 14px;
+  }
+
+  /*评论下的回复信息*/
+  .comment-replyInfo{
+    display: block;
     margin-bottom: 5px;
   }
-  .div-commentInfo span{
-    font-size: 18px;
+  /*.comment-replyInfo-info{*/
+    /*font-size: 16px;*/
+  /*}*/
+  .comment-replyInfo-info > .reply-time{
+    display: block;
   }
+  .comment-replyInfo-info > .from-nickname{
+    cursor: pointer;
+    color: cadetblue;
+    margin-right: 5px;
+  }
+  .comment-replyInfo-info > .to-nickname{
+    cursor: pointer;
+    color: cadetblue;
+    margin-left: 5px;
+  }
+  .comment-replyInfo-info > .reply-content{
+    margin-left: 5px;
+    color: black;
+    letter-spacing: 1px;
+  }
+  .comment-replyInfo-info > .reply-button{
+    cursor: pointer;
+    color: cadetblue;
+    margin-left: 15px;
+    letter-spacing: 1px;
+  }
+
+  .c-replyInfo-button{
+    margin-top: 5px;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+
+  .comment-getAll{
+    margin-top: 50px;
+  }
+
+
 </style>
