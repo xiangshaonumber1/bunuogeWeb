@@ -25,11 +25,11 @@
             <i-form :modal="messageInfo" label-position="left" :label-width="150" class="m-auto" style="width: 90%;">
               <form-item>
                 <span slot="label">指定收件人：</span>
-                <i-input type="textarea" rows="1" :autosize="{minRows:1,maxRows:4}" v-model="messageInfo.acceptor" :disabled="allAcceptor"></i-input>
+                <i-input type="textarea" :rows="1" :autosize="{minRows:1,maxRows:4}" v-model="messageInfo.acceptor" :disabled="allAcceptor"></i-input>
               </form-item>
               <form-item>
                 <span slot="label">消息主题：</span>
-                <i-input type="textarea" rows="1" :autosize="{minRows:1,maxRows:4}" v-model="messageInfo.title"></i-input>
+                <i-input type="textarea" :rows="1" :autosize="{minRows:1,maxRows:4}" v-model="messageInfo.title"></i-input>
               </form-item>
               <form-item>
                 <span slot="label">消息详情：</span>
@@ -94,6 +94,7 @@
         }
       },
       mounted(){
+          console.log("service_management_systemMessage 执行了")
         var editor = new E(this.$refs.toolMenu,this.$refs.emailText);
         //加上这个句，才能在编辑器中粘贴图片
         editor.customConfig.uploadImgShowBase64 = true;

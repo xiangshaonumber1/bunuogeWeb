@@ -119,7 +119,7 @@
 
         //前往意见反馈模块
         goFeedBackMessage(){
-          this.$router.push({name:'web_feedback'});
+          this.$router.push({name:'feedback'});
         },
         //前往本站的留言墙
         goMessage_wall(){
@@ -161,7 +161,7 @@
         goSearchResult(key_word){
           if (key_word !== null && key_word.length>=2){
             this.$router.push({
-              name:"web_search",
+              name:"search",
               params:{
                 key_word:key_word,
               }
@@ -179,13 +179,13 @@
        async to_user_function(item_name){
           switch (item_name) {
             case 'userCenter'://前往个人信息
-              this.$router.push({name:'web_userInfo',params:{open_id:this.$store.getters.openID}});break;
+              this.$router.push({name:'user_info',params:{open_id:this.$store.getters.openID}});break;
             case 'userSetting'://前往用户设置，默认展示账号信息
-              this.$router.push({name:'update_password',params:{open_id:this.$store.getters.openID}});break;
+              this.$router.push({name:'update_pd',params:{open_id:this.$store.getters.openID}});break;
             // case 'userManager'://前往管理中心
             //   this.$router.push({name:'userManager'});break;
             case 'userFeedback'://前往帮助与反馈
-              this.$router.push({name:'web_feedback'});break;
+              this.$router.push({name:'feedback'});break;
             case 'userExit': // 注销当前登录
               const result = await this.$apis.AuthenticationApi.logout();
               if (result){
@@ -203,12 +203,12 @@
 
         //前往文章创作版块
         go_writeArticle(){
-          this.$router.push({name:'web_write_article'})
+          this.$router.push({name:'write_article'})
         },
 
         //前往笔记创作页面
         go_writeDiary(){
-          this.$router.push({name:'web_write_diary'})
+          this.$router.push({name:'write_diary'})
         },
 
         //获取当前routeName,并赋值给menuActive
@@ -223,11 +223,6 @@
           //同时保存到localstorage中，以便其消息中心需要显示
           this.$store.dispatch("SaveUnreadMessageCount",result);
         },
-
-        //获取关注用户的动态消息，待完成
-        getMarkerActivity(){
-
-        }
 
       },
 

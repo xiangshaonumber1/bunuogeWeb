@@ -23,6 +23,7 @@ export default {
       //token刷新成功，什么都不做
       //token刷新失败（405），前往登录页面（已在拦截器中实现）
     },
+
   },
 
   mounted(){

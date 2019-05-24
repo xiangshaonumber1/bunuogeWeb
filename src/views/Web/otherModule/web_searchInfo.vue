@@ -44,8 +44,9 @@
                 <!--文章作者和文章状态信息-->
                 <div class="searchArticleOtherInfo">
                   <span v-html="searchArticle.nickname"></span>&emsp;
-                  <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;<label>{{searchArticle.like}}</label></span>&emsp;
-                  <span><Icon type="md-eye" size="16" />&nbsp;<label>{{searchArticle.dislike}}</label></span>
+                  <span><Icon type="md-heart" color="rgb(251, 114, 153)" size="16"/>&nbsp;<label>{{searchArticle.like}}</label></span>
+                  <span><Icon type="md-eye" size="16" />&nbsp;<label>{{searchArticle.watch}}</label></span>
+                  <span><Icon type="md-star" size="16"/><label>&nbsp;{{searchArticle.collection}}</label></span>
                   <span style="float: right;margin-right: 20px"><Icon type="md-time" size="16" />&nbsp;<Time :time="searchArticle.time"/></span>
                 </div>
 
@@ -152,6 +153,7 @@
             }
           }
           this.searchInfoList = TempSearchInfoList;
+          console.log("输出处理后的信息：",this.searchInfoList);
           this.listTotal = result.total;
           this.key_word_list = result.key_word_list;  //赋值获取到的分词器
         }
@@ -172,7 +174,7 @@
       goArticleInfo(article_id,open_id){
         //新建窗口跳转
         let ArticleInfo = this.$router.resolve({
-          name:'web_articleInfo',
+          name:'article_info',
           params:{
             article_id:article_id,
             open_id:open_id
@@ -184,7 +186,7 @@
       //前往用户详情页面
       goUserInfo(openID){
         console.log("前往用户信息：");
-        this.$router.push({name:'web_userInfo',params:{open_id:openID}})
+        this.$router.push({name:'user_info',params:{open_id:openID}})
       },
 
       // 筛选变色,不过英文好像无法识别大小写
