@@ -6,6 +6,7 @@ import {Notice} from  'iview'
 import AuthenticationApi from './AuthenticationApi'
 import qs from  'qs'
 import router from '../router/router'
+import store from '../blog_vuex/store'
 
 const user = {
 
@@ -23,11 +24,11 @@ const user = {
     }).then(res=>{
       console.log("发送邮件输出:",res);
       if (res.data.data){
-        Notice.success({
-          title:'邮件发送成功',
-          desc:'邮件已成功发送，请注意查收'
-        })
-        return true;
+        // Notice.success({
+        //   title:'邮件发送成功',
+        //   desc:'邮件已成功发送，请注意查收'
+        // });
+        return res.data;
       }
     })
   },
@@ -44,11 +45,7 @@ const user = {
         openID:openID,
       }
     }).then( async res => {
-      if (res.data.code === 404) {
-        return null;
-      }else{
-        return res.data.data;
-      }
+      return res.data;
     })
   },
 
@@ -66,17 +63,11 @@ const user = {
         myDescribe:userInfo.myDescribe
       })
     }).then( async res => {
-      if (res.data.code === 10200) {
-        return true;
-      } else if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result)
+      console.log("updateUserInfo 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
           return this.updateUserInfo(userInfo);
-        else
-          return null;
-      } else {
-        return res.data.data;
       }
+      return res.data;
     })
   },
 
@@ -89,16 +80,11 @@ const user = {
       method:'post',
       data:formData,  //上传的为文件类型，不需要qs格式化
     }).then( async res => {
-      console.log("updateUserIcon 输出res :", res);
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result)
+      console.log("updateUserIcon 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
           return this.updateUserIcon(formData);
-        else
-          return null;
-      }else {
-        return res.data.data;
       }
+      return res.data;
     })
   },
 
@@ -115,7 +101,7 @@ const user = {
         executeType:executeType
       })
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -129,7 +115,7 @@ const user = {
         aim_openID:aim_openID,
       }
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     });
   },
 
@@ -150,21 +136,19 @@ const user = {
         type:type
       })
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result)
+      console.log("updateUserIcon 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
           return this.update_pw(new_pw,old_pw,mail_code,type);
-        else
-          return null;
-      }else if(res.data.code === 10200) {
+      }
+
+      if(res.data.code === 10200) {
         Notice.success({
           title:'密码修改成功：',
           desc: res.data.msg,
         });
         return router.push({name:'login'})
-      }else {
-        return res.data;
       }
+      return res.data;
     })
   },
 
@@ -175,7 +159,7 @@ const user = {
       method:'get',
     }).then( res =>{
       console.log("输出未读信息 ：",res);
-      return res.data.data;
+      return res.data;
     })
   },
 

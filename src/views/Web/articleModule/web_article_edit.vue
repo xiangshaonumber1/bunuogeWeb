@@ -191,6 +191,21 @@
          //新建文章请求
           if(this.type === 'write'){
             result = await this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
+            if (result.status){
+              //发布成功后，立即跳转到刚编辑的文章
+              this.$Notice.success({
+                title: "发布成功：",
+                desc: "文章发布成功，已为您跳转到当前页面"
+              });
+              //跳转到对应的文章详情页面
+              this.$router.push({
+                name: 'web_articleInfo',
+                params: {
+                  article_id: result.data.articleID,
+                  open_id: result.data.authorID
+                }
+              });
+            }
           }
           //修改已发布的文章
           else if (this.type === 'update'){
@@ -198,6 +213,13 @@
               this.origin_link = null;
             }
             result = await this.$apis.ArticleApi.update_article(this.ArticleInfo.articleID,this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
+            if(result.status){
+              this.$Notice.success({
+                title:'修改成功：',
+                desc:'修改已生效，即将为你跳转到详情页面'
+              });
+              return this.$router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID});
+            }
           }
          this.loading_push = false;
         },

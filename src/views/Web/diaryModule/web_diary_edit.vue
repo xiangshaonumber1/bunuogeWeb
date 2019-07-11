@@ -98,9 +98,13 @@
           let result = false;
           if (this.type === 'write') {
             result = await this.$apis.ArticleApi.write_diary(this.diaryTitle, this.diaryContent, this.select_type)
+            if (result.status){
+              this.$Notice.success({ title: '日记保存成：', desc: "即将为你跳转到当前日记界面"});
+              return this.$router.push({name:'web_diaryInfo', params:{diary_id: res.data.data}})
+            }
           } else if (this.type === 'update') {
             result = await this.$apis.ArticleApi.update_diary(this.DiaryInfo.diaryID,this.diaryTitle,this.diaryContent,this.select_type);
-            if(result){
+            if(result.status){
               this.$Notice.success({
                 title:'修改成功：',
                 desc:'修改已生效，即将为你跳转到详情页面'

@@ -36,8 +36,13 @@ const actions = {
   //读取未读消息(清除指定类型的未读消息统计)
   readUnreadMessageCount(context,type){
     context.commit("readUnreadMessageCount",type)
-  }
+  },
 
+  //改变token刷新状态
+  tokenRefreshStatus(context,status){
+    console.log(" tokenRefreshStatus 执行");
+    context.commit("tokenRefreshStatus",status);
+  }
 
 };
 

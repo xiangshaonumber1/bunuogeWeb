@@ -15,6 +15,7 @@ const state = {
   replyMessageCount:0,  //未读 '回复我的' 消息数量
   personalMessageCount:0, //未读 '我的消息' 消息数量
   markedActivityCount:0,  //未读 '动态' 消息数量
+  tokenRefreshStatus:false, //token是否有刷新过
   serverPath:'http://localhost:8089', //开发环境
 };
 

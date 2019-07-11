@@ -25,6 +25,11 @@ const getters =  {  //实时监听state值的变化(最新状态)
     return context.serverPath;
   },
 
+  //获取token刷新状态
+  tokenRefreshStatus(context){
+    return context.tokenRefreshStatus;
+  }
+
 
 };
 export default getters

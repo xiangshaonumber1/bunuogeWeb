@@ -16,7 +16,7 @@ const common = {
       method:'get',
     }).then( res =>{
       // console.log("getPosterList 返回的信息:",res);
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -33,7 +33,7 @@ const common = {
         feedbackType:feedBackInfo.feedbackType
       })
     }).then( res =>{
-      return res.data.data === true;
+      return res.data;
     })
   },
 
@@ -51,7 +51,7 @@ const common = {
       })
     }).then( res =>{
       console.log("重置密码返回结果：",res);
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -64,10 +64,9 @@ const common = {
       method:'get',
     }).then( res => {
       console.log("输出底部链接信息：",res.data);
-      return res.data.data;
+      return res.data;
     })
   }
-
 };
 
 export default  common

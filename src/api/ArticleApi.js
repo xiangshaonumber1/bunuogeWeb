@@ -7,6 +7,7 @@ import AuthenticationApi from './AuthenticationApi'
 import router from '../router/router'
 import {Notice} from 'iview'
 import qs from 'qs'
+import store from '../blog_vuex/store'
 
 const article = {
 
@@ -25,28 +26,11 @@ const article = {
         origin_link:origin_link,
       })
     }).then( async res => {
-
-     if (res.data.code === 402) {
-       const result = await AuthenticationApi.getToken();
-       if (result) {
-         return this.write_article(ArticleTitle, ArticleContent, ArticleType, ArticleLabel, origin_link)
-       }
+     console.log("write_article 输出返回信息：", res.data);
+     if (store.getters.tokenRefreshStatus) {
+       return this.write_article(ArticleTitle, ArticleContent, ArticleType, ArticleLabel, origin_link)
      }
-
-     //发布成功后，立即跳转到刚编辑的文章
-     Notice.success({
-       title: "发布成功：",
-       desc: "文章发布成功，已为您跳转到当前页面"
-     });
-     //跳转到对应的文章详情页面
-     router.push({
-       name: 'web_articleInfo',
-       params: {
-         article_id: res.data.data.articleID,
-         open_id: res.data.data.authorID
-       }
-     });
-     return true
+     return res.data;
    })
   },
 
@@ -67,20 +51,11 @@ const article = {
         origin_link:origin_link,
       })
     }).then( async res => {
-      console.log("返回信息 ： ",res);
-      if (res.data.code === 200){
-        Notice.success({
-          title:'修改成功：',
-          desc:'修改已生效，即将为你跳转到详情页面'
-        });
-        return router.push({name:'web_articleInfo',params:this.ArticleInfo.articleID});
+      console.log("update_article 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.update_article(ArticleID,ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link)
       }
-      else if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if(result){
-          return this.update_article(ArticleID,ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link)
-        }
-      }
+      return res.data;
     })
   },
 
@@ -97,28 +72,11 @@ const article = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === 200) {
-        Notice.success({
-          title: '日记保存成：',
-          desc: "即将为你跳转到当前日记界面"
-        });
-        return router.push({
-          name:'web_diaryInfo',
-          params:{
-            diary_id: res.data.data
-          }
-        })
-      } else if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.write_diary(title,content,type);
-        }else {
-          return router.push({name:'login'})
-        }
-      }else {
-        console.log("write_article else info :", res);
-        return res;
+      console.log("write_diary 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.write_diary(title,content,type);
       }
+      return res.data;
     })
   },
 
@@ -137,15 +95,11 @@ const article = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === 200){
-        return true;
+      console.log("update_diary 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.update_diary(diaryID,title,content,type)
       }
-      else if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.update_diary(diaryID,title,content,type)
-        }
-      }
+      return res.data;
     })
   },
 
@@ -160,7 +114,7 @@ const article = {
         articleID:articleID
       }
     }).then(res=>{
-     return res.data.data //如果有数据，则返回获取的data
+     return res.data;
     })
   },
 
@@ -175,8 +129,7 @@ const article = {
         diaryID:diaryID,
       }
     }).then( res => {
-      console.log("输出的信息 res：",res);
-      return res.data.data //如果有数据，则返回获取的data
+      return res.data;
     })
   },
 
@@ -191,7 +144,7 @@ const article = {
        page: page,
      }
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -209,7 +162,7 @@ const article = {
         type:type,
       }
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -224,8 +177,8 @@ const article = {
         openID:openID,
         page:page,
       }
-    }).then( async (res) => {
-      return res.data.data;
+    }).then( res => {
+      return res.data;
     })
   },
 
@@ -241,9 +194,8 @@ const article = {
         openID:openID,
         page:page,
       }
-    }).then( async (res) => {
-      console.log("get_userDiary 返回的所有信息：",res)
-      return res.data.data;
+    }).then( res => {
+      return res.data;
     })
   },
 
@@ -260,16 +212,11 @@ const article = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.delete_article(deleteID,type)
-        }else{
-          return null;
-        }
-      }else {
-        return res.data;
+      console.log("delete_article 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.delete_article(deleteID,type)
       }
+      return res.data;
     })
   },
 
@@ -281,7 +228,7 @@ const article = {
       url:'/article/getTop',
       method:"get"
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -300,7 +247,7 @@ const article = {
         executeType:executeType,
       })
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -319,7 +266,7 @@ const article = {
         executeType:executeType,
       })
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -336,7 +283,7 @@ const article = {
         openID:openID
       }
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -353,17 +300,11 @@ const article = {
         pageCount:pageCount
       }
     }).then( async res => {
-      console.log("请求评论和回复结果：",res.data);
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result){
+      console.log("getCommentAndReplyInfo 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
           return this.getCommentAndReplyInfo(articleID,page);
-        }else {
-          return null;
-        }
-      }else {
-        return res.data.data;
       }
+      return res.data;
     })
   },
 
@@ -386,16 +327,11 @@ const article = {
         comment_content:comment_content
       })
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.write_comment(articleID,from_openID,comment_content);
-        }else {
-          return null;
-        }
-      }else {
-        return res.data.data;
+      console.log("write_comment 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.write_comment(articleID,from_openID,comment_content);
       }
+      return res.data;
     })
   },
 
@@ -417,16 +353,11 @@ const article = {
         to_openID:replyInfo.to_openID
       })
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.write_reply(replyInfo);
-        }else{
-          return null
-        }
-      }else {
-        return res.data.data;
+      console.log("write_reply 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.write_reply(replyInfo);
       }
+      return res.data;
     })
   },
 

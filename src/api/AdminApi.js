@@ -4,6 +4,7 @@
 import request from '../common/request'
 import AuthenticationApi from './AuthenticationApi'
 import qs from 'qs'
+import store from '../blog_vuex/store'
 
 const admin = {
 
@@ -15,17 +16,12 @@ const admin = {
       url:'/admin/service_login',
       method:'post'
     }).then( async res => {
-      console.log("service_login 输出返回信息：", res);
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result){
-          return this.service_login();
-        }else {
-          return null;
-        }
-      }else {
-        return res.data.data;
+      console.log("service_login 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.service_login();
       }
+      //正常情况下直接返回响应数据
+      return res.data;
     })
   },
 
@@ -40,17 +36,11 @@ const admin = {
         page:page
       }
     }).then( async res => {
-      console.log("AdminApi 输出：", res.data);
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.getFeedBackInfo(page)
-        }else {
-          return null;
-        }
-      }else {
-        return res.data.data;
+      console.log("getFeedBackInfo 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.getFeedBackInfo(page)
       }
+      return res.data;
     })
   },
 
@@ -66,16 +56,11 @@ const admin = {
         status:status,
       })
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.updateStatus(feedID,status)
-        } else {
-          return false;
-        }
-      } else {
-        return res.data.data;
+      console.log("updateFeedBackStatus 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.updateStatus(feedID,status)
       }
+      return res.data;
     })
   },
 
@@ -93,16 +78,11 @@ const admin = {
         pageCount:pageCount
       }
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.getUserRoleAndPermissionList(page,key_word)
-        } else {
-          return null;
-        }
-      } else {
-        return res.data.data;
+      console.log("getUserRoleAndPermissionList 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.getUserRoleAndPermissionList(page,key_word)
       }
+      return res.data;
     })
   },
 
@@ -119,16 +99,11 @@ const admin = {
         type:type,
       })
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.updateRoleOrPermission(aim_openID,new_value,type)
-        } else {
-          return null;
-        }
-      } else {
-        return res.data.data;
+      console.log("updateRoleOrPermission 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.updateRoleOrPermission(aim_openID,new_value,type)
       }
+      return res.data;
     })
   },
 
@@ -145,16 +120,11 @@ const admin = {
         new_status:new_status
       })
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.updateArticleStatus(aim_articleID, new_status);
-        } else {
-          return null;
-        }
-      } else {
-        return res.data.data;
+      console.log("updateArticleStatus 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.updateArticleStatus(aim_articleID, new_status);
       }
+      return res.data;
     })
   },
 
@@ -171,16 +141,11 @@ const admin = {
         pageCount:pageCount
       }
     }).then( async res => {
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.getAdminArticleInfo(page, key_word, pageCount);
-        } else {
-          return null;
-        }
-      } else {
-        return res.data.data;
+      console.log("getAdminArticleInfo 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.getAdminArticleInfo(page, key_word, pageCount);
       }
+      return res.data;
     })
   },
 
@@ -196,17 +161,11 @@ const admin = {
         email:email,
       })
     }).then( async res => {
-      console.log("adminapi 输出:",res)
-      if (res.data.code === 402) {
-        const result = await AuthenticationApi.getToken();
-        if (result) {
-          return this.adminResetPassword(aim_openID,email);
-        } else {
-          return false;
-        }
-      } else {
-        return res.data;
+      console.log("adminResetPassword 输出返回信息：", res.data);
+      if (store.getters.tokenRefreshStatus) {
+        return this.adminResetPassword(aim_openID,email);
       }
+      return res.data;
     })
   },
 
@@ -223,7 +182,7 @@ const admin = {
         operation:link_info.operation
       })
     }).then( res=>{
-      return res.data.data;
+      return res.data;
     })
   },
 
@@ -239,7 +198,7 @@ const admin = {
         content:message_info.content,
       })
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 

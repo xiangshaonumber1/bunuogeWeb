@@ -19,19 +19,15 @@ const authentication = {
           MailVerificationCode: emailCode//邮箱验证码
         })
     }).then(res =>{
-      if (res.data.code === 10200){
-        const userInfo = {
-          openID: res.data.data.openID,
-          nickname: res.data.data.nickname,
-          avatar: store.getters.serverPath + JSON.parse(res.data.data.avatar),
-          token: res.data.data.token,
-        };
-        store.dispatch("saveLoginInfo",userInfo);
-        return true;
-      }else {
-        console.log("register else info :",res);
-        return false;
-      }
+      console.log("register 输出返回信息：", res.data);
+      const userInfo = {
+        openID: res.data.data.openID,
+        nickname: res.data.data.nickname,
+        avatar: store.getters.serverPath + JSON.parse(res.data.data.avatar),
+        token: res.data.data.token,
+      };
+      store.dispatch("saveLoginInfo",userInfo);
+      return res.data;
     })
   },
 
@@ -44,44 +40,39 @@ const authentication = {
         username: username,
         password: password,
       })
-    }).then(response => {
-      console.log("登录返回信息：",response)
+    }).then(res => {
+      console.log("login 输出返回信息：", res.data);
       const userInfo = {
-        openID: response.data.data.openID,
-        nickname: response.data.data.nickname,
-        avatar: store.getters.serverPath+JSON.parse(response.data.data.avatar)[0],
-        token: response.data.data.token,
+        openID: res.data.data.openID,
+        nickname: res.data.data.nickname,
+        avatar: store.getters.serverPath+JSON.parse(res.data.data.avatar)[0],
+        token: res.data.data.token,
       };
       store.dispatch("saveLoginInfo", userInfo);
       router.push({name: 'index'});
-      return true;
+      return res.data;
     })
   },
 
-  //注销请求，需要带token，但这个token并不用于验证，所以不需要判断402
+  //注销请求，需要带token，但这个token并不用于验证，所以不需要判断10401
   logout(){
    return request({
      url:'/Authentication/logout',
      method:"post",
     }).then(res =>{
-      return res.data.data;
+      return res.data;
    })
   },
 
 
-  //token过期，请求重新获取token,header中需要带上token，但同样不用于验证，不用判断402,失败返回405
-  getToken(){
+  //token过期，请求重新获取token,header中需要带上token，但同样不用于验证，不用判断10401,失败返回405
+  refreshToken(){
     return request({
-      url:'/Authentication/getToken',
+      url:'/Authentication/refreshToken',
       method:'get',
-    }).then(res=>{//这里不用考虑402
-      if (res.data.code === 200){
-        localStorage.setItem("token",res.data.data.token); //保存刷新后的token到本地
-        return true;
-      }else{ //token刷新失败（405）,已在拦截器中做处理,跳转到登录页面
-        console.log("getToken else info：",res);
-        return false;
-      }
+    }).then(res=>{
+      console.log("refreshToken 输出: ",res.data);
+      return res.data;
     });
    },
 
@@ -94,7 +85,7 @@ const authentication = {
         username:email,
       }
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   },
 

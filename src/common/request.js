@@ -16,9 +16,13 @@ const request = axios.create({
   // retryDelay:1000,  //请求的间隙
 });
 
-//http request 拦截器
+// request 请求拦截器
 request.interceptors.request.use(config=>{
   //在请求发送前做某些事情
+
+  //请求之前初始化token刷新状态，避免冲突
+  store.dispatch("tokenRefreshStatus",false);
+
   //设置token
   config.headers["X-Auth-Token"] = localStorage.getItem("token");
   return config;
@@ -54,86 +58,45 @@ request.interceptors.request.use(config=>{
   });
 });
 
-//响应拦截器,http请求后，后台返回的一些状态码，包括我们自己的服务器返回的错误码进行一个逻辑处理
-request.interceptors.response.use(response=>{
+//response 响应拦截器
+request.interceptors.response.use(async response => {
   /*
   * 不拦截的有
-  * 200 变成正常，不用拦截，
-  * 402(只有带需要token的请求才判断) 因为涉及到重新发送请求，不方便在拦截器里设置
-  * 404(查询信息类根据需要是否判断) 因为404页面是组件化到其他组件中，所以也不方便统一拦截
+  * 10200 变成正常，不用拦截，
+  * 401(只有带需要token的请求才判断) 因为涉及到重新发送请求，不方便在拦截器里设置
   * */
   switch (response.data.code) {
-    case 401:// 表示该功能需要登录才能继续,
-      Notice.info({
-        title: "登录提示：",
-        desc: response.data.msg,
-      });
-      router.push({name:'login'});
-      break;
-
-    case 403: // 服务器请求成功，但有，比如注册失败，登录失败，等等失败操作
-      Notice.error({
-        title: "无法继续提示：",
-        desc: response.data.msg,
-      });
-      break;
-
-    case 405: // 仅仅用于表示token拒绝刷新等处理
-      console.log("request.js提示：操作返回405，即将清除用户信息");
-      //注销存储在本地的用户信息
-      store.dispatch("clearLoginInfo");
-      break;
-
-    case 406: //用于修改，删除等需要对数据进行变动，但变动无效的，类似无效的修改，或者删除已删除的信息
-      Notice.info({
-        title:'无效的操作：',
-        desc:response.data.msg
-      });
-      break;
-
-    case 407: //表示没有足够的 权限 或者 身份
-      Notice.warning({
-        title:'无权访问提示：',
-        desc:response.data.msg,
-      });
-      break;
-
-    case 408: //邮件发送失败
-      Notice.warning({
-        title:'请求验证码失败提示：',
-        desc:response.data.msg,
-      });
-      break;
-
-    case 500://表示服务器处理该请求的时候，出现了错误,不需要返回response
-      Notice.error({
-        title:'服务处理异常：',
-        desc:response.data.msg,
-      });
+    case 10201:
+      Notice.error({title: '系统提示：', desc: '当前服务器繁忙，请稍后再试！\n∑(っ°Д°;)っ卧槽，忙死了，忙死了，忙死了'});
       break;
     case 10300:
-      Notice.error({title:'异常提示：', desc:'返回请求结果异常，请联系管理员'});
+      Notice.error({title: '系统提示：', desc: '认证信息异常，如有疑问，请联系网站管理员（联系网站首页下方）\no(´^｀)o'});
       break;
     case 10301:
-      Notice.error({title:'操作异常：',desc:'当前操作出现异常，服务器已拒绝处理，请联系管理员处理'});
+      Notice.error({title: '登录提醒：', desc: '请登录后再继续该操作\n(✪ω✪) '});
       break;
-    case 10400:
-      Notice.error({title:'登录提示：',desc:'请登录后再继续该操作'});
+    case 10302:
+      Notice.error({title: '系统提示：', desc: '当前权限不足，如需更高权限，请联系管理员(联系方式网站首页下方)\n(σﾟ∀ﾟ)σ..:*☆欢迎哦'});
       break;
     case 10401:
-      Notice.error({title:'权限不足：',desc:'当前权限不足，如需要更高权限请联系管理员'});
+      //token 过期 ，在拦截器中统一刷新token，并在各自的请求中，判断10401并重新请求
+      let result= await AuthenticationApi.refreshToken();
+      if (result.status){
+        //刷新成功后......
+        store.dispatch("tokenRefreshStatus",result.status); //改变token刷新状态
+        localStorage.setItem("token",result.data); //保存刷新后的token到本地
+      }
       break;
-    case 10500:
-      Notice.error({title:'邮件发送异常：',desc:'邮件发送失败，请稍后再试，或联系管理员解决'});
-      break;
-    case 10600:
-      console.log("需要刷新token，待执行");
-      break;
-    case 10601:
+    case 10400: //非法token状态码
+    case 10402: //token刷新异常状态码
+      Notice.error({title: '系统提示：', desc: '当前信息已过期，即将为你跳转到登录页，请登录后再继续'});
       console.log("需要执行清除缓存用户信息");
       //注销存储在本地的用户信息
       store.dispatch("clearLoginInfo");
-      break
+      return router.push({name: 'login'});
+    case 10001:
+      Notice.error({title: '邮件发送异常：', desc: '邮件发送失败，请稍后再试，或联系管理员解决'});
+      break;
   }
   //不论最终是否需要跳转，都将返回response信息，然后再判断之前没判断的code
   return response;

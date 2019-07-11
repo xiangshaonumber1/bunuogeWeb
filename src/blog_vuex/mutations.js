@@ -94,6 +94,14 @@ const mutations = {
         console.log("修改未读消息错误");
         break;
     }
+  },
+
+  /**
+   * token 刷新
+   */
+  tokenRefreshStatus(state,status){
+    state.tokenRefreshStatus = status;
+    console.log("tokenRefreshStatus 已改变：",state.tokenRefreshStatus);
   }
 
 };

@@ -181,8 +181,7 @@
         //确认删除该篇文章
         async delete_article(){
           const result = await this.$apis.ArticleApi.delete_article(this.$route.params.article_id,"article");
-          console.log("返回的结果：",result);
-          if (result.msg === 'success'){//表示删除成功
+          if (result.status === true){//表示删除成功
             this.$Notice.success({
               title: '操作成功',
               desc: '该篇文章已成功删除！所有人都将无法再获取该篇文章的信息'
