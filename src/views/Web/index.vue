@@ -188,7 +188,7 @@
               this.isLoading = false;
             }else {                                                         //情况二：有具体的返回数据
               //循环向现有的文章数组中添加元素
-              for (let value of result.newest_article){
+              for (let value of result.data.newest_article){
                 this.articleList.push(value)
               }
               //只有当当前显示的文章信息数小于总数时，才允许加载下一页
@@ -256,7 +256,7 @@
         async refreshToken() {
           const token = localStorage.getItem("token");
           if (token){
-            const result = await this.$apis.AuthenticationApi.getToken();
+            const result = await this.$apis.AuthenticationApi.refreshToken();
             console.log("是否有刷新token：",result);
           }else {
             console.log("token 获取为空，不用刷新");

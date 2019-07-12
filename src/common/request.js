@@ -67,16 +67,16 @@ request.interceptors.response.use(async response => {
   * */
   switch (response.data.code) {
     case 10201:
-      Notice.error({title: '系统提示：', desc: '当前服务器繁忙，请稍后再试！\n∑(っ°Д°;)っ卧槽，忙死了，忙死了，忙死了'});
+      Notice.error({ title: '系统提示：', desc: '当前服务器繁忙，请稍后再试！\n∑(っ°Д°;)っ卧槽，忙死了，忙死了，忙死了'} );
       break;
     case 10300:
-      Notice.error({title: '系统提示：', desc: '认证信息异常，如有疑问，请联系网站管理员（联系网站首页下方）\no(´^｀)o'});
+      Notice.error({ title: '系统提示：', desc: '认证信息异常，如有疑问，请联系网站管理员（联系网站首页下方）\no(´^｀)o'} );
       break;
     case 10301:
-      Notice.error({title: '登录提醒：', desc: '请登录后再继续该操作\n(✪ω✪) '});
+      Notice.error({ title: '登录提醒：', desc: '请登录后再继续该操作\n(✪ω✪) '} );
       break;
     case 10302:
-      Notice.error({title: '系统提示：', desc: '当前权限不足，如需更高权限，请联系管理员(联系方式网站首页下方)\n(σﾟ∀ﾟ)σ..:*☆欢迎哦'});
+      Notice.error({ title: '系统提示：', desc: '当前权限不足，如需更高权限，请联系管理员(联系方式网站首页下方)\n(σﾟ∀ﾟ)σ..:*☆欢迎哦'} );
       break;
     case 10401:
       //token 过期 ，在拦截器中统一刷新token，并在各自的请求中，判断10401并重新请求
@@ -89,20 +89,20 @@ request.interceptors.response.use(async response => {
       break;
     case 10400: //非法token状态码
     case 10402: //token刷新异常状态码
-      Notice.error({title: '系统提示：', desc: '当前信息已过期，即将为你跳转到登录页，请登录后再继续'});
+      Notice.error({ title: '系统提示：', desc: '当前信息已过期，即将为你跳转到登录页，请登录后再继续'} );
       console.log("需要执行清除缓存用户信息");
       //注销存储在本地的用户信息
       store.dispatch("clearLoginInfo");
       return router.push({name: 'login'});
     case 10001:
-      Notice.error({title: '邮件发送异常：', desc: '邮件发送失败，请稍后再试，或联系管理员解决'});
+      Notice.error({ title: '邮件发送异常：', desc: '邮件发送失败，请稍后再试，或联系管理员解决'} );
       break;
   }
   //不论最终是否需要跳转，都将返回response信息，然后再判断之前没判断的code
   return response;
 },error => {
   console.log("error信息 :",error);
-  return Notice.warning({title : '网络链接阻塞', desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'});
+  return Notice.warning({ title : '网络链接阻塞', desc : '服务器被外星人拐跑了 \n @oo(▼皿▼メ;)o'} );
   //返回链接错误时的信息，模拟后台返回给前端的格式
   // return {
   //   code: 500,

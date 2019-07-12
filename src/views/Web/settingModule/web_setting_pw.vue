@@ -143,7 +143,14 @@
              } else if (this.update_way === 'email') {
                new_pw = this.updateInfo.email_new_pw;
              }
-             return await this.$apis.UserApi.update_pw(new_pw, old_pw, this.updateInfo.email_code, this.update_way);
+             let result = await this.$apis.UserApi.update_pw(new_pw, old_pw, this.updateInfo.email_code, this.update_way);
+             if (result.status){
+               this.$Notice.success({
+                 title:'密码修改成功：',
+                 desc: result.msg,
+               });
+               return this.$router.push({name:'login'})
+             }
            }
            //如果没有通过，则什么也不做
          });

@@ -140,14 +140,6 @@ const user = {
       if (store.getters.tokenRefreshStatus) {
           return this.update_pw(new_pw,old_pw,mail_code,type);
       }
-
-      if(res.data.code === 10200) {
-        Notice.success({
-          title:'密码修改成功：',
-          desc: res.data.msg,
-        });
-        return router.push({name:'login'})
-      }
       return res.data;
     })
   },
@@ -158,7 +150,7 @@ const user = {
       url:'/user/getUnreadMessageCount',
       method:'get',
     }).then( res =>{
-      console.log("输出未读信息 ：",res);
+      console.log("getUnreadMessageCount ：",res);
       return res.data;
     })
   },
@@ -172,8 +164,8 @@ const user = {
         page:page,
       }
     }).then( res =>{
-      console.log("输出系统信息详情: ",res);
-      return res.data.data;
+      console.log("getSystemMessageDetails: ",res);
+      return res.data;
     })
   },
 
@@ -186,11 +178,9 @@ const user = {
         page:page
       }
     }).then( res =>{
-      return res.data.data;
+      return res.data;
     })
   }
-
-
 
 };
 

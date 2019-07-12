@@ -101,7 +101,6 @@ const mutations = {
    */
   tokenRefreshStatus(state,status){
     state.tokenRefreshStatus = status;
-    console.log("tokenRefreshStatus 已改变：",state.tokenRefreshStatus);
   }
 
 };
