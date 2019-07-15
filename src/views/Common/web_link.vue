@@ -58,7 +58,8 @@
       methods:{
           //初始化连接信息
         async instanceLinkData() {
-          this.web_link_data = await this.$apis.CommonApi.getBottomNavBar();
+          let result = await this.$apis.CommonApi.getBottomNavBar();
+          this.web_link_data = result.data;
         }
       },
 

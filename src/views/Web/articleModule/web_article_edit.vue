@@ -10,8 +10,8 @@
         <Divider orientation="left">
           <a @click="goIndex">
              <span style="font-size: 30px;padding: 5px" >
-               <span style="color: lightskyblue;font-size: 35px">Getok</span>
-               &nbsp;文&nbsp;章&nbsp;创&nbsp;作
+               <span style="color: lightskyblue;font-size: 35px;text-space:5px">Getok</span>
+               文章创作
              </span>
           </a>
         </Divider>
@@ -190,7 +190,7 @@
           let result = false;
          //新建文章请求
           if(this.type === 'write'){
-            result = await this.$apis.ArticleApi.write_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
+            result = await this.$apis.ArticleApi.publish_article(this.articleTitle,this.articleContent,this.select_type,null,this.origin_link);
             if (result.status){
               //发布成功后，立即跳转到刚编辑的文章
               this.$Notice.success({

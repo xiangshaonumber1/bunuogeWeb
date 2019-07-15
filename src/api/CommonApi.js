@@ -3,8 +3,6 @@
  */
 
 import request from '../common/request'
-import router from '../router/router'
-import {Notice} from 'iview'
 import qs from 'qs'
 
 const common = {

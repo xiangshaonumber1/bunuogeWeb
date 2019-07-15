@@ -3,9 +3,6 @@
  */
 
 import request from '../common/request'
-import AuthenticationApi from './AuthenticationApi'
-import router from '../router/router'
-import {Notice} from 'iview'
 import qs from 'qs'
 import store from '../blog_vuex/store'
 
@@ -14,7 +11,7 @@ const article = {
   /**
    * 发布新文章，需要验证token
    */
-  write_article(ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link){
+  publish_article(ArticleTitle,ArticleContent,ArticleType,ArticleLabel,origin_link){
    return request({
       url:'/article/write_article',
       method:'post',

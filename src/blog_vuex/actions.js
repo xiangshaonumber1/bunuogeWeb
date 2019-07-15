@@ -40,7 +40,7 @@ const actions = {
 
   //改变token刷新状态
   tokenRefreshStatus(context,status){
-    console.log(" tokenRefreshStatus 执行");
+    console.log("每次请求前初始化token刷新状态");
     context.commit("tokenRefreshStatus",status);
   }
 

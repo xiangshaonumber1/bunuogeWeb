@@ -232,10 +232,10 @@
         this.userInfo = await this.$store.getters.userInfo;
         this.isLogin = await this.$store.getters.isLogin;
 
-        //获取未读消息数量（这个可以考虑优化下，不用每次加载header就获取一次）
-        this.getUnreadMessage();
-
         if (this.isLogin) {
+          //获取未读消息数量（这个可以考虑优化下，不用每次加载header就获取一次）
+          this.getUnreadMessage();
+
           //如果用户有登录的话，再执行emit，去记录用户当前client信息，因为刷新也会执行
           this.$socket.emit("notification_connect", this.$store.getters.openID);
         }

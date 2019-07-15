@@ -2,10 +2,7 @@
  * 认证用户相关操作统一管理
  */
 import request from '../common/request'
-import {Notice} from  'iview'
-import AuthenticationApi from './AuthenticationApi'
 import qs from  'qs'
-import router from '../router/router'
 import store from '../blog_vuex/store'
 
 const user = {

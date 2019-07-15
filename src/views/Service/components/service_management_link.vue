@@ -208,7 +208,7 @@
 
         //初始化链接信息
         async instanceLinkData() {
-          this.service_link_data = await this.$apis.CommonApi.getBottomNavBar();
+          this.service_link_data = await this.$apis.CommonApi.getBottomNavBar().data;
         },
 
       },
