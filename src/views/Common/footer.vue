@@ -10,7 +10,7 @@
 
 <script>
     export default {
-        name: "blog-footer"
+        name: "CommonFooter"
     }
 </script>
 

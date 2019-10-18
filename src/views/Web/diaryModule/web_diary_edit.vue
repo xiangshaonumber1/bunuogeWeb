@@ -64,7 +64,7 @@
   import E from 'wangeditor'
   import QuickRouter from "../../Common/quickRouter";
   import store from '../../../blog_vuex/store'
-  import {Message} from 'iview'
+  import {Message} from 'view-design'
 
     export default {
       name: "write_diary",

@@ -2,19 +2,19 @@
 <template>
   <div id="app"  >
     <affix>
-      <ok-header></ok-header>
+      <Header></Header>
     </affix>
-    <router-view style="margin-top: 30px"></router-view>
+    <router-view class="router-view"></router-view>
   </div>
 </template>
 
 <script>
 
-import OkHeader from "./views/Common/ok_header";
+import Header from "./views/Common/header";
 
 export default {
   name:'App',
-  components: {OkHeader},
+  components: {Header},
   methods:{
     //登录检查
     async checkLogin(){
@@ -50,12 +50,17 @@ export default {
 
   #app{
     /*border: 1px solid red;*/
-    width: 100vm;
+    width: 100%;
     height: auto;
+    background-color: rgb(245, 247, 249);
   }
 
-  *{
-    font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+  textarea{
+    resize: none;
+  }
+
+  .router-view{
+    padding: 30px 20% 0 20%;
   }
 
 </style>

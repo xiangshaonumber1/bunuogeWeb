@@ -11,10 +11,6 @@
     </Sider>
 
     <Layout>
-      <!-- ok-header 导航栏 -->
-      <Header style="padding: 0;">
-        <ok-header style="height: 100%"></ok-header>
-      </Header>
 
       <Content class="message-content">
         <RouterView></RouterView>
@@ -25,11 +21,8 @@
 </template>
 
 <script>
-    import OkHeader from "../../Common/ok_header";
-
     export default {
-        name: "web_message_module",
-      components: {OkHeader},
+      name: "web_message_module",
       data() {
         return {
           systemMessageCount:0,

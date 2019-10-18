@@ -20,7 +20,7 @@
 
 <script>
     export default {
-        name: "quickRouter",
+        name: "CommonQuickRouter",
       methods:{
         //前往首页
         goIndex(){

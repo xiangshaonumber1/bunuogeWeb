@@ -3,7 +3,7 @@
  */
 
 import axios from 'axios';
-import {Notice} from 'iview'
+import {Notice} from 'view-design'
 import router from '../router/router'
 import store from '../blog_vuex/store'
 import AuthenticationApi from '../api/AuthenticationApi'

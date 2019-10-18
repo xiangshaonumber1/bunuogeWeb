@@ -2,9 +2,6 @@
 
     <div class="web_diaryInfo">
 
-      <!-- ok_header 导航栏-->
-      <ok-header></ok-header>
-
       <loading v-if="isLoading"></loading>
 
       <not-found v-else-if="isNotFound"></not-found>
@@ -95,10 +92,9 @@
 <script>
     import Loading from "../../Common/loading";
     import NotFound from "../otherModule/404";
-    import OkHeader from "../../Common/ok_header";
     export default {
         name: "web_diaryInfo",
-      components: {OkHeader, NotFound, Loading},
+      components: { NotFound, Loading},
       data(){
         return {
           isLoading:true,

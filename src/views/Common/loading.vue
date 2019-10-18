@@ -15,7 +15,7 @@
 
 <script>
     export default {
-        name: "loading"
+        name: "CommonLoading"
     }
 </script>
 

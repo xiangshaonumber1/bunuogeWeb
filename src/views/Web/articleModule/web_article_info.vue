@@ -134,12 +134,11 @@
 <script>
 
     import NotFound from "../otherModule/404";
-    import OkHeader from "../../Common/ok_header";
     import Loading from "../../Common/loading";
 
     export default {
       name: "articleInfo",
-      components: {Loading, OkHeader, NotFound},
+      components: {Loading, NotFound},
       data() {
         return {
           isClickLike:false,//是否有点击过支持一下的按钮

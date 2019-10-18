@@ -1,136 +1,40 @@
 <template>
-
-    <div class="index">
-
-      <!--首页主要内容-->
-      <div class="index-content m-auto">
-
-        <Row type="flex" align="middle" class="code-row-bg" justify="space-between">
-          <i-col span="15">
-            <Carousel autoplay v-model="CarouselOrder" loop :autoplay-speed="autoplaySpeed">
-              <CarouselItem v-for="(poster,index) in posterList" :key="index">
-                <div class="my-carousel">
-                  <img :src="poster" alt="">
-                </div>
-              </CarouselItem>
-            </Carousel>
-          </i-col>
-
-          <i-col span="8" class="official-activities">
-            <div>
-              <a @click="goSpecialArea()"><b-alert show variant="primary">前端：Vue学习</b-alert></a>
-              <a @click="goSpecialArea()">  <b-alert show variant="success">后端：SpringBoot</b-alert></a>
-              <a @click="goSpecialArea()"> <b-alert show variant="danger">书籍：优质书籍推荐</b-alert></a>
-            </div>
-
-            <!--首页推荐部分-->
-            <div class="excellent-articles">
-
-              <p style="font-size: 22px;margin-bottom: 0">
-                <Icon type="md-star-outline" size="30" color="rgb(251, 114, 153)" />
-                &nbsp;今日星推荐
-              </p>
-
-              <a>
-                <div>
-                  <Button type="text" style="background-color: rgba(255,255,0,0.7);"><span>Top&nbsp;1</span></Button>
-                  <span>&nbsp;{{topList[0]}}</span>
-                </div>
-              </a>
-
-              <a>
-                <div>
-                  <Button type="text" style="background-color: rgba(220,220,220,0.7);"><span>Top&nbsp;2</span></Button>
-                  <span>&nbsp;{{topList[1]}}</span>
-                </div>
-              </a>
-
-              <a>
-                <div>
-                  <Button type="text" style="background-color: rgba(205, 154, 98,0.7);"><span>Top&nbsp;3</span></Button>
-                  <span>&nbsp;{{topList[2]}}</span>
-                </div>
-              </a>
-
-            </div>
-
-          </i-col>
-        </Row>
-
-        <hr>
-
-        <Row>
-          <i-col span="24">
-            <p style="float: left;font-size: 20px;font-weight: bold;">
-              <Icon type="md-trophy" style="float: left" size="25" color="goldenrod" />
-              &nbsp;为你推送</p>
-            <div style="float: right">
-              <span>排序：</span><Button type="text">时间</Button><Divider type="vertical" /><Button type="text">喜欢</Button>
-            </div>
-          </i-col>
-        </Row>
-
-        <!--正文内容-->
-        <Row type="flex" class="code-row-bg" justify="center">
-          <i-col span="24">
-            <!--数据获取完成前显示正在加载-->
-            <loading v-if="isLoading"></loading>
-            <!--如果没有数据，显示404-->
-            <not-found v-else-if="notFound"></not-found>
-            <!--如果有数据，正常显示-->
-            <div  v-else v-for="article in articleList">
-              <Card :bordered="false" class="articleCard">
-                <div class="articles-title">
-                  <p><a @click="goArticleInfo(article.articleID,article.openID)">{{article.title}}</a></p>
-                </div>
-                <div class="articles-content">
-                  <span style="color: gray;font-size: 14px">{{replaceHtml(article.content)}}</span>
-                </div>
-                <div class="articles-info">
-                  作者：<span v-html="article.nickname"></span>&emsp;
-                  <span>点赞量：<Icon type="md-heart" color="rgb(251, 114, 153)" size="20"/>&nbsp;<label>{{article.like}}</label></span>&emsp;
-                  <span>浏览量：<Icon type="md-eye" size="20" />&nbsp;<label>{{article.watch}}</label></span>&emsp;
-                  <span>收藏量：<Icon type="md-star" size="20" style="margin-bottom: 5px" />&nbsp;<label style="margin: 0;padding: 0">{{article.collection}}</label></span>
-                  <span style="float: right;margin-right: 20px">发布时间：<Icon type="md-time" size="20" /><Time :time="article.time"></Time></span>
-                </div>
-              </Card>
-              <Divider style="margin-top: 0;" />
-            </div>
-          </i-col>
-
-          <!--加载更多Button,当自动加载次数超过三次时，需要手动加载更多-->
-          <i-col span="12">
-            <div class="loadMoreButton">
-              <Button v-if="this.loadMore && this.page>3" type="info" size="large" @click="get_article_list(page)" long >
-                <span>加 载 更 多 > > > </span>
-              </Button>
-            </div>
-          </i-col>
-
-        </Row>
-      </div>
-
-      <!--返回顶部-->
-      <BackTop></BackTop>
-      <!--网站链接管理-->
-      <web_link></web_link>
-      <!--备案信息-->
-      <blog-footer></blog-footer>
-
-    </div>
+  <Layout class="index">
+    <Header>这里是属于头部</Header>
+    <Layout>
+      <Content>
+        <List item-layout="vertical">
+          <ListItem v-for="item in articleInfoList" :key="item.articleId" >
+            <ListItemMeta>
+              <span slot="title" class="articleInfoListTitle">{{item.title}}</span>
+              <span slot="description" class="articleInfoListContent">{{item.content}}</span>
+            </ListItemMeta>
+            <template slot="action">
+              <li>{{item.nickname}}</li>
+              <li><Icon type="md-star" /> {{item.collectCount}}</li>
+              <li><Icon type="md-thumbs-up" />  {{item.lickCount}}</li>
+              <li><Icon type="md-chatbubbles" />  {{item.comments}}</li>
+              <li><Icon type="md-time" /> {{item.creatTine}}</li>
+            </template>
+          </ListItem>
+        </List>
+      </Content>
+      <Sider>这个是侧边</Sider>
+    </Layout>
+    <Footer>
+      <CommonFooter></CommonFooter>
+    </Footer>
+  </Layout>
 </template>
 
 <script>
-    import Loading from "../Common/loading";
-    import NotFound from "./otherModule/404";
-    import BlogFooter from "../Common/footer";
+    import CommonLoading from "../Common/loading";
+    import CommonFooter from "../Common/footer";
     import store from '../../blog_vuex/store'
-    import Web_link from "../Common/web_link";
 
     export default {
-        name: "index",
-      components: {Web_link, BlogFooter, NotFound, Loading},
-
+      name: "index",
+      components: {CommonFooter,CommonLoading},
       data(){
         return {
           isLoading:true,       //第一次请求加载等待
@@ -143,7 +47,16 @@
           topList:['暂无推荐，敬请期待...',
             '暂无推荐，敬请期待...',
             '暂无推荐，敬请期待...'],
-          articleList:[], //首页基本文章信息
+          articleInfoList:[
+            {articleId:1,title:'标题搞成最高不能超过15个字不久搞定了',content:'内容11内容11111内容11111内容11111内容内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容1111111111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111内容11111111',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+            {articleId:2,title:'标题2',content:'内容22222',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+            {articleId:3,title:'标题3',content:'内容33333',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+            {articleId:4,title:'标题4',content:'内容44444',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+            {articleId:5,title:'标题5',content:'内容55555',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+            {articleId:6,title:'标题6',content:'内容66666',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+            {articleId:7,title:'标题7',content:'内容77777',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+            {articleId:8,title:'标题8',content:'内容88888',nickname:'作者昵称',lickCount:1237,collectCount:111,comments:465,creatTine:'2019-10-16 20:30:33'},
+          ], //首页基本文章信息
           posterList:[],  //首页海报信息
         }
       },
@@ -270,102 +183,18 @@
 </script>
 
 <style scoped>
-  a{
-    color: black;
-  }
 
-  span{
-    font-size: 16px;
-  }
-
-  .excellent-articles div{
-    /* 超出不换行 */
-    white-space: nowrap;
-    /* 超出长度时，出现省略号  */
-    overflow:hidden;
-    text-overflow:ellipsis;
-    margin: 10px 0;
-  }
-
-  .excellent-articles span{
-    font-size: 14px;
-    font-weight: bolder;
-    font-family: '微软雅黑',serif;
-    color: black;
-  }
-
-  .excellent-articles strong{
-    font-size: 16px;
-    font-weight: bolder;
-    font-family: '微软雅黑',serif;
-    color: black;
-  }
-
-  .my-carousel{
-    height: 400px;
-    overflow: hidden;
-    position: relative;
-    color: white;
-    background: rgb(217, 237, 247);
-    border-radius: 5px;
-    padding: 0;
-    margin: 0;
-  }
-
-  .my-carousel img{
-    margin: auto;
-    padding: 0;
-    border-radius: 5px;
-    position: absolute;
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
-  }
-
-  .index-content{
-    margin-top: 20px;
-    padding: 0;
-    /*border: 1px solid gold;*/
-    /*background-color: rgb(248, 248, 248);*/
-    width: 65vw;
-  }
-
-  .official-activities a{
-    color: black;
-    text-decoration: none;
-  }
-
-  .official-activities p{
-    border-radius: 5px;
-    padding: 15px 10px;
-    font-size: 18px;
-    font-family: "微软雅黑",serif;
-  }
-
-  .articleCard:hover{
-    /*border: 1px solid red;*/
-    margin-left: 15px;
-    margin-right: -15px;
-    margin-bottom: 15px;
-  }
-
-
-  .articles-title{
-    font-size: 20px;
+  .articleInfoListTitle{
     font-weight: bold;
+    font-size: 18px;
   }
-
-  .articles-title a{
-    color: black;
-  }
-
-  .articles-content{
+  .articleInfoListContent{
     overflow: hidden;   /* 超出容器隐藏，不然会撑破容器。 */
 
     text-overflow: ellipsis;    /* 可以用来多行文本的情况下，用省略号“...”隐藏超出范围的文本 。 */
     display:-webkit-box;    /* 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示 。 */
     /*! autoprefixer: off */
-    -webkit-line-clamp: 3;      /* -webkit-box-orient: vertical;这行样式上下需要加上上文中的注释，否则用webpack后-webkit-box-orient样式会丢失  需要显示的文本行数 */
+    -webkit-line-clamp: 2;      /* -webkit-box-orient: vertical;这行样式上下需要加上上文中的注释，否则用webpack后-webkit-box-orient样式会丢失  需要显示的文本行数 */
     /* autoprefixer: on */
     -webkit-box-orient: vertical;   /* 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 。 */
 
@@ -373,26 +202,5 @@
     white-space: pre-wrap;
   }
 
-  .articles-info{
-    line-height: 30px;
-    width: 100%;
-    margin-top: 10px;
-    color:cadetblue;
-  }
-
-  .articles-info img {
-    width: 25px;
-    float: left;
-  }
-
-  .articles-info span{
-    margin-left: 5px;
-    font-size: 14px;
-  }
-
-  .loadMoreButton{
-    margin-top: 20px;
-    margin-bottom: 50px;
-  }
 
 </style>

@@ -48,7 +48,7 @@
 
 <script>
     export default {
-        name: "web_link",
+        name: "CommonWebLink",
       data() {
         return {
           web_link_data:[],

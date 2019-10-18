@@ -5,8 +5,8 @@
 import Vue from 'vue'
 import VueCropper from 'vue-cropper'
 import VueSocketIO from 'vue-socket.io'
-import iview from 'iview';
-import 'iview/dist/styles/iview.css'
+import ViewUI from 'view-design';
+import 'view-design/dist/styles/iview.css'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -16,8 +16,8 @@ import apis from './api/Api'
 import router from './router/router'
 //引入BootstrapVue UI框架
 Vue.use(BootstrapVue);
-//Iview UI 框架
-Vue.use(iview);
+//view-design 框架
+Vue.use(ViewUI);
 //Vue 截图工具
 Vue.use(VueCropper);
 // 将api挂载到vue的原型上复制代码,让其可以在vue实例中 通过this.$apis 调用其中的接口

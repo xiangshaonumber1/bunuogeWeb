@@ -1,17 +1,16 @@
 <template>
-    <div class="ok-header">
-        <!-- bootstrap 导航条 -->
-        <b-navbar toggleable="lg"  style="padding: 0;background-color: white;" >
-          <!--Iview 实现-->
-          <Menu mode="horizontal">
-            <b-img src="/static/picture/getok-2.png" alt="getok" style="height: 50px;background-color: white;"></b-img>
-          </Menu>
+    <div class="CommonHeader">
 
-          <!--展开更多按钮-->
+        <b-navbar toggleable="lg" type="light">
+          <b-navbar-brand href="#">布诺阁</b-navbar-brand>
+          <!--界面过小时，用于展开更多按钮-->
           <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-          <!-- bootstrap-vue 折叠导航栏 -->
-          <b-collapse id="nav-collapse" is-nav >
+          <
+          <b-collapse id="nav-collapse" is-nav>
+            <b-narbar-nav>
+              <b-nav-item></b-nav-item>
+            </b-narbar-nav>
             <!--导航栏菜单 Iview 实现-->
             <Menu mode="horizontal" style="width: 100%;">
               <!--顶部导航栏基本功能-->
@@ -57,8 +56,8 @@
                 <Button type="success" icon="ios-paper" size="large" @click="go_writeDiary" style="margin: 0 10px 0 5px"><span>写笔记</span></Button>
               </div>
               <!--顶部导航栏游客功能-->
-              <div v-else class="menu-guest" style="float: right">
-                <Button type="text" ghost @click="to_sign_in()" style="margin:0 5px 0 10px "><span style="color: rgb(35, 201, 237);font-weight: bolder">立 即 登 录</span></Button>
+              <div v-else style="float: right">
+                <Button type="text" ghost @click="to_sign_in()" style="margin:0 5px 0 10px ">立 即 登 录</Button>
                 <Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;margin: 0 10px 0 5px" @click="to_sign_up"><span>免 费 注 册</span></Button>
               </div>
             </Menu>
@@ -70,7 +69,7 @@
 
 <script>
     export default {
-        name: "ok-header",
+        name: "CommonHeader",
       data(){
         return {
           menuActive:"",
@@ -261,23 +260,6 @@
 </script>
 
 <style scoped>
-
-  a{
-    text-decoration: none;
-    color: black;
-  }
-
-  span{
-    font-size: 16px;
-  }
-
-  .ok-header{
-    background-color: white;
-  }
-
-  .menu-user{
-    float: right;
-  }
 
 
 </style>
