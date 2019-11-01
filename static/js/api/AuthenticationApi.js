@@ -1,9 +1,9 @@
 /**
  * 角色权限相关统一管理
  */
-import request from '../common/request'
-import router from '../router/router'
-import store from '../blog_vuex/store'
+import request from '../request'
+import router from '../router'
+import store from '../vuex/store'
 import qs from 'qs'
 
 const authentication = {

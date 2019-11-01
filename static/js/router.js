@@ -6,53 +6,53 @@ Vue.use(VueRouter);
 //  1.定义（路由）组件
 
 //主页内容
-import App from '../App'
-import Index from '../views/Web'
+import App from '../../src/App'
+import Index from '../../src/views/Web'
 
 //loginRegisterInfo登录注册模块
-import ModuleLoginRegister from '../views/Web/loginRegisterModule/web_module_loginRegister'
-import Register from '../views/Web/loginRegisterModule/web_loginRegister_register'
-import Login from '../views/Web/loginRegisterModule/web_loginRegister_login'
+import ModuleLoginRegister from '../../src/views/Web/loginRegisterModule/web_module_loginRegister'
+import Register from '../../src/views/Web/loginRegisterModule/web_loginRegister_register'
+import Login from '../../src/views/Web/loginRegisterModule/web_loginRegister_login'
 
 //文章相关模块
-import ArticleInfo from '../views/Web/articleModule/web_article_info'
-import ArticleEdit from '../views/Web/articleModule/web_article_edit'
-import ArticleCommentAndReply from '../views/Web/articleModule/web_article_commentAndReply'
+import ArticleInfo from '../../src/views/Web/articleModule/web_article_info'
+import ArticleEdit from '../../src/views/Web/articleModule/web_article_edit'
+import ArticleCommentAndReply from '../../src/views/Web/articleModule/web_article_commentAndReply'
 
 //日记相关模块
-import DiaryInfo from '../views/Web/diaryModule/web_diary_info'
-import DiaryEdit from '../views/Web/diaryModule/web_diary_edit'
+import DiaryInfo from '../../src/views/Web/diaryModule/web_diary_info'
+import DiaryEdit from '../../src/views/Web/diaryModule/web_diary_edit'
 
 //账号设置相关
-import ModuleSetting from '../views/Web/settingModule/web_module_setting'
-import SettingPW from '../views/Web/settingModule/web_setting_pw'
+import ModuleSetting from '../../src/views/Web/settingModule/web_module_setting'
+import SettingPW from '../../src/views/Web/settingModule/web_setting_pw'
 
 //用户信息相关模块
-import ModuleUser from '../views/Web/personalModule/web_module_user'
-import UserArticles from '../views/Web/personalModule/web_user_articles'
-import UserDiaries from '../views/Web/personalModule/web_user_diaries'
-import UserInfo from '../views/Web/personalModule/web_user_info'
+import ModuleUser from '../../src/views/Web/personalModule/web_module_user'
+import UserArticles from '../../src/views/Web/personalModule/web_user_articles'
+import UserDiaries from '../../src/views/Web/personalModule/web_user_diaries'
+import UserInfo from '../../src/views/Web/personalModule/web_user_info'
 
 //站内消息模块
-import ModuleMessage from '../views/Web/messageModule/web_module_message'
-import MessageReply from '../views/Web/messageModule/web_message_reply'
-import MessageSystem from '../views/Web/messageModule/web_message_system'
-import MessagePersonal from '../views/Web/messageModule/web_message_personal'
+import ModuleMessage from '../../src/views/Web/messageModule/web_module_message'
+import MessageReply from '../../src/views/Web/messageModule/web_message_reply'
+import MessageSystem from '../../src/views/Web/messageModule/web_message_system'
+import MessagePersonal from '../../src/views/Web/messageModule/web_message_personal'
 
 //其他独立模块
-import Feedback from '../views/Web/otherModule/web_feedback'
-import Search from '../views/Web/otherModule/web_searchInfo'
-import MessageWall from '../views/Web/otherModule/web_messageWall'
-import NotFound from '../views/Web/otherModule/404'
+import Feedback from '../../src/views/Web/otherModule/web_feedback'
+import Search from '../../src/views/Web/otherModule/web_searchInfo'
+import MessageWall from '../../src/views/Web/otherModule/web_messageWall'
+import NotFound from '../../src/views/Web/otherModule/404'
 
 //后台管理相关模块
-import ServiceController from '../views/Service/ServiceController'
-import ManagementSystemMessage from '../views/Service/components/service_management_systemMessage'
-import ManagementUser from '../views/Service/components/service_management_user'
-import ManagementLink from '../views/Service/components/service_management_link'
-import ManagementFeedback from '../views/Service/components/service_management_feedback'
-import ManagementArticle from '../views/Service/components/service_management_article'
-import ManagementComments from '../views/Service/components/service_management_comments'
+import ServiceController from '../../src/views/Service/ServiceController'
+import ManagementSystemMessage from '../../src/views/Service/components/service_management_systemMessage'
+import ManagementUser from '../../src/views/Service/components/service_management_user'
+import ManagementLink from '../../src/views/Service/components/service_management_link'
+import ManagementFeedback from '../../src/views/Service/components/service_management_feedback'
+import ManagementArticle from '../../src/views/Service/components/service_management_article'
+import ManagementComments from '../../src/views/Service/components/service_management_comments'
 
 //  2.定义路由
 //  每个路由应该映射一个组件

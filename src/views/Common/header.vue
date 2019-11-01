@@ -8,8 +8,8 @@
           <b-collapse id="nav-collapse" is-nav>
 
             <b-navbar-nav>
-              <b-nav-item class="mr-2" href="#">意见反馈</b-nav-item>
-              <b-nav-item class="mr-2" href="#">首页</b-nav-item>
+              <b-nav-item class="mr-2" @click="whereGo('feedback')">意见反馈</b-nav-item>
+              <b-nav-item class="mr-2" @click="whereGo('index')">首页</b-nav-item>
             </b-navbar-nav>
 
             <b-navbar-nav>
@@ -22,15 +22,13 @@
             <b-navbar-nav v-if="true" class="ml-auto">
               <b-button variant="outline-info">文稿创作</b-button>
               <!--用户快捷导航-->
-              <b-nav-item-dropdown>
-                <template v-slot:button-content>
-                  <span>小博主_1654654651354</span>
-                </template>
-                <b-dropdown-item><span>我的主页</span></b-dropdown-item>
-                <b-dropdown-item><span>账户安全</span></b-dropdown-item>
-                <b-dropdown-item><span>设置</span></b-dropdown-item>
-                <b-dropdown-item><span>帮助和反馈</span></b-dropdown-item>
-                <b-dropdown-item><span>退出</span></b-dropdown-item>
+              <b-nav-item-dropdown variant="b-popover-dark">
+                <template v-slot:button-content>小博主_1654654651354</template>
+                <b-dropdown-item>我的主页</b-dropdown-item>
+                <b-dropdown-item>账户安全</b-dropdown-item>
+                <b-dropdown-item>设置</b-dropdown-item>
+                <b-dropdown-item>帮助和反馈</b-dropdown-item>
+                <b-dropdown-item>退出</b-dropdown-item>
               </b-nav-item-dropdown>
               <!--用户消息-->
               <b-nav-item-dropdown text="消息">
@@ -48,56 +46,7 @@
 
           </b-collapse>
         </b-navbar>
-            <!--导航栏菜单 Iview 实现-->
-            <!--<Menu mode="horizontal" style="width: 100%;">-->
-              <!--&lt;!&ndash;顶部导航栏基本功能&ndash;&gt;-->
-              <!--<div class="menu-common">-->
-                <!--<MenuItem name="1">-->
-                  <!--<a @click="goFeedBackMessage"><span>&emsp;意见反馈&ensp;</span></a>-->
-                <!--</MenuItem>-->
-                <!--<MenuItem name="2">-->
-                  <!--<a @click="goIndex"><span>&emsp;首页&ensp;</span></a>-->
-                <!--</MenuItem>-->
-              <!--</div>-->
-              <!--&lt;!&ndash;搜索框&ndash;&gt;-->
-              <!--&lt;!&ndash;顶部导航栏登录用户功能&ndash;&gt;-->
-              <!--<div v-if="$store.getters.isLogin" class="menu-user">-->
-                <!--<Dropdown style="float: left" placement="bottom" @on-click="to_user_function">-->
-                  <!--<a style="margin-right: 10px"><b-img :src="userInfo.avatar"  alt="none" rounded="circle" width="40px" height="40px"></b-img>&ensp;<Icon type="ios-arrow-down"/></a>-->
-                  <!--<DropdownMenu slot="list">-->
-                    <!--<DropdownItem name="userCenter"><Icon type="md-contact" size="20" /><span>&emsp;个人中心&emsp;</span></DropdownItem>-->
-                    <!--<DropdownItem name="userSetting"><Icon type="md-settings" size="20" /><span>&emsp;设置&emsp;</span></DropdownItem>-->
-                    <!--<DropdownItem name="userFeedback"><Icon type="md-chatboxes" size="20" /><span>&emsp;帮助和反馈&emsp;</span></DropdownItem>-->
-                    <!--<DropdownItem name="userExit"><Icon type="md-exit" size="20" /><span>&emsp;退出&emsp;</span></DropdownItem>-->
-                  <!--</DropdownMenu>-->
-                <!--</Dropdown>-->
-                <!--<MenuItem name="4">-->
-                  <!--<Dropdown placement="bottom" @on-click="to_message_module">-->
-                    <!--<Badge :count="$store.getters.userInfo.replyMessageCount + $store.getters.userInfo.personalMessageCount + $store.getters.userInfo.systemMessageCount" :offset="[15,-5]">-->
-                      <!--<span style="height: 40px;width: 40px" class="text-center center-block mt-auto">&ensp;消息&ensp;</span>-->
-                    <!--</Badge>-->
-                    <!--<DropdownMenu slot="list" :padding="0">-->
-                      <!--<DropdownItem name="reply"><Badge :count="$store.getters.userInfo.replyMessageCount" /><span>&emsp;回复我的&emsp;</span></DropdownItem>-->
-                      <!--<DropdownItem name="personal"><Badge :count="$store.getters.userInfo.personalMessageCount" /><span>&emsp;我的消息&emsp;</span></DropdownItem>-->
-                      <!--<DropdownItem name="system"><Badge :count="$store.getters.userInfo.systemMessageCount" /><span>&emsp;系统通知&emsp;</span></DropdownItem>-->
-                    <!--</DropdownMenu>-->
-                  <!--</Dropdown>-->
-                <!--</MenuItem>-->
-                <!--<MenuItem name="5">-->
-                  <!--<Badge :count="$store.getters.userInfo.markedActivityCount" dot :offset="[20,0]">-->
-                    <!--<span>&ensp;动态&ensp;</span>-->
-                  <!--</Badge>-->
-                <!--</MenuItem>-->
-                <!--<Button type="info" icon="md-create" size="large" @click="go_writeArticle" style="margin:0 5px 0 10px "><span>创作文章</span></Button>-->
-                <!--<Button type="success" icon="ios-paper" size="large" @click="go_writeDiary" style="margin: 0 10px 0 5px"><span>写笔记</span></Button>-->
-              <!--</div>-->
-              <!--&lt;!&ndash;顶部导航栏游客功能&ndash;&gt;-->
-              <!--<div v-else style="float: right">-->
-                <!--<Button type="text" ghost @click="to_sign_in()" style="margin:0 5px 0 10px ">立 即 登 录</Button>-->
-                <!--<Button type="success" style="background-color: rgb(0, 192, 145);font-weight: bolder;margin: 0 10px 0 5px" @click="to_sign_up"><span>免 费 注 册</span></Button>-->
-              <!--</div>-->
-            <!--</Menu>-->
-          <!--</b-collapse>-->
+
     </div>
 </template>
 
@@ -106,87 +55,17 @@
         name: "CommonHeader",
       data(){
         return {
-          searchKeyWord:null,//搜索框关键字
+          searchKeyWord:'',//搜索框关键字
           userInfo:{
             openID:'',//用户ID
             nickname:'',//用户昵称
             avatar:'',//用户头像地址
             token:'',//用户登录后持有的token
           },
-          // replyMessageCount:0,  //用户未读信息（评论回复类）
-          // personalMessageCount:0, //我的消息，私聊类消息
-          // systemMessageCount:0,  //系统发起的通知类消息
-          // markedActivityCount:0, //关注用户的活动信息
         }
       },
 
       methods:{
-
-        //前往消息模块
-        to_message_module(type){
-          switch (type) {
-            //回复类消息
-            case 'reply':
-              this.$router.push({
-                name:'replyMessage',
-                params:{openID:this.$store.getters.openID,messageType:'reply'}
-              });
-              break;
-            case 'personal':
-              this.$router.push({
-                name:'personalMessage',
-                params:{openID:this.$store.getters.openID,messageType:'personal'}
-              });
-              break;
-            case 'system':
-              this.$router.push({
-                name:'systemMessage',
-                params:{openID:this.$store.getters.openID,messageType:'system'}
-              });
-              break;
-            default:
-              return;
-          }
-        },
-
-        //前往意见反馈模块
-        goFeedBackMessage(){
-          this.$router.push({name:'feedback'});
-        },
-        //前往本站的留言墙
-        goMessage_wall(){
-          this.$router.push({name:'message_wall'})
-        },
-          //前往首页
-        goIndex(){
-          this.$router.push({name:'index'});
-        },
-
-        //前往我的收藏页
-        goCollections(){
-          this.$Notice.info({
-            title: '敬请期待：',
-            desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
-          })
-        },
-
-        //获取关注对象的动态信息
-        goDynamic(){
-          this.$Notice.info({
-            title: '敬请期待：',
-            desc: '非常抱歉，该模块尚在构建中，暂时无法使用，敬请期待'
-          })
-        },
-
-        //进行登录
-        to_sign_in(){
-          this.$router.push({name:'login'});
-        },
-
-        //进行注册
-        to_sign_up(){
-          this.$router.push({name:'register'});
-        },
 
         /*************************************************** 搜索暂行解决方法（新建窗口跳转）********************************************************/
         //前往搜索结果页面

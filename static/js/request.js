@@ -4,9 +4,9 @@
 
 import axios from 'axios';
 import {Notice} from 'view-design'
-import router from '../router/router'
-import store from '../blog_vuex/store'
-import AuthenticationApi from '../api/AuthenticationApi'
+import router from './router'
+import store from './vuex/store'
+import AuthenticationApi from './api/AuthenticationApi'
 
 //axios默认设置
 const request = axios.create({

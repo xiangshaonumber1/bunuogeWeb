@@ -2,9 +2,9 @@
  * 文章相关请求统一管理
  */
 
-import request from '../common/request'
+import request from '../request'
 import qs from 'qs'
-import store from '../blog_vuex/store'
+import store from '../vuex/store'
 
 const article = {
 

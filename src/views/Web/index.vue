@@ -30,7 +30,7 @@
 <script>
     import CommonLoading from "../Common/loading";
     import CommonFooter from "../Common/footer";
-    import store from '../../blog_vuex/store'
+    import store from '../../../static/js/vuex/store'
 
     export default {
       name: "index",

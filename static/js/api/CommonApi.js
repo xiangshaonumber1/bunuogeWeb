@@ -2,7 +2,7 @@
  * Web无权限相关操作
  */
 
-import request from '../common/request'
+import request from '../request'
 import qs from 'qs'
 
 const common = {
